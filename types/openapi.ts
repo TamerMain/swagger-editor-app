@@ -7,6 +7,15 @@ export type FetchParams = {
   [key: string]: unknown;
 };
 
+export interface ResponseData {
+  status: number;
+  headers: Record<string, string>;
+  body: any;
+  isBinary: boolean;
+  size?: number;
+  blob?: Blob;
+}
+
 
 export interface OpenAPISpec {
   openapi: string;

@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import History from "@/components/History";
+import History from "@/components/History/History";
 
 export default async function HistoryPage() {
   const supabase = await createClient();

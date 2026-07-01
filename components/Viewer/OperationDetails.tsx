@@ -1,8 +1,8 @@
-import MethodBadge from "@/components/FormatViewer/MethodBadge";
-import ParametersList from "@/components/FormatViewer/ParameterList";
-import RequestBodyDisplay from "@/components/FormatViewer/RequestBodyDisplay";
-import ResponsesDisplay from "@/components/FormatViewer/ResponsesDisplay";
-import TryOut from "@/components/FormatViewer/TryOut";
+import MethodBadge from "@/components/Viewer/MethodBadge";
+import ParametersList from "@/components/Viewer/ParameterList";
+import RequestBodyDisplay from "@/components/Viewer/RequestBodyDisplay";
+import ResponsesDisplay from "@/components/Viewer/ResponsesDisplay";
+import TryOut from "@/components/Viewer/Tryout/TryOut";
 import { type HttpMethod, type Operation } from "@/types/openapi";
 
 type OperationDetailsProps = {
@@ -17,7 +17,7 @@ export default function OperationDetails({
   path,
 }: OperationDetailsProps) {
   return (
-    <div className="mt-3 first:mt-0">
+    <div className="pt-3 first:mt-0">
       <div className="flex items-center gap-2 mb-1">
         <MethodBadge method={method} />
         {operation.summary && (

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Editor from "@/components/Editor";
-import Viewer from "@/components/Viewer";
+import Editor from "@/components/Editor/Editor";
+import Viewer from "@/components/Viewer/Viewer";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { parseFormat } from "@/lib/formatParser";
@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className="flex">
+      <div className="flex bg-mist-950">
         <div className="w-1/2">
           <Editor onSpecChange={handleEditorChange} />
         </div>

@@ -77,7 +77,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
           <span
             className={`px-2 py-1 text-xs border-2 rounded font-mono ${
               format === "json"
-                ? "bg-blue-500/20 border-green-500/30"
+                ? "bg-blue-500/20 border-blue-500/30"
                 : "bg-green-500/20 border-green-500/30"
             }`}
           >
@@ -95,7 +95,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
             className={`px-2 py-1 text-xs border-2 rounded font-mono ${
               format === "json"
                 ? "bg-green-500/20 hover:bg-green-500/20 border-green-500/30"
-                : "bg-blue-500/20 hover:bg-blue-500/30 border-green-500/30"
+                : "bg-blue-500/20 hover:bg-blue-500/30 border-blue-500/30"
             }`}
             disabled={errors.length !== 0}
           >

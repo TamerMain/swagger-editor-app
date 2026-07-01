@@ -1,6 +1,6 @@
 import { useState } from "react";
-import SpecHeader from "@/components/FormatViewer/SpecHeader";
-import PathItem from "@/components/FormatViewer/PathItem";
+import SpecHeader from "@/components/Viewer/SpecHeader";
+import PathItem from "@/components/Viewer/PathItem";
 import { getMethods } from "@/lib/getMethods";
 import { type OpenAPISpec } from "@/types/openapi";
 

@@ -1,4 +1,4 @@
-import HistoryItem from "./FormatHistory/HistoryItem";
+import HistoryItem from "./HistoryItem";
 
 export default function History({ history }: { history: any[] | null }) {
   if (!history || history.length === 0) {

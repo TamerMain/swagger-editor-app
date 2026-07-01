@@ -1,5 +1,5 @@
-import MethodBadge from "@/components/FormatViewer/MethodBadge";
-import OperationDetails from "@/components/FormatViewer/OperationDetails";
+import MethodBadge from "@/components/Viewer/MethodBadge";
+import OperationDetails from "@/components/Viewer/OperationDetails";
 import { getMethods } from "@/lib/getMethods";
 
 type PathItemProps = {
