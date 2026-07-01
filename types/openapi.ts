@@ -1,4 +1,13 @@
 export type Format = "json" | "yaml";
+export type HttpMethod = "get" | "post" | "put" | "delete" | "patch";
+
+export type FetchParams = {
+  headers?: HeadersInit;
+  body?: BodyInit;
+  [key: string]: unknown;
+};
+
+
 export interface OpenAPISpec {
   openapi: string;
   info: {
@@ -58,4 +67,3 @@ export interface Schema {
   example?: any;
 }
 
-export type HttpMethod = "get" | "post" | "put" | "delete" | "patch";

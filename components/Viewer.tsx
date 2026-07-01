@@ -9,7 +9,7 @@ interface ViewerProps {
   isValid: boolean;
 }
 
-export default function FormatViewer({ spec, isValid }: ViewerProps) {
+export default function Viewer({ spec, isValid }: ViewerProps) {
   const [expandedPaths, setExpandedPaths] = useState<Record<string, boolean>>(
     {},
   );

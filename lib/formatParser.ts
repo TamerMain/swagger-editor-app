@@ -12,12 +12,8 @@ export interface ParseResult {
 
 export async function parseFormat(content: string): Promise<ParseResult> {
   try {
-    // Detect format
     const isJson = content.trim().startsWith("{");
-    // Parse to object
     const data = isJson ? JSON.parse(content) : yaml.load(content);
-
-    // Validate with SwaggerParser
     await SwaggerParser.validate(data);
 
     return {

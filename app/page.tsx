@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import FormatEditor from '@/components/FormatEditor';
-import FormatViewer from '@/components/FormatViewer';
-import { parseFormat } from '@/lib/formatParser';
-import type { OpenAPISpec } from '@/types/openapi';
+import { useState } from "react";
+import Editor from "@/components/Editor";
+import Viewer from "@/components/Viewer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { parseFormat } from "@/lib/formatParser";
+import type { OpenAPISpec } from "@/types/openapi";
 
 export default function Home() {
   const [spec, setSpec] = useState<OpenAPISpec | null>(null);
@@ -12,24 +14,28 @@ export default function Home() {
 
   const handleEditorChange = async (content: string) => {
     const result = await parseFormat(content);
-    
+
     if (result.valid) {
       setSpec(result.data);
       setIsValid(true);
-    } else {  
+    } else {
       setSpec(null);
       setIsValid(false);
     }
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/2">
-        <FormatEditor onSpecChange={handleEditorChange} />
+    <>
+      <Header />
+      <div className="flex">
+        <div className="w-1/2">
+          <Editor onSpecChange={handleEditorChange} />
+        </div>
+        <div className="w-1/2 border-l border-gray-700 overflow-y-auto p-4">
+          <Viewer spec={spec} isValid={isValid} />
+        </div>
       </div>
-      <div className="w-1/2 border-l border-gray-700 overflow-y-auto p-4">
-        <FormatViewer spec={spec} isValid={isValid} />
-      </div>
-    </div>
+      <Footer />
+    </>
   );
 }

@@ -9,11 +9,11 @@ import { parseFormat, convertFormat } from "@/lib/formatParser";
 import { FORMAT } from "@/constants/constants";
 import { type Format } from "@/types/openapi";
 
-interface FormatEditorProps {
+interface EditorProps {
   onSpecChange?: (content: string) => void;
 }
 
-export default function FormatEditor({ onSpecChange }: FormatEditorProps) {
+export default function Editor({ onSpecChange }: EditorProps) {
   const [code, setCode] = useState("");
   const [format, setFormat] = useState<Format>(FORMAT.YAML);
   const [errors, setErrors] = useState<string[]>([]);
@@ -25,8 +25,6 @@ export default function FormatEditor({ onSpecChange }: FormatEditorProps) {
         const res = await fetch("/examples/petstorebigger.yaml");
         let content = await res.text();
         setCode(content);
-
-        // ✅ Validate on initial load
         await validateContent(content);
       } catch (error) {
         console.error("Failed to load spec:", error);
@@ -59,8 +57,6 @@ export default function FormatEditor({ onSpecChange }: FormatEditorProps) {
   };
 
   const handleFormatSwitch = () => {
-    console.log("Current code:", code); // ← Check console
-    console.log("Current format:", format);
     try {
       const newFormat = format === FORMAT.JSON ? FORMAT.YAML : FORMAT.JSON;
       const converted = convertFormat(code, format, newFormat);
@@ -79,22 +75,28 @@ export default function FormatEditor({ onSpecChange }: FormatEditorProps) {
         <div className="flex items-center gap-3">
           <span className="text-sm text-gray-400">Format:</span>
           <span
-            className={`px-2 py-1 text-xs rounded font-mono ${
-              format === "json" ? "bg-blue-600" : "bg-green-600"
+            className={`px-2 py-1 text-xs border-2 rounded font-mono ${
+              format === "json"
+                ? "bg-blue-500/20 border-green-500/30"
+                : "bg-green-500/20 border-green-500/30"
             }`}
           >
             {format.toUpperCase()}
           </span>
 
           {isValid && (
-            <span className="text-xs text-green-400">✓ Valid OpenAPI</span>
+            <span className="text-xs text-green-500">✓ Valid OpenAPI</span>
           )}
         </div>
 
         <div className="flex gap-2">
           <button
             onClick={handleFormatSwitch}
-            className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 rounded transition"
+            className={`px-2 py-1 text-xs border-2 rounded font-mono ${
+              format === "json"
+                ? "bg-green-500/20 hover:bg-green-500/20 border-green-500/30"
+                : "bg-blue-500/20 hover:bg-blue-500/30 border-green-500/30"
+            }`}
             disabled={errors.length !== 0}
           >
             Switch to {format === FORMAT.JSON ? "YAML" : "JSON"}
