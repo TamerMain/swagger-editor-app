@@ -22,7 +22,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
   useEffect(() => {
     const loadSpec = async () => {
       try {
-        const res = await fetch("/examples/petstorebigger.yaml");
+        const res = await fetch("/examples/jsonplaceholder.yaml");
         let content = await res.text();
         setCode(content);
         await validateContent(content);
@@ -69,16 +69,16 @@ export default function Editor({ onSpecChange }: EditorProps) {
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-900">
+    <div className="h-full flex flex-col">
       {/* Toolbar */}
-      <div className="flex items-center justify-between p-3 bg-gray-800 border-b border-gray-700">
+      <div className="flex items-center justify-between p-3 bg-neutral-900 border-b border-neutral-700">
         <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-400">Format:</span>
+          <span className="text-sm text-neutral-400">Format:</span>
           <span
             className={`px-2 py-1 text-xs border-2 rounded font-mono ${
               format === "json"
-                ? "bg-blue-500/20 border-blue-500/30"
-                : "bg-green-500/20 border-green-500/30"
+                ? "text-blue-400 bg-blue-500/20 border-blue-500/30"
+                : "text-green-400 bg-green-500/20 border-green-500/30"
             }`}
           >
             {format.toUpperCase()}
@@ -92,10 +92,10 @@ export default function Editor({ onSpecChange }: EditorProps) {
         <div className="flex gap-2">
           <button
             onClick={handleFormatSwitch}
-            className={`px-2 py-1 text-xs border-2 rounded font-mono ${
+            className={`px-2 py-1 text-xs border-2 rounded font-mono cursor-pointer ${
               format === "json"
-                ? "bg-green-500/20 hover:bg-green-500/20 border-green-500/30"
-                : "bg-blue-500/20 hover:bg-blue-500/30 border-blue-500/30"
+                ? "bg-green-900 hover:bg-green-900/90 border-green-700 hover:border-green-700/90"
+                : "bg-blue-900 hover:bg-blue-900/70 border-blue-700 hover:border-blue-700/70"
             }`}
             disabled={errors.length !== 0}
           >

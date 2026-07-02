@@ -1,3 +1,4 @@
+// components/Viewer/OperationDetails.tsx
 import MethodBadge from "@/components/Viewer/MethodBadge";
 import ParametersList from "@/components/Viewer/ParameterList";
 import RequestBodyDisplay from "@/components/Viewer/RequestBodyDisplay";
@@ -9,13 +10,33 @@ type OperationDetailsProps = {
   method: HttpMethod;
   operation: Operation;
   path: string;
+  pathItemParameters?: any[]; // ✅ Add path-level params
 };
 
 export default function OperationDetails({
   method,
   operation,
   path,
+  pathItemParameters = [], // ✅ Default to empty array
 }: OperationDetailsProps) {
+  // ✅ Merge path-level + operation-level parameters
+  const mergedParameters = [
+    ...(pathItemParameters || []), // PathItem level params (e.g., userId)
+    ...(operation.parameters || []), // Operation level params (e.g., limit, page)
+  ];
+
+  // ✅ Remove duplicates (if same param appears in both places)
+  const uniqueParameters = mergedParameters.filter(
+    (param, index, self) =>
+      index === self.findIndex((p) => p.name === param.name && p.in === param.in)
+  );
+
+  // ✅ Create merged operation with all parameters
+  const mergedOperation = {
+    ...operation,
+    parameters: uniqueParameters,
+  };
+
   return (
     <div className="pt-3 first:mt-0">
       <div className="flex items-center gap-2 mb-1">
@@ -49,12 +70,13 @@ export default function OperationDetails({
         </div>
       )}
 
-      {operation.parameters && operation.parameters.length > 0 && (
+      {/* ✅ Use merged parameters for display */}
+      {uniqueParameters && uniqueParameters.length > 0 && (
         <div className="ml-1">
           <div className="text-gray-400 text-xs font-semibold mb-1">
-            Parameters ({operation.parameters.length})
+            Parameters ({uniqueParameters.length})
           </div>
-          <ParametersList parameters={operation.parameters} />
+          <ParametersList parameters={uniqueParameters} />
         </div>
       )}
 
@@ -68,11 +90,15 @@ export default function OperationDetails({
 
       <div className="mt-4">
         <details>
-          <summary className="cursor-pointer text-blue-400 hover:text-blue-300 text-sm">
-            🔧 Try It Out
+          <summary className="w-fit px-3 py-1 rounded border-2 border-blue-700 hover:border-blue-700/70 cursor-pointer text-neutral-50 hover:text-blue-300 text-sm">
+            Try It Out
           </summary>
           <div className="mt-3">
-            <TryOut operation={operation} path={path} method={method} />
+            <TryOut 
+              operation={mergedOperation} // ✅ Pass merged operation with all params
+              path={path}
+              method={method}
+            />
           </div>
         </details>
       </div>

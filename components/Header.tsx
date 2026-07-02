@@ -27,20 +27,20 @@ export default function Header() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-sm border-b border-gray-700">
+    <nav className="sticky top-0 z-50 bg-neutral-900/80 backdrop-blur-sm border-b border-neutral-700">
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link href="/" className="font-bold text-white hover:text-blue-400">
+        <Link href="/" className="font-bold text-white">
           Swagger UI
         </Link>
 
         <div className="flex items-center gap-4 text-sm">
-          <Link href="/about" className="text-gray-300 hover:text-white">
+          <Link href="/about" className="text-neutral-300 hover:text-white">
             About
           </Link>
 
           {user ? (
             <>
-              <Link href="/history" className="text-gray-300 hover:text-white">
+              <Link href="/history" className="text-neutral-300 hover:text-white">
                 History
               </Link>
               <button
@@ -52,12 +52,12 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/login" className="text-blue-400 hover:text-blue-300">
+              <Link href="/login" className="px-3 py-1 rounded border-2 border-blue-700 hover:border-blue-700/70 hover:text-blue-300">
                 Sign In
               </Link>
               <Link
                 href="/signup"
-                className="px-3 py-1 bg-blue-600 rounded text-white hover:bg-blue-700"
+                className="px-3 py-1 rounded border-2 border-blue-700 bg-blue-900 text-white hover:border-blue-700/70 hover:bg-blue-900/70"
               >
                 Sign Up
               </Link>

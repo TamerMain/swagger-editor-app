@@ -3,8 +3,6 @@
 import { useState } from "react";
 import Editor from "@/components/Editor/Editor";
 import Viewer from "@/components/Viewer/Viewer";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { parseFormat } from "@/lib/formatParser";
 import type { OpenAPISpec } from "@/types/openapi";
 
@@ -18,6 +16,7 @@ export default function Home() {
     if (result.valid) {
       setSpec(result.data);
       setIsValid(true);
+      console.log(result.data);
     } else {
       setSpec(null);
       setIsValid(false);
@@ -26,8 +25,7 @@ export default function Home() {
 
   return (
     <>
-      <Header />
-      <div className="flex bg-mist-950">
+      <div className="flex">
         <div className="w-1/2">
           <Editor onSpecChange={handleEditorChange} />
         </div>
@@ -35,7 +33,6 @@ export default function Home() {
           <Viewer spec={spec} isValid={isValid} />
         </div>
       </div>
-      <Footer />
     </>
   );
 }

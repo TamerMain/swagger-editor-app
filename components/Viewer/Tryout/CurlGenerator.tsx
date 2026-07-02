@@ -68,7 +68,7 @@ export default function CurlGenerator({
   return (
     <button
       onClick={handleCopy}
-      className="px-3 py-1 text-sm bg-gray-700 hover:bg-gray-600 rounded text-white flex items-center gap-2"
+      className="px-3 py-1 text-sm bg-neutral-700 hover:bg-neutral-600 rounded text-white flex items-center gap-2"
     >
       <span>📋</span>
       {copied ? "Copied!" : "Generate cURL"}

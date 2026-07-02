@@ -15,7 +15,7 @@ export default function ParametersList({ parameters }: ParametersListProps) {
       {parameters.map((param, idx) => (
         <div
           key={`${param.name}-${idx}`}
-          className="flex items-start gap-2 text-xs bg-gray-800/50 rounded p-1.5"
+          className="flex items-start gap-2 text-xs bg-neutral-800/50 rounded p-1.5"
         >
           <span
             className={`px-1.5 py-0.5 rounded border font-mono text-[10px] uppercase ${parameterTypeColors[param.in]}`}

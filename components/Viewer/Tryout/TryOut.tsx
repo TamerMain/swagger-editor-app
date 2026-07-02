@@ -22,8 +22,6 @@ type TryOutProps = {
   method: string;
 };
 
-
-
 export default function TryOut({ operation, path, method }: TryOutProps) {
   // ... all your existing state ...
   const [bodyType, setBodyType] = useState<"json" | "formdata" | "file">(
@@ -42,6 +40,8 @@ export default function TryOut({ operation, path, method }: TryOutProps) {
   const pathParams = parameters.filter((p: Parameter) => p.in === "path");
   const queryParams = parameters.filter((p: Parameter) => p.in === "query");
   const headerParams = parameters.filter((p: Parameter) => p.in === "header");
+  console.log([pathParams, queryParams, headerParams]);
+   console.log(operation);
 
   // ... buildUrl function ...
   const buildUrl = () => {

@@ -13,7 +13,7 @@ export default function FileUpload({ file, onChange }: FileUploadProps) {
   };
 
   return (
-    <div className="border-2 border-dashed border-gray-600 rounded p-4 text-center">
+    <div className="border-2 border-dashed border-neutral-600 rounded p-4 text-center">
       <input
         type="file"
         onChange={handleFileChange}

@@ -10,7 +10,7 @@ export default function JsonBody({ value, onChange }: JsonBodyProps) {
     <textarea
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full h-32 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-white text-sm font-mono"
+      className="w-full h-32 px-2 py-1 bg-neutral-800 border border-neutral-600 rounded text-white text-sm font-mono"
       placeholder='{"key": "value"}'
     />
   );

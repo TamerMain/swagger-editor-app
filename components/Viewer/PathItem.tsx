@@ -1,3 +1,4 @@
+// components/Viewer/PathItem.tsx
 import MethodBadge from "@/components/Viewer/MethodBadge";
 import OperationDetails from "@/components/Viewer/OperationDetails";
 import { getMethods } from "@/lib/getMethods";
@@ -17,11 +18,14 @@ export default function PathItem({
 }: PathItemProps) {
   const methods = getMethods(pathItem);
 
+  // ✅ Extract path-level parameters (common to all operations)
+  const pathItemParameters = pathItem.parameters || [];
+
   return (
-    <div className="border border-gray-700 rounded-lg overflow-hidden bg-gray-900/50">
+    <div className="border border-neutral-700 rounded-lg overflow-hidden bg-neutral-900/50">
       {/* Header */}
       <div
-        className="p-3 cursor-pointer hover:bg-gray-800/50 transition-colors"
+        className="p-3 cursor-pointer hover:bg-neutral-800/50 transition-colors"
         onClick={onToggle}
       >
         <div className="flex items-center justify-between">
@@ -44,6 +48,8 @@ export default function PathItem({
         <div className="p-3 pt-0 border-t border-gray-700/50">
           {methods.map((method) => {
             const operation = pathItem[method];
+            console.log("Operation");
+            console.log(pathItem);
             if (!operation) return null;
             return (
               <OperationDetails
@@ -51,6 +57,7 @@ export default function PathItem({
                 method={method}
                 operation={operation}
                 path={path}
+                pathItemParameters={pathItemParameters} // ✅ Pass path-level params down
               />
             );
           })}

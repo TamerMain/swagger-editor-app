@@ -14,7 +14,7 @@ export default async function SignUpPage() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
         <div>
-          <h2 className="text-3xl font-bold text-center">Create Account</h2>
+          <h2 className="text-3xl font-bold text-center text-black">Create Account</h2>
           <p className="mt-2 text-center text-gray-600">
             Sign up to get started
           </p>

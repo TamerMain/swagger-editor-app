@@ -12,7 +12,7 @@ export default function RequestBodyDisplay({
       <div className="text-gray-400 text-xs font-semibold mb-1">
         Request Body
       </div>
-      <div className="text-gray-300 text-xs bg-gray-800/50 rounded p-1.5">
+      <div className="text-gray-300 text-xs bg-neutral-800/50 rounded p-1.5">
         {requestBody.description && <div>{requestBody.description}</div>}
         {requestBody.content && (
           <div className="text-gray-400 text-[10px] mt-0.5">
