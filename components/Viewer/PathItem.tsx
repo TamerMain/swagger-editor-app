@@ -45,7 +45,7 @@ export default function PathItem({
 
       {/* Expanded Content */}
       {isExpanded && (
-        <div className="p-3 pt-0 border-t border-gray-700/50">
+        <div className="p-3 pt-0 border-t border-neutral-700/50">
           {methods.map((method) => {
             const operation = pathItem[method];
             console.log("Operation");

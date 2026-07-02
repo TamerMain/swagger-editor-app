@@ -30,7 +30,7 @@ export default function ParameterSection({
             </span>
           )}
           <span className={` ${colorClass} font-mono min-w-[80px]`}>
-            {param.name}
+            {param.name}{param.required && <span className="pl-1 text-xs text-red-400">*</span>}
           </span>
           <input
             type="text"
@@ -39,7 +39,6 @@ export default function ParameterSection({
             placeholder={param.required ? "Required" : "Optional"}
             className="flex-1 px-2 py-1 bg-neutral-800 border border-neutral-600 rounded text-white"
           />
-          {param.required && <span className="text-red-400">*</span>}
         </div>
       ))}
     </div>

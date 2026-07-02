@@ -2,9 +2,12 @@ import { formatBytes } from "@/lib/formatBytes";
 
 export default function HistoryItem({ item }: { item: any }) {
   const getStatusColor = (code: number) => {
-    if (code < 400) return "bg-green-500";
-    if (code < 500) return "bg-yellow-500";
-    return "bg-red-500";
+    if (code === 0) return "bg-red-900 border-red-700"; // ERR
+    if (code >= 200 && code < 300) return "bg-green-900 border-green-700"; // 2xx
+    if (code >= 300 && code < 400) return "bg-blue-900 border-blue-700"; // 3xx
+    if (code >= 400 && code < 500) return "bg-yellow-900 border-yellow-700"; // 4xx
+    if (code >= 500) return "bg-red-500 border-red-700"; // 5xx
+    return "bg-gray-900 border-gray-700"; // Unknown
   };
 
   return (
@@ -13,7 +16,7 @@ export default function HistoryItem({ item }: { item: any }) {
         <div className="flex items-center gap-2 flex-wrap">
           {/* Status code */}
           <span
-            className={`px-2 py-1 text-xs rounded text-white ${getStatusColor(item.status_code)}`}
+            className={`px-2 py-1 text-xs rounded text-white border-2 ${getStatusColor(item.status_code)}`}
           >
             {item.status_code || "ERR"}
           </span>
@@ -25,11 +28,6 @@ export default function HistoryItem({ item }: { item: any }) {
           <span className="text-sm text-neutral-600 truncate max-w-[300px]">
             {item.endpoint}
           </span>
-
-          {/* Error indicator */}
-          {/* {item.error_details && (
-            <span className="text-xs text-red-500">⚠️ Error</span>
-          )} */}
         </div>
 
         <div className="text-sm text-neutral-500 flex items-center gap-3 flex-shrink-0 ml-4">
@@ -54,7 +52,7 @@ export default function HistoryItem({ item }: { item: any }) {
 
       {/* Error details (only if error exists) */}
       {item.error_details && (
-        <div className="mt-2 p-2 rounded border-2 border-red-200 text-sm text-red-600 bg-neutral-50">
+        <div className="w-fit mt-1 p-1 rounded border-2 border-red-200 text-sm text-red-600 bg-neutral-50">
           ❌ {item.error_details}
         </div>
       )}

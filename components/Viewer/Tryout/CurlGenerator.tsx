@@ -7,7 +7,7 @@ interface CurlGeneratorProps {
   url: string;
   headers: Record<string, string>;
   body?: any;
-  bodyType?: "json" | "formdata" | "file";
+  bodyType?: "JSON" | "Form Data" | "File";
 }
 
 export default function CurlGenerator({ 
@@ -26,15 +26,15 @@ export default function CurlGenerator({
     // Add headers
     Object.entries(headers).forEach(([key, value]) => {
       // Skip Content-Type for FormData (curl handles it)
-      if (bodyType === "formdata" && key === "Content-Type") return;
+      if (bodyType === "Form Data" && key === "Content-Type") return;
       curl += ` \\\n  -H "${key}: ${value}"`;
     });
     
     // Add body
     if (body) {
-      if (bodyType === "json") {
+      if (bodyType === "JSON") {
         curl += ` \\\n  -H "Content-Type: application/json" \\\n  -d '${JSON.stringify(body)}'`;
-      } else if (bodyType === "formdata") {
+      } else if (bodyType === "Form Data") {
         // FormData requires special handling
         Object.entries(body).forEach(([key, value]) => {
           if (value instanceof File) {
@@ -43,7 +43,7 @@ export default function CurlGenerator({
             curl += ` \\\n  -F "${key}=${value}"`;
           }
         });
-      } else if (bodyType === "file" && body instanceof File) {
+      } else if (bodyType === "File" && body instanceof File) {
         curl += ` \\\n  -F "file=@${body.name}"`;
       }
     }
@@ -70,7 +70,7 @@ export default function CurlGenerator({
       onClick={handleCopy}
       className="px-3 py-1 text-sm bg-neutral-700 hover:bg-neutral-600 rounded text-white flex items-center gap-2"
     >
-      <span>📋</span>
+    
       {copied ? "Copied!" : "Generate cURL"}
     </button>
   );

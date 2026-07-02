@@ -22,7 +22,7 @@ export default function FileUpload({ file, onChange }: FileUploadProps) {
       />
       <label
         htmlFor="file-upload"
-        className="cursor-pointer text-blue-400 hover:text-blue-300"
+        className="text-sm text-blue-400 hover:text-blue-300 cursor-pointer"
       >
         {file ? `📎 ${file.name}` : "Click to select file"}
       </label>

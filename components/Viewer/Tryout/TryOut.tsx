@@ -1,3 +1,4 @@
+// components/Viewer/Tryout/TryOut.tsx
 "use client";
 
 import { useState } from "react";
@@ -24,8 +25,8 @@ type TryOutProps = {
 
 export default function TryOut({ operation, path, method }: TryOutProps) {
   // ... all your existing state ...
-  const [bodyType, setBodyType] = useState<"json" | "formdata" | "file">(
-    "json",
+  const [bodyType, setBodyType] = useState<"JSON" | "Form Data" | "File">(
+    "JSON",
   );
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,16 +36,17 @@ export default function TryOut({ operation, path, method }: TryOutProps) {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [paramValues, setParamValues] = useState<Record<string, string>>({});
 
+  // ✅ Base URL state - starts empty, user must fill it
+  const [baseUrl, setBaseUrl] = useState<string>("");
+
   // ... extract parameters ...
   const parameters = operation.parameters || [];
   const pathParams = parameters.filter((p: Parameter) => p.in === "path");
   const queryParams = parameters.filter((p: Parameter) => p.in === "query");
   const headerParams = parameters.filter((p: Parameter) => p.in === "header");
-  console.log([pathParams, queryParams, headerParams]);
-   console.log(operation);
 
-  // ... buildUrl function ...
-  const buildUrl = () => {
+  // ... buildUrl function - now returns relative path only ...
+  const buildRelativeUrl = () => {
     let url = path;
 
     pathParams.forEach((param: Parameter) => {
@@ -67,6 +69,22 @@ export default function TryOut({ operation, path, method }: TryOutProps) {
     return url;
   };
 
+  // ✅ Build full URL with baseUrl (only if baseUrl is provided)
+  const buildFullUrl = () => {
+    const relativeUrl = buildRelativeUrl();
+
+    // If baseUrl is empty, return just the relative URL
+    if (!baseUrl) {
+      return relativeUrl;
+    }
+
+    const cleanBase = baseUrl.replace(/\/$/, "");
+    const cleanPath = relativeUrl.startsWith("/")
+      ? relativeUrl
+      : `/${relativeUrl}`;
+    return `${cleanBase}${cleanPath}`;
+  };
+
   // ... handlers ...
   const handleParamChange = (name: string, value: string) => {
     setParamValues((prev) => ({ ...prev, [name]: value }));
@@ -87,7 +105,22 @@ export default function TryOut({ operation, path, method }: TryOutProps) {
     setLoading(true);
     setDownloadUrl(null);
 
-    const fullUrl = buildUrl();
+    const fullUrl = buildFullUrl();
+
+    // ✅ Validate that baseUrl is provided
+    if (!baseUrl) {
+      setResponse({
+        status: 400,
+        body: {
+          error: "Please enter a Base URL first",
+        },
+        headers: {},
+        isBinary: false,
+      });
+      setLoading(false);
+      return;
+    }
+
     let requestBody: any;
     let headers: Record<string, string> = {};
 
@@ -100,14 +133,17 @@ export default function TryOut({ operation, path, method }: TryOutProps) {
 
     try {
       // Prepare body
-      if (bodyType === "json") {
+      if (bodyType === "JSON" && body.trim()) {
         requestBody = JSON.parse(body);
         headers["Content-Type"] = "application/json";
-      } else if (bodyType === "file" && selectedFile) {
+      } else if (bodyType === "JSON") {
+        // ✅ Empty JSON = no body
+        requestBody = undefined;
+      } else if (bodyType === "File" && selectedFile) {
         const fd = new FormData();
         fd.append("file", selectedFile);
         requestBody = fd;
-      } else if (bodyType === "formdata") {
+      } else if (bodyType === "Form Data") {
         const fd = new FormData();
         Object.entries(formData).forEach(([key, value]) => {
           fd.append(key, value instanceof File ? value : String(value));
@@ -161,6 +197,27 @@ export default function TryOut({ operation, path, method }: TryOutProps) {
 
   return (
     <div className="space-y-4">
+      {/* Base URL Input - User must fill this */}
+      <div className="text-xs space-y-2 p-3 bg-neutral-800/30 rounded border border-neutral-700/50">
+        <h4 className="font-semibold text-neutral-400">
+          Base URL
+          <span className="ml-1 text-red-400">*</span>
+        </h4>
+        <div className="flex items-center gap-2">
+          <span className="text-neutral-500 font-mono min-w-[80px]">
+            Server
+          </span>
+          <input
+            type="url"
+            value={baseUrl}
+            onChange={(e) => setBaseUrl(e.target.value)}
+            placeholder="https://api.example.com"
+            className={`flex-1 px-2 py-1 bg-neutral-800 border rounded text-white text-sm border-neutral-600
+            `}
+          />
+        </div>
+      </div>
+
       {/* Parameters */}
       <ParameterSection
         title="Path Parameters"
@@ -186,20 +243,20 @@ export default function TryOut({ operation, path, method }: TryOutProps) {
         colorClass="text-yellow-400"
       />
 
-      {/* URL Preview */}
-      {showUrlPreview && <UrlPreview url={buildUrl()} />}
+      {/* URL Preview - now shows full URL */}
+      {showUrlPreview && <UrlPreview url={buildFullUrl()} />}
 
       {/* Body Type Selector */}
       <BodySelector bodyType={bodyType} onChange={setBodyType} />
 
       {/* Body Inputs */}
-      {bodyType === "json" && <JsonBody value={body} onChange={setBody} />}
+      {bodyType === "JSON" && <JsonBody value={body} onChange={setBody} />}
 
-      {bodyType === "file" && (
+      {bodyType === "File" && (
         <FileUpload file={selectedFile} onChange={setSelectedFile} />
       )}
 
-      {bodyType === "formdata" && (
+      {bodyType === "Form Data" && (
         <FormDataBuilder
           values={formData}
           onChange={handleFormDataChange}
@@ -207,13 +264,17 @@ export default function TryOut({ operation, path, method }: TryOutProps) {
         />
       )}
 
-      {/* ✅ Action Buttons - PASTE HERE */}
+      {/* Action Buttons */}
       <div className="flex gap-2">
-        <ExecuteButton loading={loading} onClick={executeRequest} />
+        <ExecuteButton
+          loading={loading}
+          onClick={executeRequest}
+          // disabled={!baseUrl} // ✅ Disable if no base URL
+        />
 
         <CurlGenerator
           method={method}
-          url={buildUrl()}
+          url={buildFullUrl()}
           headers={{
             ...headerParams.reduce(
               (acc, p) => ({
@@ -222,12 +283,12 @@ export default function TryOut({ operation, path, method }: TryOutProps) {
               }),
               {},
             ),
-            ...(bodyType === "json" && body
+            ...(bodyType === "JSON" && body
               ? { "Content-Type": "application/json" }
               : {}),
           }}
           body={
-            bodyType === "json"
+            bodyType === "JSON"
               ? (() => {
                   try {
                     return JSON.parse(body);
@@ -235,9 +296,9 @@ export default function TryOut({ operation, path, method }: TryOutProps) {
                     return null;
                   }
                 })()
-              : bodyType === "file"
+              : bodyType === "File"
                 ? selectedFile
-                : bodyType === "formdata"
+                : bodyType === "Form Data"
                   ? formData
                   : null
           }

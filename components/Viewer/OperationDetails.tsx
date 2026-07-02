@@ -38,7 +38,7 @@ export default function OperationDetails({
   };
 
   return (
-    <div className="pt-3 first:mt-0">
+    <div className="pt-2 mt-2 border-t border-neutral-700/50 first:border-none">
       <div className="flex items-center gap-2 mb-1">
         <MethodBadge method={method} />
         {operation.summary && (
@@ -52,7 +52,7 @@ export default function OperationDetails({
       </div>
 
       {operation.description && (
-        <p className="text-gray-400 text-xs mb-2 ml-1">
+        <p className="text-neutral-400 text-xs mb-2 ml-1">
           {operation.description}
         </p>
       )}
@@ -62,7 +62,7 @@ export default function OperationDetails({
           {operation.tags.map((tag) => (
             <span
               key={tag}
-              className="px-1.5 py-0.5 bg-gray-700/50 rounded text-[10px] text-gray-300"
+              className="px-1.5 py-0.5 bg-neutral-700/50 rounded text-[10px] text-neutral-300"
             >
               #{tag}
             </span>
@@ -73,7 +73,7 @@ export default function OperationDetails({
       {/* ✅ Use merged parameters for display */}
       {uniqueParameters && uniqueParameters.length > 0 && (
         <div className="ml-1">
-          <div className="text-gray-400 text-xs font-semibold mb-1">
+          <div className="text-neutral-400 text-xs font-semibold mb-1">
             Parameters ({uniqueParameters.length})
           </div>
           <ParametersList parameters={uniqueParameters} />
@@ -90,7 +90,7 @@ export default function OperationDetails({
 
       <div className="mt-4">
         <details>
-          <summary className="w-fit px-3 py-1 rounded border-2 border-blue-700 hover:border-blue-700/70 cursor-pointer text-neutral-50 hover:text-blue-300 text-sm">
+          <summary className="w-fit px-2 py-1 rounded border-2 border-blue-700 hover:border-blue-700/70 cursor-pointer text-neutral-300 hover:text-blue-300 text-xs">
             Try It Out
           </summary>
           <div className="mt-3">
