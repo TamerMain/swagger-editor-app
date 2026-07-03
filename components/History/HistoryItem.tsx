@@ -11,7 +11,7 @@ export default function HistoryItem({ item }: { item: any }) {
   };
 
   return (
-    <div className="border p-3 rounded">
+    <div className=" p-3 border-1 rounded border-neutral-800">
       <div className="flex justify-between items-start">
         <div className="flex items-center gap-2 flex-wrap">
           {/* Status code */}
@@ -38,16 +38,8 @@ export default function HistoryItem({ item }: { item: any }) {
 
       {/* ✅ Payload Sizes */}
       <div className="mt-2 flex items-center gap-4 text-xs text-neutral-400">
-        {item.request_size !== null && item.request_size > 0 && (
-          <span>📤 Request: {formatBytes(item.request_size)}</span>
-        )}
-        {item.response_size !== null && item.response_size > 0 && (
-          <span>📥 Response: {formatBytes(item.response_size)}</span>
-        )}
-        {(!item.request_size || item.request_size === 0) &&
-          (!item.response_size || item.response_size === 0) && (
-            <span className="text-neutral-400">No size data</span>
-          )}
+        <span>📤 Request: {formatBytes(item.request_size)}</span>
+        <span>📥 Response: {formatBytes(item.response_size)}</span>
       </div>
 
       {/* Error details (only if error exists) */}

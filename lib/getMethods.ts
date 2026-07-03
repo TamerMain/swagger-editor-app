@@ -1,11 +1,6 @@
-import { type HttpMethod } from "@/types/openapi";
+import { HTTP_METHODS } from "@/constants/constants";
+import { type HttpMethods, type PathItem } from "@/types/openapi";
 
-export const getMethods = (pathItem: any): HttpMethod[] => {
-  const methods: HttpMethod[] = [];
-  ["get", "post", "put", "delete", "patch"].forEach((method) => {
-    if (pathItem[method as HttpMethod]) {
-      methods.push(method as HttpMethod);
-    }
-  });
-  return methods;
+export const getMethods = (pathItem: PathItem): HttpMethods[] => {
+  return Object.values(HTTP_METHODS).filter((method) => pathItem[method]);
 };

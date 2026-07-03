@@ -1,0 +1,1487 @@
+openapi: 3.0.0
+info:
+  title: Mockoon Playground API
+  description: |
+    A shared playground for prototyping and testing.
+    Supports full CRUD operations with fake data.
+    Data is periodically reset.
+    Base URL: https://playground.mockoon.com
+  version: 1.0.0
+  contact:
+    name: Mockoon
+    url: https://mockoon.com
+
+servers:
+  - url: https://playground.mockoon.com
+    description: Production server (shared playground)
+
+tags:
+  - name: Users
+    description: User management
+  - name: Posts
+    description: Blog posts
+  - name: Todos
+    description: Todo items
+  - name: Movies
+    description: Movie catalog
+  - name: Companies
+    description: Company directory
+  - name: Contacts
+    description: Contact list
+  - name: Customers
+    description: Customer management
+  - name: Notifications
+    description: User notifications
+  - name: Photos
+    description: Photo gallery
+  - name: Pokemons
+    description: Pokemon data (read-only)
+  - name: Sales
+    description: Sales records
+
+paths:
+  # ============================================
+  # USERS
+  # ============================================
+  /users:
+    get:
+      tags: [Users]
+      summary: Get all users
+      description: Returns a list of all users with optional filtering
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: property_eq
+          in: query
+          description: Filter by property (e.g., name_eq=John)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    
+    post:
+      tags: [Users]
+      summary: Create a new user
+      description: Inserts a new user. ID is auto-generated if not provided.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: User ID
+        schema:
+          type: string
+        example: "1"
+    
+    get:
+      tags: [Users]
+      summary: Get user by ID
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    
+    put:
+      tags: [Users]
+      summary: Update entire user
+      description: Full object update (replaces existing)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    
+    patch:
+      tags: [Users]
+      summary: Partially update user
+      description: Partial object update (merges with existing)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    
+    delete:
+      tags: [Users]
+      summary: Delete a user
+      responses:
+        '204':
+          description: User deleted
+        '404':
+          description: User not found
+
+  # ============================================
+  # POSTS
+  # ============================================
+  /posts:
+    get:
+      tags: [Posts]
+      summary: Get all posts
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: userId
+          in: query
+          description: Filter by user ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+    
+    post:
+      tags: [Posts]
+      summary: Create a post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+      responses:
+        '201':
+          description: Post created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+  /posts/{postId}:
+    parameters:
+      - name: postId
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Posts]
+      summary: Get post by ID
+      responses:
+        '200':
+          description: Post found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: Post not found
+    
+    put:
+      tags: [Posts]
+      summary: Update entire post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+      responses:
+        '200':
+          description: Post updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+    
+    patch:
+      tags: [Posts]
+      summary: Partially update post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+      responses:
+        '200':
+          description: Post updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+    
+    delete:
+      tags: [Posts]
+      summary: Delete a post
+      responses:
+        '204':
+          description: Post deleted
+
+  # ============================================
+  # TODOS
+  # ============================================
+  /todos:
+    get:
+      tags: [Todos]
+      summary: Get all todos
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: completed
+          in: query
+          description: Filter by completion status
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of todos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+    
+    post:
+      tags: [Todos]
+      summary: Create a todo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoInput'
+      responses:
+        '201':
+          description: Todo created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+
+  /todos/{todoId}:
+    parameters:
+      - name: todoId
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Todos]
+      summary: Get todo by ID
+      responses:
+        '200':
+          description: Todo found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+    
+    put:
+      tags: [Todos]
+      summary: Update entire todo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoInput'
+      responses:
+        '200':
+          description: Todo updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+    
+    patch:
+      tags: [Todos]
+      summary: Partially update todo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                completed:
+                  type: boolean
+      responses:
+        '200':
+          description: Todo updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+    
+    delete:
+      tags: [Todos]
+      summary: Delete a todo
+      responses:
+        '204':
+          description: Todo deleted
+
+  # ============================================
+  # MOVIES (Read-Only)
+  # ============================================
+  /movies:
+    get:
+      tags: [Movies]
+      summary: Get all movies
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of movies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+    
+  /movies/{movieId}:
+    parameters:
+      - name: movieId
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Movies]
+      summary: Get movie by ID
+      responses:
+        '200':
+          description: Movie found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+
+  # ============================================
+  # COMPANIES
+  # ============================================
+  /companies:
+    get:
+      tags: [Companies]
+      summary: Get all companies
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of companies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+    
+    post:
+      tags: [Companies]
+      summary: Create a company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyInput'
+      responses:
+        '201':
+          description: Company created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+
+  /companies/{companyId}:
+    parameters:
+      - name: companyId
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Companies]
+      summary: Get company by ID
+      responses:
+        '200':
+          description: Company found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    
+    put:
+      tags: [Companies]
+      summary: Update entire company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyInput'
+      responses:
+        '200':
+          description: Company updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    
+    patch:
+      tags: [Companies]
+      summary: Partially update company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                industry:
+                  type: string
+      responses:
+        '200':
+          description: Company updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    
+    delete:
+      tags: [Companies]
+      summary: Delete a company
+      responses:
+        '204':
+          description: Company deleted
+
+  # ============================================
+  # CONTACTS
+  # ============================================
+  /contacts:
+    get:
+      tags: [Contacts]
+      summary: Get all contacts
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+    
+    post:
+      tags: [Contacts]
+      summary: Create a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactInput'
+      responses:
+        '201':
+          description: Contact created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+
+  /contacts/{contactId}:
+    parameters:
+      - name: contactId
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Contacts]
+      summary: Get contact by ID
+      responses:
+        '200':
+          description: Contact found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+    
+    put:
+      tags: [Contacts]
+      summary: Update entire contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactInput'
+      responses:
+        '200':
+          description: Contact updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+    
+    patch:
+      tags: [Contacts]
+      summary: Partially update contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Contact updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+    
+    delete:
+      tags: [Contacts]
+      summary: Delete a contact
+      responses:
+        '204':
+          description: Contact deleted
+
+  # ============================================
+  # PHOTOS
+  # ============================================
+  /photos:
+    get:
+      tags: [Photos]
+      summary: Get all photos
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of photos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Photo'
+    
+    post:
+      tags: [Photos]
+      summary: Create a photo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoInput'
+      responses:
+        '201':
+          description: Photo created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+
+  /photos/{photoId}:
+    parameters:
+      - name: photoId
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Photos]
+      summary: Get photo by ID
+      responses:
+        '200':
+          description: Photo found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+    
+    put:
+      tags: [Photos]
+      summary: Update entire photo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoInput'
+      responses:
+        '200':
+          description: Photo updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+    
+    patch:
+      tags: [Photos]
+      summary: Partially update photo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                url:
+                  type: string
+      responses:
+        '200':
+          description: Photo updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+    
+    delete:
+      tags: [Photos]
+      summary: Delete a photo
+      responses:
+        '204':
+          description: Photo deleted
+
+  # ============================================
+  # POKEMONS (Read-Only)
+  # ============================================
+  /pokemons:
+    get:
+      tags: [Pokemons]
+      summary: Get all pokemons
+      description: Read-only resource
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of pokemons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pokemon'
+
+  /pokemons/{pokemonId}:
+    parameters:
+      - name: pokemonId
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Pokemons]
+      summary: Get pokemon by ID
+      responses:
+        '200':
+          description: Pokemon found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pokemon'
+
+  # ============================================
+  # SALES
+  # ============================================
+  /sales:
+    get:
+      tags: [Sales]
+      summary: Get all sales
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of sales
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sale'
+    
+    post:
+      tags: [Sales]
+      summary: Create a sale
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleInput'
+      responses:
+        '201':
+          description: Sale created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sale'
+
+  /sales/{saleId}:
+    parameters:
+      - name: saleId
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Sales]
+      summary: Get sale by ID
+      responses:
+        '200':
+          description: Sale found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sale'
+    
+    put:
+      tags: [Sales]
+      summary: Update entire sale
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleInput'
+      responses:
+        '200':
+          description: Sale updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sale'
+    
+    patch:
+      tags: [Sales]
+      summary: Partially update sale
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Sale updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sale'
+    
+    delete:
+      tags: [Sales]
+      summary: Delete a sale
+      responses:
+        '204':
+          description: Sale deleted
+
+  # ============================================
+  # CUSTOMERS
+  # ============================================
+  /customers:
+    get:
+      tags: [Customers]
+      summary: Get all customers
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+    
+    post:
+      tags: [Customers]
+      summary: Create a customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+      responses:
+        '201':
+          description: Customer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+
+  /customers/{customerId}:
+    parameters:
+      - name: customerId
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Customers]
+      summary: Get customer by ID
+      responses:
+        '200':
+          description: Customer found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    
+    put:
+      tags: [Customers]
+      summary: Update entire customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+      responses:
+        '200':
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    
+    patch:
+      tags: [Customers]
+      summary: Partially update customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    
+    delete:
+      tags: [Customers]
+      summary: Delete a customer
+      responses:
+        '204':
+          description: Customer deleted
+
+  # ============================================
+  # NOTIFICATIONS
+  # ============================================
+  /notifications:
+    get:
+      tags: [Notifications]
+      summary: Get all notifications
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+    
+    post:
+      tags: [Notifications]
+      summary: Create a notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationInput'
+      responses:
+        '201':
+          description: Notification created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+
+  /notifications/{notificationId}:
+    parameters:
+      - name: notificationId
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Notifications]
+      summary: Get notification by ID
+      responses:
+        '200':
+          description: Notification found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+    
+    put:
+      tags: [Notifications]
+      summary: Update entire notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationInput'
+      responses:
+        '200':
+          description: Notification updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+    
+    patch:
+      tags: [Notifications]
+      summary: Partially update notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                read:
+                  type: boolean
+      responses:
+        '200':
+          description: Notification updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+    
+    delete:
+      tags: [Notifications]
+      summary: Delete a notification
+      responses:
+        '204':
+          description: Notification deleted
+
+components:
+  schemas:
+    # ============ USER ============
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1"
+        name:
+          type: string
+          example: "John Doe"
+        username:
+          type: string
+          example: "johndoe"
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        phone:
+          type: string
+          example: "1-770-736-8031"
+        website:
+          type: string
+          example: "johndoe.com"
+        company:
+          type: object
+          properties:
+            name:
+              type: string
+            catchPhrase:
+              type: string
+            bs:
+              type: string
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            suite:
+              type: string
+            city:
+              type: string
+            zipcode:
+              type: string
+            geo:
+              type: object
+              properties:
+                lat:
+                  type: string
+                lng:
+                  type: string
+
+    UserInput:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        website:
+          type: string
+        company:
+          type: object
+        address:
+          type: object
+
+    # ============ POST ============
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+
+    PostInput:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+
+    # ============ TODO ============
+    Todo:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        completed:
+          type: boolean
+
+    TodoInput:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        completed:
+          type: boolean
+
+    # ============ MOVIE ============
+    Movie:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        year:
+          type: integer
+        director:
+          type: string
+        genre:
+          type: string
+
+    # ============ COMPANY ============
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        industry:
+          type: string
+        employees:
+          type: integer
+        founded:
+          type: integer
+
+    CompanyInput:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        industry:
+          type: string
+        employees:
+          type: integer
+        founded:
+          type: integer
+
+    # ============ CONTACT ============
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+
+    ContactInput:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+
+    # ============ PHOTO ============
+    Photo:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        url:
+          type: string
+        thumbnailUrl:
+          type: string
+
+    PhotoInput:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        url:
+          type: string
+        thumbnailUrl:
+          type: string
+
+    # ============ POKEMON ============
+    Pokemon:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        abilities:
+          type: array
+          items:
+            type: string
+
+    # ============ SALE ============
+    Sale:
+      type: object
+      properties:
+        id:
+          type: string
+        product:
+          type: string
+        amount:
+          type: number
+        status:
+          type: string
+        date:
+          type: string
+
+    SaleInput:
+      type: object
+      properties:
+        id:
+          type: string
+        product:
+          type: string
+        amount:
+          type: number
+        status:
+          type: string
+        date:
+          type: string
+
+    # ============ CUSTOMER ============
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+
+    CustomerInput:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+
+    # ============ NOTIFICATION ============
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        message:
+          type: string
+        read:
+          type: boolean
+        createdAt:
+          type: string
+
+    NotificationInput:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        message:
+          type: string
+        read:
+          type: boolean
+        createdAt:
+          type: string

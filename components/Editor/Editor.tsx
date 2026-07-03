@@ -1,6 +1,7 @@
 "use client";
 
 import CodeMirror from "@uiw/react-codemirror";
+import Toolbar from "@/components/Editor/Toolbar";
 import { json } from "@codemirror/lang-json";
 import { yaml } from "@codemirror/lang-yaml";
 import { oneDark } from "@codemirror/theme-one-dark";
@@ -22,12 +23,11 @@ export default function Editor({ onSpecChange }: EditorProps) {
   useEffect(() => {
     const loadSpec = async () => {
       try {
-        const res = await fetch("/examples/jsonplaceholder.yaml");
+        const res = await fetch("/examples/mockoon.yaml");
         let content = await res.text();
         setCode(content);
         await validateContent(content);
       } catch (error) {
-        console.error("Failed to load spec:", error);
         setErrors(["Failed to load specification file"]);
       }
     };
@@ -70,39 +70,12 @@ export default function Editor({ onSpecChange }: EditorProps) {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Toolbar */}
-      <div className="flex items-center justify-between p-3 bg-neutral-900 border-b border-neutral-700">
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-neutral-400">Format:</span>
-          <span
-            className={`px-2 py-1 text-xs border-2 rounded font-mono ${
-              format === "json"
-                ? "text-blue-400 bg-blue-500/20 border-blue-500/30"
-                : "text-green-400 bg-green-500/20 border-green-500/30"
-            }`}
-          >
-            {format.toUpperCase()}
-          </span>
-
-          {isValid && (
-            <span className="text-xs text-green-500">✓ Valid OpenAPI</span>
-          )}
-        </div>
-
-        <div className="flex gap-2">
-          <button
-            onClick={handleFormatSwitch}
-            className={`px-2 py-1 text-xs border-2 rounded font-mono cursor-pointer ${
-              format === "json"
-                ? "bg-green-900 hover:bg-green-900/90 border-green-700 hover:border-green-700/90"
-                : "bg-blue-900 hover:bg-blue-900/70 border-blue-700 hover:border-blue-700/70"
-            }`}
-            disabled={errors.length !== 0}
-          >
-            Switch to {format === FORMAT.JSON ? "YAML" : "JSON"}
-          </button>
-        </div>
-      </div>
+      <Toolbar
+        format={format}
+        isValid={isValid}
+        errors={errors}
+        onFormatSwitch={handleFormatSwitch}
+      />
 
       {/* Code Editor */}
       <div className="flex-1">

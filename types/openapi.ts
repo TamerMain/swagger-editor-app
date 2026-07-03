@@ -1,24 +1,17 @@
-export type Format = "json" | "yaml";
-export type HttpMethod = "get" | "post" | "put" | "delete" | "patch";
+import {
+  FORMAT,
+  HTTP_METHODS,
+  PARAMETER_TYPES,
+  BODY_TYPES,
+} from "@/constants/constants";
 
-export type FetchParams = {
-  headers?: HeadersInit;
-  body?: BodyInit;
-  [key: string]: unknown;
-};
+export type Format = (typeof FORMAT)[keyof typeof FORMAT];
+export type HttpMethods = (typeof HTTP_METHODS)[keyof typeof HTTP_METHODS];
+export type BodyTypes = (typeof BODY_TYPES)[keyof typeof BODY_TYPES];
+export type ParameterType =
+  (typeof PARAMETER_TYPES)[keyof typeof PARAMETER_TYPES];
 
-export interface ResponseData {
-  status: number;
-  headers: Record<string, string>;
-  body: any;
-  isBinary: boolean;
-  size?: number;
-  blob?: Blob;
-}
-
-
-export interface OpenAPISpec {
-  openapi: string;
+export interface Spec {
   info: {
     title: string;
     version: string;
@@ -26,8 +19,12 @@ export interface OpenAPISpec {
   };
   paths: Record<string, PathItem>;
   components?: {
-    schemas?: Record<string, Schema>;
+    schemas?: Record<string, any>;
   };
+  servers?: Array<{
+    url: string;
+    description?: string;
+  }>;
 }
 
 export interface PathItem {
@@ -36,6 +33,7 @@ export interface PathItem {
   put?: Operation;
   delete?: Operation;
   patch?: Operation;
+  parameters?: Parameter[];
 }
 
 export interface Operation {
@@ -50,7 +48,7 @@ export interface Operation {
 
 export interface Parameter {
   name: string;
-  in: "path" | "query" | "header" | "cookie";
+  in: ParameterType;
   required?: boolean;
   description?: string;
   schema?: Schema;
@@ -59,20 +57,15 @@ export interface Parameter {
 export interface RequestBody {
   description?: string;
   required?: boolean;
-  content: Record<string, { schema?: Schema; example?: any }>;
+  content: Record<string, { schema?: Schema; default?: any }>;
 }
 
 export interface Response {
-  description: string;
-  content?: Record<string, { schema?: Schema; example?: any }>;
+  description?: string;
+  content?: Record<string, { schema?: Schema; default?: any }>;
 }
 
 export interface Schema {
   type?: string;
-  properties?: Record<string, Schema>;
-  items?: Schema;
-  required?: string[];
-  enum?: string[];
-  example?: any;
+  default?: any;
 }
-

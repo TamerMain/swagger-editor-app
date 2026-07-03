@@ -1,15 +1,19 @@
-'use server';
+"use server";
 
 import { createClient } from "@/lib/supabase/server";
 import { calculateBodySize } from "@/lib/requestSize";
+import { type RequestBody } from "@/types/tryitout";
 
-export async function endpointTryout(
+export async function executeRequest(
   endpoint: string,
   method: string,
-  params: { headers?: Record<string, string>; body?: any }
+  params: { headers?: Record<string, string>; body?: RequestBody },
 ) {
   const supabase = await createClient();
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
   if (userError || !user) {
     throw new Error("Authentication required");
@@ -19,40 +23,25 @@ export async function endpointTryout(
   const startTime = performance.now();
 
   try {
-    // Make request
     const fetchOptions: RequestInit = { method, headers: params.headers || {} };
-    
     if (params.body) {
       if (params.body instanceof FormData) {
         fetchOptions.body = params.body;
       } else {
-        fetchOptions.headers = { ...fetchOptions.headers, 'Content-Type': 'application/json' };
+        fetchOptions.headers = {
+          ...fetchOptions.headers,
+          "Content-Type": "application/json",
+        };
         fetchOptions.body = JSON.stringify(params.body);
       }
     }
 
     const response = await fetch(endpoint, fetchOptions);
     const duration = performance.now() - startTime;
+    const responseBody = await response.text();
+    const responseSize = calculateBodySize(responseBody);
 
-    // Check binary response
-    const contentType = response.headers.get('content-type') || '';
-    const isBinary = /image|octet-stream|pdf|zip/.test(contentType);
-
-    let responseData: any;
-    let responseSize = 0;
-
-    if (isBinary) {
-      const buffer = await response.arrayBuffer();
-      responseSize = buffer.byteLength;
-      responseData = Buffer.from(buffer).toString('base64');
-    } else {
-      const text = await response.text();
-      responseSize = new Blob([text]).size;
-      responseData = JSON.parse(text);
-    }
-
-    // Record history
-    await supabase.from('history').insert({
+    await supabase.from("history").insert({
       user_id: user.id,
       endpoint,
       method,
@@ -62,17 +51,14 @@ export async function endpointTryout(
       response_size: responseSize,
       error_details: null,
     });
-
+    
     return {
       status: response.status,
       headers: Object.fromEntries(response.headers),
-      body: responseData,
-      isBinary,
-      size: responseSize,
+      body: responseBody,
     };
-
   } catch (error) {
-    await supabase.from('history').insert({
+    await supabase.from("history").insert({
       user_id: user.id,
       endpoint,
       method,
@@ -80,7 +66,7 @@ export async function endpointTryout(
       status_code: 0,
       duration_ms: null,
       response_size: null,
-      error_details: error instanceof Error ? error.message : 'Unknown error',
+      error_details: error instanceof Error ? error.message : "Unknown error",
     });
     throw error;
   }

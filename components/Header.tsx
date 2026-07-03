@@ -17,7 +17,6 @@ export default function Header() {
     } = supabase.auth.onAuthStateChange((_, session) =>
       setUser(session?.user ?? null),
     );
-    console.log("1");
     return () => subscription.unsubscribe();
   }, []);
 

@@ -4,10 +4,10 @@ import { useState } from "react";
 import Editor from "@/components/Editor/Editor";
 import Viewer from "@/components/Viewer/Viewer";
 import { parseFormat } from "@/lib/formatParser";
-import type { OpenAPISpec } from "@/types/openapi";
+import { Spec } from "@/types/openapi";
 
 export default function Home() {
-  const [spec, setSpec] = useState<OpenAPISpec | null>(null);
+  const [spec, setSpec] = useState<Spec | null>(null);
   const [isValid, setIsValid] = useState(false);
 
   const handleEditorChange = async (content: string) => {
@@ -16,7 +16,6 @@ export default function Home() {
     if (result.valid) {
       setSpec(result.data);
       setIsValid(true);
-      console.log(result.data);
     } else {
       setSpec(null);
       setIsValid(false);

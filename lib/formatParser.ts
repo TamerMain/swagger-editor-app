@@ -14,7 +14,14 @@ export async function parseFormat(content: string): Promise<ParseResult> {
   try {
     const isJson = content.trim().startsWith("{");
     const data = isJson ? JSON.parse(content) : yaml.load(content);
+    
+    const originalLog = console.log;
+    const originalError = console.error;
+    console.log = () => {};
+    console.error = () => {};
     await SwaggerParser.validate(data);
+    console.log = originalLog;
+    console.error = originalError;
 
     return {
       valid: true,

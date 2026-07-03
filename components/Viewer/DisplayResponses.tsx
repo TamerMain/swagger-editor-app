@@ -1,14 +1,16 @@
-import { type Operation } from "@/types/openapi";
 import { getStatusColor } from "@/constants/constants";
+import { Operation } from "@/types/openapi";
 
-type ResponseDisplayProps = { responses: Operation["responses"] };
+type DisplayResponseProps = { responses: Operation["responses"] };
 
-export default function ResponsesDisplay({ responses }: ResponseDisplayProps) {
+export default function DisplayResponses({ responses }: DisplayResponseProps) {
   if (!responses || Object.keys(responses).length === 0) return null;
 
   return (
     <div className="ml-1 mt-2">
-      <div className="text-gray-400 text-xs font-semibold mb-1">Responses</div>
+      <div className="text-neutral-400 text-xs font-semibold mb-1">
+        Responses
+      </div>
       <div className="flex gap-2 flex-wrap">
         {Object.entries(responses).map(([status, response]) => (
           <div key={status} className="flex items-center gap-1">

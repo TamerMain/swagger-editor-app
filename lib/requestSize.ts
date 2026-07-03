@@ -1,4 +1,6 @@
-export function calculateBodySize(body: unknown): number {
+import { RequestBody } from "@/types/tryitout";
+
+export function calculateBodySize(body: RequestBody): number {
   // 1. No Body
   if (!body) return 0;
 

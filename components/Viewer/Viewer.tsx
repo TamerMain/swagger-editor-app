@@ -1,11 +1,11 @@
 import { useState } from "react";
-import SpecHeader from "@/components/Viewer/SpecHeader";
-import PathItem from "@/components/Viewer/PathItem";
+import ViewerHeader from "@/components/Viewer/ViewerHeader";
+import Path from "@/components/Viewer/Path";
 import { getMethods } from "@/lib/getMethods";
-import { type OpenAPISpec } from "@/types/openapi";
+import { type Spec } from "@/types/openapi";
 
 interface ViewerProps {
-  spec: OpenAPISpec | null;
+  spec: Spec | null;
   isValid: boolean;
 }
 
@@ -41,12 +41,13 @@ export default function Viewer({ spec, isValid }: ViewerProps) {
 
   return (
     <div className="space-y-6">
-      <SpecHeader spec={spec} totalOperations={totalOperations} />
+      <ViewerHeader spec={spec} totalOperations={totalOperations} />
 
       <div className="space-y-3">
         {Object.entries(spec.paths).map(([path, pathItem]) => (
-          <PathItem
+          <Path
             key={path}
+            servers={spec.servers}
             path={path}
             pathItem={pathItem}
             isExpanded={expandedPaths[path] || false}

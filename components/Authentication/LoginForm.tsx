@@ -31,18 +31,18 @@ export function LoginForm() {
     setLoading(false);
   };
 
-  const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
+  // const handleGoogleLogin = async () => {
+  //   const { error } = await supabase.auth.signInWithOAuth({
+  //     provider: "google",
+  //     options: {
+  //       redirectTo: `${window.location.origin}/auth/callback`,
+  //     },
+  //   });
 
-    if (error) {
-      setError(error.message);
-    }
-  };
+  //   if (error) {
+  //     setError(error.message);
+  //   }
+  // };
 
   return (
     <form onSubmit={handleLogin} className="space-y-6 text-black">
