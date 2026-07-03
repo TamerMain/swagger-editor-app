@@ -1,22 +1,23 @@
-import { useState } from "react";
-import { executeRequest } from "@/app/actions/tryout";
-import { buildUrl, buildHeaders, buildBody } from "@/lib/requestBuilder";
-import TryParameters from "./TryParameters";
-import TryHeaders from "./TryHeaders";
-import TryBody from "./TryBody";
-import TryURL from "./TryURL";
-import TryResponse from "./TryResponse";
-import TryCurl from "./TryCurl";
-import { PARAMETER_TYPES, TRY_IT_OUT_FIELDS } from "@/constants/constants";
+import { useState } from 'react';
+import { executeRequest } from '@/app/actions/tryout';
+import { buildUrl, buildHeaders, buildBody } from '@/lib/requestBuilder';
+import TryParameters from './TryParameters';
+import TryHeaders from './TryHeaders';
+import TryBody from './TryBody';
+import TryURL from './TryURL';
+import TryResponse from './TryResponse';
+import TryCurl from './TryCurl';
+import { PARAMETER_TYPES, TRY_IT_OUT_FIELDS } from '@/constants/constants';
 import {
   Operation,
   Spec,
   type HttpMethods,
   type BodyTypes,
-} from "@/types/openapi";
+  type ResponseData
+} from '@/types/openapi';
 
 type TryItOutProps = {
-  servers: Spec["servers"];
+  servers: Spec['servers'];
   method: HttpMethods;
   operation: Operation;
   path: string;
@@ -29,7 +30,7 @@ export default function TryItOut({
   path,
 }: TryItOutProps) {
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<ResponseData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const params = operation?.parameters || [];
@@ -61,23 +62,23 @@ export default function TryItOut({
         customHeaders: data.get(TRY_IT_OUT_FIELDS.HEADERS) as string,
         contentType:
           Object.keys(operation.requestBody?.content || {})[0] ||
-          "application/json",
+          'application/json',
         bodyType:
           (data.get(TRY_IT_OUT_FIELDS.BODY.CURRENT_TYPE) as BodyTypes) ||
-          "json",
+          'json',
       });
 
       const body = buildBody({
         data,
         bodyType:
           (data.get(TRY_IT_OUT_FIELDS.BODY.CURRENT_TYPE) as BodyTypes) ||
-          "json",
+          'json',
       });
 
       const result = await executeRequest(url, method, { headers, body });
       setResponse(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Request failed");
+      setError(err instanceof Error ? err.message : 'Request failed');
     } finally {
       setLoading(false);
     }
@@ -86,7 +87,7 @@ export default function TryItOut({
   return (
     <div className="mt-4">
       <details className="group">
-        <summary className="w-fit px-2 py-1 text-white hover:text-blue-400 cursor-pointer text-xs border-2 rounded border-transparent group-open:border-blue-500 ">
+        <summary className="w-fit px-2 py-1 text-white hover:text-blue-400 cursor-pointer text-xs border-2 rounded border-transparent group-open:border-blue-500 group-open:hover:border-blue-600 ">
           Try It Out
         </summary>
         <form onSubmit={handleSubmit}>

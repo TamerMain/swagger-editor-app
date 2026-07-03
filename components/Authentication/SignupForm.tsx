@@ -115,7 +115,7 @@ export function SignUpForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full flex justify-center py-2 px-4 border-3 border-blue-500 hover:border-blue-600 rounded-md text-sm font-medium text-white bg-blue-800 hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 cursor-pointer"
+        className="w-full flex justify-center py-2 px-4 border-3 border-blue-600 hover:border-blue-700 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 cursor-pointer"
       >
         {loading ? 'Creating account...' : 'Sign Up'}
       </button>

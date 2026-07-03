@@ -1,6 +1,11 @@
-import HistoryItem from "./HistoryItem";
+import HistoryItem from './HistoryItem';
+import { type DatabaseRow } from '@/types/supabase';
 
-export default function History({ history }: { history: any[] | null }) {
+type HistoryProps = {
+  history: DatabaseRow[] | null;
+};
+
+export default function History({ history }: HistoryProps) {
   if (!history || history.length === 0) {
     return (
       <div className="p-4">

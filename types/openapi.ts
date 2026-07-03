@@ -3,7 +3,7 @@ import {
   HTTP_METHODS,
   PARAMETER_TYPES,
   BODY_TYPES,
-} from "@/constants/constants";
+} from '@/constants/constants';
 
 export type Format = (typeof FORMAT)[keyof typeof FORMAT];
 export type HttpMethods = (typeof HTTP_METHODS)[keyof typeof HTTP_METHODS];
@@ -19,7 +19,7 @@ export interface Spec {
   };
   paths: Record<string, PathItem>;
   components?: {
-    schemas?: Record<string, any>;
+    schemas?: Record<string, unknown>;
   };
   servers?: Array<{
     url: string;
@@ -57,15 +57,41 @@ export interface Parameter {
 export interface RequestBody {
   description?: string;
   required?: boolean;
-  content: Record<string, { schema?: Schema; default?: any }>;
+  content: Record<string, { schema?: Schema; default?: unknown }>;
 }
 
 export interface Response {
   description?: string;
-  content?: Record<string, { schema?: Schema; default?: any }>;
+  content?: Record<string, { schema?: Schema; default?: unknown }>;
 }
 
 export interface Schema {
   type?: string;
-  default?: any;
+  default?: unknown;
+}
+
+export type RequestBodyTypes =
+  | string
+  | ArrayBuffer
+  | Uint8Array
+  | FormData
+  | Blob
+  | File
+  | URLSearchParams
+  | JsonValue
+  | number
+  | boolean
+  | null
+  | undefined;
+
+export type JsonValue =
+  string | number | boolean | null | { [key: string]: JsonValue } | JsonValue[];
+
+export interface ResponseData {
+  status: number;
+  headers: Record<string, string>;
+  body: unknown;
+  isBinary?: boolean;
+  size?: number;
+  blob?: Blob;
 }

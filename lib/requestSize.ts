@@ -1,6 +1,6 @@
-import { RequestBody } from "@/types/tryitout";
+import { RequestBodyTypes } from "@/types/openapi";
 
-export function calculateBodySize(body: RequestBody): number {
+export function calculateBodySize(body: RequestBodyTypes): number {
   // 1. No Body
   if (!body) return 0;
 

@@ -3,7 +3,7 @@ import {
   PARAMETER_TYPES,
   BODY_TYPES,
 } from "@/constants/constants";
-import { type BodyTypes, Spec, Parameter } from "@/types/openapi";
+import { type BodyTypes, Spec, Parameter, RequestBodyTypes } from "@/types/openapi";
 
 type BuildUrlParams = {
   data: FormData;
@@ -101,7 +101,7 @@ type BuildBodyParams = {
   bodyType: BodyTypes;
 };
 
-export function buildBody({ data, bodyType }: BuildBodyParams): any {
+export function buildBody({ data, bodyType }: BuildBodyParams): RequestBodyTypes {
   if (bodyType === BODY_TYPES.JSON) {
     const raw = data.get(TRY_IT_OUT_FIELDS.BODY.JSON) as string;
     if (!raw || !raw.trim()) return undefined;

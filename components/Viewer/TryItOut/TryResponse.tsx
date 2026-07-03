@@ -18,27 +18,28 @@ export default function TryResponse({ response }: TryResponseProps) {
     }
   }
 
+  const bodyString =
+    typeof displayBody === "string"
+      ? displayBody
+      : JSON.stringify(displayBody, null, 2);
+
   return (
     <div className="border border-neutral-700 rounded p-3">
       <div className="flex justify-between items-center">
         <span
-          className={`px-2 py-0.5 text-[10px] font-mono rounded border  ${getStatusColor(String(response.status))}`}
+          className={`px-2 py-0.5 text-[10px] font-mono rounded border ${getStatusColor(String(response.status))}`}
         >
           {response.status}
         </span>
         <button
-          onClick={() =>
-            navigator.clipboard.writeText(
-              JSON.stringify(response.body, null, 2),
-            )
-          }
+          onClick={() => navigator.clipboard.writeText(bodyString)}
           className="text-xs text-blue-400 hover:text-blue-300"
         >
           Copy
         </button>
       </div>
       <pre className="mt-2 text-xs text-neutral-300 overflow-auto max-h-60">
-        {JSON.stringify(displayBody, null, 2)}
+        {bodyString}
       </pre>
     </div>
   );

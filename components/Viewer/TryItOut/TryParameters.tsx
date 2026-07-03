@@ -1,24 +1,21 @@
 import {
   PARAMETER_TYPE_COLORS,
   TRY_IT_OUT_FIELDS,
-} from "@/constants/constants";
-import { type ParameterType } from "@/types/openapi";
+} from '@/constants/constants';
+import { type ParameterType, type Parameter } from '@/types/openapi';
 
 type TryParametersProps = {
   type: ParameterType;
-  params: Array<{
-    name: string;
-    required?: boolean;
-  }>;
+  params: Parameter[];
 };
 
 export default function TryParameters({ type, params }: TryParametersProps) {
   if (params.length === 0) return null;
 
-  const getPlaceholder = (p: any) => {
+  const getPlaceholder = (p: Parameter) => {
     if (p.schema?.default !== undefined) return String(p.schema.default);
     if (p.schema?.type) return p.schema.type;
-    return p.required ? "required" : "optional";
+    return p.required ? 'required' : 'optional';
   };
 
   return (

@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import CodeMirror from "@uiw/react-codemirror";
-import Toolbar from "@/components/Editor/Toolbar";
-import { json } from "@codemirror/lang-json";
-import { yaml } from "@codemirror/lang-yaml";
-import { oneDark } from "@codemirror/theme-one-dark";
-import { useState, useEffect } from "react";
-import { parseFormat, convertFormat } from "@/lib/formatParser";
-import { FORMAT } from "@/constants/constants";
-import { type Format } from "@/types/openapi";
+import CodeMirror from '@uiw/react-codemirror';
+import EditorHeader from '@/components/Editor/EditorHeader';
+import { json } from '@codemirror/lang-json';
+import { yaml } from '@codemirror/lang-yaml';
+import { oneDark } from '@codemirror/theme-one-dark';
+import { useState, useEffect } from 'react';
+import { parseFormat, convertFormat } from '@/lib/formatParser';
+import { FORMAT } from '@/constants/constants';
+import { type Format } from '@/types/openapi';
 
 interface EditorProps {
   onSpecChange?: (content: string) => void;
 }
 
 export default function Editor({ onSpecChange }: EditorProps) {
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState('');
   const [format, setFormat] = useState<Format>(FORMAT.YAML);
   const [errors, setErrors] = useState<string[]>([]);
   const [isValid, setIsValid] = useState(false);
@@ -23,12 +23,12 @@ export default function Editor({ onSpecChange }: EditorProps) {
   useEffect(() => {
     const loadSpec = async () => {
       try {
-        const res = await fetch("/examples/mockoon.yaml");
+        const res = await fetch('/examples/mockoon.yaml');
         let content = await res.text();
         setCode(content);
         await validateContent(content);
       } catch (error) {
-        setErrors(["Failed to load specification file"]);
+        setErrors(['Failed to load specification file']);
       }
     };
     loadSpec();
@@ -45,9 +45,9 @@ export default function Editor({ onSpecChange }: EditorProps) {
       }
       onSpecChange?.(content);
     } else {
-      setErrors([result.error || "Invalid specification"]);
+      setErrors([result.error || 'Invalid specification']);
       setIsValid(false);
-      onSpecChange?.("");
+      onSpecChange?.('');
     }
   };
 
@@ -64,13 +64,13 @@ export default function Editor({ onSpecChange }: EditorProps) {
       setFormat(newFormat);
       setErrors([]);
     } catch (error) {
-      setErrors(["Failed to convert format"]);
+      setErrors(['Failed to convert format']);
     }
   };
 
   return (
     <div className="h-full flex flex-col">
-      <Toolbar
+      <EditorHeader
         format={format}
         isValid={isValid}
         errors={errors}

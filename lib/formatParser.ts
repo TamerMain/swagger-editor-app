@@ -1,20 +1,20 @@
-import SwaggerParser from "@apidevtools/swagger-parser";
-import * as yaml from "js-yaml";
-import { FORMAT } from "@/constants/constants";
-import { type Format } from "@/types/openapi";
+import SwaggerParser from '@apidevtools/swagger-parser';
+import * as yaml from 'js-yaml';
+import { FORMAT } from '@/constants/constants';
+import { type Format, type Spec } from '@/types/openapi';
 
 export interface ParseResult {
   valid: boolean;
-  data?: any;
+  data?: Spec;
   error?: string;
   format?: Format;
 }
 
 export async function parseFormat(content: string): Promise<ParseResult> {
   try {
-    const isJson = content.trim().startsWith("{");
+    const isJson = content.trim().startsWith('{');
     const data = isJson ? JSON.parse(content) : yaml.load(content);
-    
+
     const originalLog = console.log;
     const originalError = console.error;
     console.log = () => {};
@@ -29,13 +29,13 @@ export async function parseFormat(content: string): Promise<ParseResult> {
       format: isJson ? FORMAT.JSON : FORMAT.YAML,
     };
   } catch (error) {
-    console.error("❌ Validation failed:", error);
+    console.error('❌ Validation failed:', error);
     return {
       valid: false,
       error:
         error instanceof Error
           ? error.message
-          : "Invalid OpenAPI specification",
+          : 'Invalid OpenAPI specification',
     };
   }
 }

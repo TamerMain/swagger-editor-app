@@ -35,11 +35,11 @@ export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   const protectedRoutes = ["/history"];
-  const authRoutes = ["/sign-in", "/sign-up"];
+  const authRoutes = ["/login", "/signup"];
 
-  //  If not authenticated and trying to access protected route > 401 redirect
+  //  If not authenticated and trying to access protected route > 401
   if (!user && protectedRoutes.some((route) => path.startsWith(route))) {
-    return NextResponse.redirect(new URL("/sign-in", request.url), {
+    return new NextResponse("Unauthorized", {
       status: 401,
     });
   }

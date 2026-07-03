@@ -3,19 +3,19 @@
 import { FORMAT } from "@/constants/constants";
 import { type Format } from "@/types/openapi";
 
-type ToolbarProps = {
+type EditorHeaderProps = {
   format: Format;
   isValid: boolean;
   errors: string[];
   onFormatSwitch: () => void;
 };
 
-export default function Toolbar({
+export default function EditorHeader({
   format,
   isValid,
   errors,
   onFormatSwitch,
-}: ToolbarProps) {
+}: EditorHeaderProps) {
   return (
     <div className="flex items-center justify-between p-3 bg-neutral-900 border-b border-neutral-700">
       <div className="flex items-center gap-3">
@@ -40,7 +40,7 @@ export default function Toolbar({
       <div className="flex gap-2">
         <button
           onClick={onFormatSwitch}
-          className={`px-2 py-1 text-xs rounded font-mono cursor-pointer ${
+          className={`px-2 py-2 text-xs rounded font-mono cursor-pointer ${
             format === FORMAT.JSON
               ? "bg-green-600 hover:bg-green-700"
               : "bg-blue-600 hover:bg-blue-700"

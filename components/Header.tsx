@@ -1,13 +1,14 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { User } from '@supabase/supabase-js';
 
 export default function Header() {
   const pathname = usePathname();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function Header() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    window.location.href = "/";
+    window.location.href = '/';
   };
 
   return (
@@ -39,7 +40,10 @@ export default function Header() {
 
           {user ? (
             <>
-              <Link href="/history" className="text-neutral-300 hover:text-white">
+              <Link
+                href="/history"
+                className="text-neutral-300 hover:text-white"
+              >
                 History
               </Link>
               <button
@@ -51,12 +55,15 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/login" className="px-3 py-1 rounded border-2 border-blue-700 hover:border-blue-700/70 hover:text-blue-300">
+              <Link
+                href="/login"
+                className="px-3 py-1 rounded border-2 border-blue-500 hover:border-blue-600 hover:text-blue-300"
+              >
                 Sign In
               </Link>
               <Link
                 href="/signup"
-                className="px-3 py-1 rounded border-2 border-blue-700 bg-blue-900 text-white hover:border-blue-700/70 hover:bg-blue-900/70"
+                className="px-3 py-1 rounded border-2 border-blue-600 bg-blue-600 text-white hover:border-blue-700 hover:bg-blue-700"
               >
                 Sign Up
               </Link>

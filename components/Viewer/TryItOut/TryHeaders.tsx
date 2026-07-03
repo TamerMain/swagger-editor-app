@@ -1,14 +1,14 @@
-import { Operation } from "@/types/openapi";
-import { TRY_IT_OUT_FIELDS } from "@/constants/constants";
+import { Operation } from '@/types/openapi';
+import { TRY_IT_OUT_FIELDS } from '@/constants/constants';
 
 type TryHeadersProps = {
-  headerParams: Operation["parameters"];
+  headerParams: Operation['parameters'];
 };
 
 export default function TryHeaders({ headerParams = [] }: TryHeadersProps) {
   const headerDefault = headerParams.reduce(
     (acc, p) => {
-      acc[p.name] = p.schema?.default || p.schema?.type || "";
+      acc[p.name] = String(p.schema?.default ?? p.schema?.type ?? '');
       return acc;
     },
     {} as Record<string, string>,

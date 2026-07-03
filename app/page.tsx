@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Editor from "@/components/Editor/Editor";
-import Viewer from "@/components/Viewer/Viewer";
-import { parseFormat } from "@/lib/formatParser";
-import { Spec } from "@/types/openapi";
+import { useState } from 'react';
+import Editor from '@/components/Editor/Editor';
+import Viewer from '@/components/Viewer/Viewer';
+import { parseFormat } from '@/lib/formatParser';
+import { Spec } from '@/types/openapi';
 
 export default function Home() {
   const [spec, setSpec] = useState<Spec | null>(null);
@@ -13,7 +13,7 @@ export default function Home() {
   const handleEditorChange = async (content: string) => {
     const result = await parseFormat(content);
 
-    if (result.valid) {
+    if (result.valid && result.data) {
       setSpec(result.data);
       setIsValid(true);
     } else {

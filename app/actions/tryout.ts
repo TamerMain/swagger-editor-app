@@ -2,12 +2,12 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { calculateBodySize } from "@/lib/requestSize";
-import { type RequestBody } from "@/types/tryitout";
+import { type RequestBodyTypes } from "@/types/openapi";
 
 export async function executeRequest(
   endpoint: string,
   method: string,
-  params: { headers?: Record<string, string>; body?: RequestBody },
+  params: { headers?: Record<string, string>; body?: RequestBodyTypes },
 ) {
   const supabase = await createClient();
   const {
@@ -51,7 +51,7 @@ export async function executeRequest(
       response_size: responseSize,
       error_details: null,
     });
-    
+
     return {
       status: response.status,
       headers: Object.fromEntries(response.headers),
