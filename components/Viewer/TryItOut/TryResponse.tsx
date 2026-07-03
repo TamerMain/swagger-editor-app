@@ -9,10 +9,14 @@ type TryResponseProps = {
 };
 
 export default function TryResponse({ response }: TryResponseProps) {
-  const displayBody =
-    typeof response.body === "string"
-      ? JSON.parse(response.body)
-      : response.body;
+  let displayBody = response.body;
+  if (typeof response.body === "string") {
+    try {
+      displayBody = JSON.parse(response.body);
+    } catch {
+      displayBody = response.body;
+    }
+  }
 
   return (
     <div className="border border-neutral-700 rounded p-3">
