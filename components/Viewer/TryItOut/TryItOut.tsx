@@ -13,7 +13,7 @@ import {
   Spec,
   type HttpMethods,
   type BodyTypes,
-  type ResponseData
+  type ResponseData,
 } from '@/types/openapi';
 
 type TryItOutProps = {
@@ -113,6 +113,7 @@ export default function TryItOut({
                 <button
                   type="submit"
                   className="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-white"
+                  disabled={loading}
                 >
                   Execute
                 </button>
@@ -123,7 +124,7 @@ export default function TryItOut({
                   path={path}
                 />
               </div>
-              {response && <TryResponse response={response} />}
+              {response && <TryResponse response={response} error={error} />}
             </div>
           </div>
         </form>

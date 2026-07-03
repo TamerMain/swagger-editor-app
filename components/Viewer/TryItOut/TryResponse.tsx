@@ -8,9 +8,10 @@ type TryResponseProps = {
     ok?: boolean;
     statusText?: string;
   };
+  error?: string | null;
 };
 
-export default function TryResponse({ response }: TryResponseProps) {
+export default function TryResponse({ response, error }: TryResponseProps) {
   let displayBody = response.body;
   if (typeof response.body === 'string') {
     try {
@@ -42,9 +43,7 @@ export default function TryResponse({ response }: TryResponseProps) {
             {response.status || 'ERR'}{' '}
             {response.statusText && `- ${response.statusText}`}
           </span>
-          {!response.ok && (
-            <span className="text-xs text-red-400">Error</span>
-          )}
+          {!response.ok && <span className="text-xs text-red-400">Error</span>}
         </div>
         <button
           onClick={() => navigator.clipboard.writeText(bodyString)}
@@ -53,6 +52,11 @@ export default function TryResponse({ response }: TryResponseProps) {
           Copy
         </button>
       </div>
+      {error && (
+        <div className="mt-2 text-xs text-red-400 bg-red-950/30 p-2 rounded border border-red-800">
+          ❌ {error}
+        </div>
+      )}
       {errorMessage && (
         <div className="mt-2 text-xs text-red-400 bg-red-950/30 p-2 rounded border border-red-800">
           ❌ {errorMessage}

@@ -1,29 +1,29 @@
-import { useState } from "react";
-import { Operation } from "@/types/openapi";
-import { BODY_TYPES, TRY_IT_OUT_FIELDS } from "@/constants/constants";
-import { BodyTypes } from "@/types/openapi";
+import { useState } from 'react';
+import { Operation } from '@/types/openapi';
+import { BODY_TYPES, TRY_IT_OUT_FIELDS } from '@/constants/constants';
+import { BodyTypes } from '@/types/openapi';
 
 type FormDataField = { key: string; value: string | File };
 
 type TryBodyProps = {
-  requestBody: Operation["requestBody"];
+  requestBody: Operation['requestBody'];
   method: string;
 };
 
 export default function TryBody({ requestBody, method }: TryBodyProps) {
   const [bodyType, setBodyType] = useState<BodyTypes>(BODY_TYPES.JSON);
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [formData, setFormData] = useState<Record<string, FormDataField>>({});
 
-  if (!requestBody || ["get", "delete"].includes(method.toLowerCase())) {
+  if (!requestBody || ['get', 'delete'].includes(method.toLowerCase())) {
     return null;
   }
 
   const addField = () => {
     const id =
       Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
-    setFormData({ ...formData, [id]: { key: "", value: "" } });
+    setFormData({ ...formData, [id]: { key: '', value: '' } });
   };
 
   const deleteField = (id: string) => {
@@ -42,7 +42,7 @@ export default function TryBody({ requestBody, method }: TryBodyProps) {
   return (
     <div>
       <label className="text-xs text-neutral-400 block mb-1">
-        Request Body{" "}
+        Request Body{' '}
         {requestBody.required && <span className="text-red-400">*</span>}
       </label>
       <input
@@ -54,11 +54,12 @@ export default function TryBody({ requestBody, method }: TryBodyProps) {
         {Object.values(BODY_TYPES).map((type) => (
           <button
             key={type}
+            type="button"
             onClick={() => setBodyType(type)}
             className={`px-2 py-0.5 text-xs border-2 rounded capitalize ${
               bodyType === type
-                ? "border-blue-600"
-                : "bg-neutral-800 hover:bg-neutral-900 border-neutral-700 hover:border-neutral-800"
+                ? 'border-blue-600'
+                : 'bg-neutral-800 hover:bg-neutral-900 border-neutral-700 hover:border-neutral-800'
             }`}
           >
             {type}
