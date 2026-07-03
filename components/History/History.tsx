@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import HistoryItem from './HistoryItem';
 import { type DatabaseRow } from '@/types/supabase';
 
@@ -12,15 +13,15 @@ export default function History({ history }: HistoryProps) {
         <h1 className="text-2xl font-bold mb-4">Request History</h1>
         <div className="text-center py-12">
           <p className="text-gray-500 mb-4">
-            You haven't executed any requests yet
+            You haven&apos;t executed any requests yet
           </p>
           <div className="space-x-4">
-            <a href="/" className="text-blue-500 hover:underline">
+            <Link href="/" className="text-blue-500 hover:underline">
               Go to Editor
-            </a>
-            <a href="/viewer" className="text-blue-500 hover:underline">
+            </Link>
+            <Link href="/viewer" className="text-blue-500 hover:underline">
               Go to Viewer
-            </a>
+            </Link>
           </div>
         </div>
       </div>

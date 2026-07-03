@@ -20,20 +20,6 @@ export default function Editor({ onSpecChange }: EditorProps) {
   const [errors, setErrors] = useState<string[]>([]);
   const [isValid, setIsValid] = useState(false);
 
-  useEffect(() => {
-    const loadSpec = async () => {
-      try {
-        const res = await fetch('/examples/mockoon.yaml');
-        let content = await res.text();
-        setCode(content);
-        await validateContent(content);
-      } catch (error) {
-        setErrors(['Failed to load specification file']);
-      }
-    };
-    loadSpec();
-  }, []);
-
   const validateContent = async (content: string) => {
     const result = await parseFormat(content);
 
@@ -50,6 +36,20 @@ export default function Editor({ onSpecChange }: EditorProps) {
       onSpecChange?.('');
     }
   };
+
+  useEffect(() => {
+    const loadSpec = async () => {
+      try {
+        const res = await fetch('/examples/mockoon.yaml');
+        const content = await res.text();
+        setCode(content);
+        await validateContent(content);
+      } catch (error) {
+        setErrors(['Failed to load specification file']);
+      }
+    };
+    loadSpec();
+  }, []);
 
   const handleChange = async (value: string) => {
     setCode(value);
