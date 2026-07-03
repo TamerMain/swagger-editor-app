@@ -1,8 +1,8 @@
-"use server";
+'use server';
 
-import { createClient } from "@/lib/supabase/server";
-import { calculateBodySize } from "@/lib/requestSize";
-import { type RequestBodyTypes } from "@/types/openapi";
+import { createClient } from '@/lib/supabase/server';
+import { calculateBodySize } from '@/lib/requestSize';
+import { type RequestBodyTypes } from '@/types/openapi';
 
 export async function executeRequest(
   endpoint: string,
@@ -16,7 +16,7 @@ export async function executeRequest(
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    throw new Error("Authentication required");
+    throw new Error('Authentication required');
   }
 
   const requestSize = calculateBodySize(params.body);
@@ -30,7 +30,7 @@ export async function executeRequest(
       } else {
         fetchOptions.headers = {
           ...fetchOptions.headers,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         };
         fetchOptions.body = JSON.stringify(params.body);
       }
@@ -40,8 +40,14 @@ export async function executeRequest(
     const duration = performance.now() - startTime;
     const responseBody = await response.text();
     const responseSize = calculateBodySize(responseBody);
+    let parsedBody;
+    try {
+      parsedBody = JSON.parse(responseBody);
+    } catch {
+      parsedBody = responseBody;
+    }
 
-    await supabase.from("history").insert({
+    await supabase.from('history').insert({
       user_id: user.id,
       endpoint,
       method,
@@ -49,16 +55,20 @@ export async function executeRequest(
       status_code: response.status,
       duration_ms: Math.round(duration),
       response_size: responseSize,
-      error_details: null,
+      error_details: response.ok
+        ? null
+        : `Status ${response.status}: ${response.statusText}`,
     });
 
     return {
       status: response.status,
       headers: Object.fromEntries(response.headers),
-      body: responseBody,
+      body: parsedBody,
+      ok: response.ok,
+      statusText: response.statusText,
     };
   } catch (error) {
-    await supabase.from("history").insert({
+    await supabase.from('history').insert({
       user_id: user.id,
       endpoint,
       method,
@@ -66,8 +76,16 @@ export async function executeRequest(
       status_code: 0,
       duration_ms: null,
       response_size: null,
-      error_details: error instanceof Error ? error.message : "Unknown error",
+      error_details: error instanceof Error ? error.message : 'Unknown error',
     });
-    throw error;
+    return {
+      status: 0,
+      headers: {},
+      body: {
+        error: error instanceof Error ? error.message : 'Request failed',
+      },
+      ok: false,
+      statusText: 'Network Error',
+    };
   }
 }
