@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import HistoryItem from './HistoryItem';
-import { type DatabaseRow } from '@/types/supabase';
+import { type HistoryRow } from '@/types/supabase';
 
 type HistoryProps = {
-  history: DatabaseRow[] | null;
+  history: HistoryRow[] | null;
 };
 
 export default function History({ history }: HistoryProps) {

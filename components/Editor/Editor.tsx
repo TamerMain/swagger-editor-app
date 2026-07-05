@@ -2,46 +2,75 @@
 
 import CodeMirror from '@uiw/react-codemirror';
 import EditorHeader from '@/components/Editor/EditorHeader';
+import { createClient } from '@/lib/supabase/client';
 import { json } from '@codemirror/lang-json';
 import { yaml } from '@codemirror/lang-yaml';
 import { oneDark } from '@codemirror/theme-one-dark';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { parseFormat, convertFormat } from '@/lib/formatParser';
 import { FORMAT } from '@/constants/constants';
 import { type Format } from '@/types/openapi';
 
-interface EditorProps {
+type EditorProps = {
   onSpecChange?: (content: string) => void;
-}
+};
 
 export default function Editor({ onSpecChange }: EditorProps) {
   const [code, setCode] = useState('');
   const [format, setFormat] = useState<Format>(FORMAT.YAML);
   const [errors, setErrors] = useState<string[]>([]);
-  const [isValid, setIsValid] = useState(false);
+  const isInitialLoad = useRef({ isHydrated: false, isAuth: false });
+  const [isSaving, setIsSaving] = useState(false);
+  const supabase = createClient();
 
   const validateContent = async (content: string) => {
     const result = await parseFormat(content);
 
     if (result.valid) {
       setErrors([]);
-      setIsValid(true);
       if (result.format && result.format !== format) {
         setFormat(result.format);
       }
       onSpecChange?.(content);
     } else {
       setErrors([result.error || 'Invalid specification']);
-      setIsValid(false);
       onSpecChange?.('');
     }
   };
 
   useEffect(() => {
+    if (isInitialLoad.current.isHydrated) {
+      return;
+    }
+    isInitialLoad.current.isHydrated = true;
+
     const loadSpec = async () => {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
       try {
-        const res = await fetch('/examples/mockoon.yaml');
-        const content = await res.text();
+        let content;
+
+        if (user && !userError) {
+          isInitialLoad.current.isAuth = true;
+          const { data } = await supabase
+            .from('userschema')
+            .select('content')
+            .eq('user_id', user.id)
+            .maybeSingle();
+
+          if (data?.content) {
+            content = data.content;
+          }
+        }
+
+        if (!content) {
+          const res = await fetch('/examples/mockoon.yaml');
+          content = await res.text();
+        }
+
         setCode(content);
         await validateContent(content);
       } catch (error) {
@@ -68,12 +97,43 @@ export default function Editor({ onSpecChange }: EditorProps) {
     }
   };
 
+  const handleSchemaSave = async () => {
+    setIsSaving(true);
+    try {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user || errors.length !== 0) {
+        setIsSaving(false);
+        return;
+      }
+
+      const { error } = await supabase.from('userschema').upsert(
+        {
+          user_id: user.id,
+          content: code,
+        },
+        { onConflict: 'user_id' },
+      );
+
+      if (error) throw error;
+    } catch (error) {
+      setErrors(['Failed to save']);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
       <EditorHeader
         format={format}
-        isValid={isValid}
+        isAuth={isInitialLoad.current.isAuth}
+        isSaving={isSaving}
         errors={errors}
+        onSchemaSave={handleSchemaSave}
         onFormatSwitch={handleFormatSwitch}
       />
 

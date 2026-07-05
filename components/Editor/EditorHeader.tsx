@@ -1,19 +1,23 @@
-"use client";
+'use client';
 
-import { FORMAT } from "@/constants/constants";
-import { type Format } from "@/types/openapi";
+import { FORMAT } from '@/constants/constants';
+import { type Format } from '@/types/openapi';
 
 type EditorHeaderProps = {
   format: Format;
-  isValid: boolean;
+  isAuth: boolean;
+  isSaving: boolean;
   errors: string[];
+  onSchemaSave: () => void;
   onFormatSwitch: () => void;
 };
 
 export default function EditorHeader({
   format,
-  isValid,
+  isAuth,
+  isSaving,
   errors,
+  onSchemaSave,
   onFormatSwitch,
 }: EditorHeaderProps) {
   return (
@@ -23,31 +27,44 @@ export default function EditorHeader({
         <span
           className={`px-2 py-1 text-xs border-2 rounded font-mono ${
             format === FORMAT.JSON
-              ? "text-blue-400 bg-blue-500/20 border-blue-700"
-              : "text-green-400 bg-green-500/20 border-green-700"
+              ? 'text-blue-400 bg-blue-500/20 border-blue-700'
+              : 'text-green-400 bg-green-500/20 border-green-700'
           }`}
         >
           {format.toUpperCase()}
         </span>
 
-        {isValid && (
+        {errors.length === 0 && (
           <span className="text-xs text-green-500">
             Valid OpenAPI 3.0 Specification
           </span>
         )}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 font-mono">
+        {isAuth && (
+          <button
+            onClick={() => onSchemaSave()}
+            className={`w-28 px-2 py-1 text-xs ${errors.length > 0 ? 'bg-gray-600' : 'bg-green-600 hover:bg-green-700'} rounded`}
+            disabled={errors.length > 0}
+          >
+            {isSaving
+              ? 'Saving...'
+              : errors.length > 0
+                ? 'Invalid Schema'
+                : 'Save Schema'}
+          </button>
+        )}
         <button
           onClick={onFormatSwitch}
-          className={`px-2 py-2 text-xs rounded font-mono cursor-pointer ${
+          className={`px-2 py-2 text-xs rounded cursor-pointer ${
             format === FORMAT.JSON
-              ? "bg-green-600 hover:bg-green-700"
-              : "bg-blue-600 hover:bg-blue-700"
+              ? 'bg-green-600 hover:bg-green-700'
+              : 'bg-blue-600 hover:bg-blue-700'
           }`}
-          disabled={errors.length !== 0}
+          disabled={errors.length > 0}
         >
-          Switch to {format === FORMAT.JSON ? "YAML" : "JSON"}
+          Switch to {format === FORMAT.JSON ? 'YAML' : 'JSON'}
         </button>
       </div>
     </div>
