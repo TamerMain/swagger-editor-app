@@ -26,7 +26,7 @@ export default function DisplayParameters({
             >
               {param.in}
             </span>
-            <span className="font-mono text-white">
+            <span className="font-mono text-gray-300">
               {param.name}
               {" "}
               {param.required && (

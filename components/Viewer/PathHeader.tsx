@@ -16,12 +16,12 @@ export default function PathHeader({
 }: PathHeaderProps) {
   return (
     <div
-      className="p-3 cursor-pointer hover:bg-neutral-800/50 transition-colors"
+      className="p-3 cursor-pointer hover:bg-neutral-800/50 transition-colors group/path"
       onClick={onToggle}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-white font-mono text-sm">{path}</span>
+          <span className="text-white font-mono text-sm group-hover/path:text-blue-400">{path}</span>
           <div className="flex gap-1">
             {methods.map((method) => (
               <PathMethodBadge key={method} method={method} />

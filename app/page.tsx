@@ -23,11 +23,11 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row landscape:flex-row flex-1 overflow-hidden">
-      <div className="w-full lg:w-1/2 landscape:w-1/2 h-1/2 lg:h-full landscape:h-full landscape:scroll-container overflow-auto">
+    <div className="flex flex-col lg:flex-row landscape:flex-row flex-1 overflow-hidden ">
+      <div className="w-full lg:w-1/2 landscape:w-1/2 h-1/2 lg:h-full landscape:h-full scroll-container overflow-auto scrollbar-thin scrollbar-thumb-neutral-400">
         <Editor onSpecChange={handleEditorChange} />
       </div>
-      <div className="w-full lg:w-1/2 landscape:w-1/2 h-1/2 lg:h-full landscape:h-full p-4 border-t lg:border-t-0 lg:border-l landscape:border-l border-gray-700 scroll-container overflow-y-auto">
+      <div className="w-full lg:w-1/2 landscape:w-1/2 h-1/2 lg:h-full landscape:h-full p-4 border-t lg:border-t-0 lg:border-l landscape:border-l border-gray-700 scroll-container overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-400">
         <Viewer spec={spec} isValid={isValid} />
       </div>
     </div>

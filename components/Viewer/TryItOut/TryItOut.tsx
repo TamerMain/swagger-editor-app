@@ -86,8 +86,8 @@ export default function TryItOut({
 
   return (
     <div className="mt-4">
-      <details className="group">
-        <summary className="w-fit px-2 py-1 text-white hover:text-blue-400 cursor-pointer text-xs border-2 rounded border-transparent group-open:border-blue-500 group-open:hover:border-blue-600 ">
+      <details>
+        <summary className="w-fit px-2 py-1 text-white hover:text-blue-400 cursor-pointer text-xs border-2 rounded border-transparent">
           Try It Out
         </summary>
         <form onSubmit={handleSubmit}>
@@ -112,7 +112,7 @@ export default function TryItOut({
               <div className="flex gap-2">
                 <button
                   type="submit"
-                  className="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-white"
+                  className="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-white text-sm"
                   disabled={loading}
                 >
                   Execute

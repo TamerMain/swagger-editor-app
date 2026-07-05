@@ -1,21 +1,21 @@
-import DisplayHeader from "./DisplayHeader";
-import DisplayParameters from "@/components/Viewer/DisplayParameters";
-import DisplayRequestBody from "@/components/Viewer/DisplayRequestBody";
-import DisplayResponses from "@/components/Viewer/DisplayResponses";
-import TryItOut from "@/components/Viewer/TryItOut/TryItOut";
+import DisplayHeader from './DisplayHeader';
+import DisplayParameters from '@/components/Viewer/DisplayParameters';
+import DisplayRequestBody from '@/components/Viewer/DisplayRequestBody';
+import DisplayResponses from '@/components/Viewer/DisplayResponses';
+import TryItOut from '@/components/Viewer/TryItOut/TryItOut';
 import {
   type HttpMethods,
   type PathItem,
   type Operation,
   type Spec,
-} from "@/types/openapi";
+} from '@/types/openapi';
 
 type PathMethodProps = {
-  servers: Spec["servers"];
+  servers: Spec['servers'];
   method: HttpMethods;
   operation: Operation;
   path: string;
-  pathLevelParameters?: PathItem["parameters"];
+  pathLevelParameters?: PathItem['parameters'];
 };
 
 export default function PathMethod({
@@ -44,11 +44,22 @@ export default function PathMethod({
 
   return (
     <div className="pt-2 mt-2 border-t border-neutral-700/50 first:border-none">
-      <DisplayHeader method={method} operation={operation} />
-      <DisplayParameters parameters={uniqueParameters} />
-      <DisplayRequestBody requestBody={operation.requestBody} />
-      <DisplayResponses responses={operation.responses} />
-      <TryItOut servers={servers} method={method} operation={mergedOperation} path={path} />
+      <details>
+        <summary className="cursor-pointer list-none group/method">
+          <DisplayHeader method={method} operation={operation} />
+        </summary>
+        <div className="mt-2">
+          <DisplayParameters parameters={uniqueParameters} />
+          <DisplayRequestBody requestBody={operation.requestBody} />
+          <DisplayResponses responses={operation.responses} />
+          <TryItOut
+            servers={servers}
+            method={method}
+            operation={mergedOperation}
+            path={path}
+          />
+        </div>
+      </details>
     </div>
   );
 }

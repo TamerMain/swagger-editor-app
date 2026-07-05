@@ -122,6 +122,7 @@ export default function TryBody({ requestBody, method }: TryBodyProps) {
                 className="flex-1 px-2 py-1 bg-neutral-900 border border-neutral-700 rounded text-white text-xs"
               />
               <button
+                type="button"
                 onClick={() => deleteField(id)}
                 className="text-red-400 text-xs"
               >
@@ -130,6 +131,7 @@ export default function TryBody({ requestBody, method }: TryBodyProps) {
             </div>
           ))}
           <button
+            type="button"
             onClick={addField}
             className="text-white hover:text-blue-400 text-xs"
           >
