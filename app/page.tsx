@@ -23,15 +23,13 @@ export default function Home() {
   };
 
   return (
-    <>
-      <div className="flex">
-        <div className="w-1/2">
-          <Editor onSpecChange={handleEditorChange} />
-        </div>
-        <div className="w-1/2 border-l border-gray-700 overflow-y-auto p-4">
-          <Viewer spec={spec} isValid={isValid} />
-        </div>
+    <div className="flex flex-col lg:flex-row landscape:flex-row flex-1 overflow-hidden">
+      <div className="w-full lg:w-1/2 landscape:w-1/2 h-1/2 lg:h-full landscape:h-full landscape:scroll-container overflow-auto">
+        <Editor onSpecChange={handleEditorChange} />
       </div>
-    </>
+      <div className="w-full lg:w-1/2 landscape:w-1/2 h-1/2 lg:h-full landscape:h-full p-4 border-t lg:border-t-0 lg:border-l landscape:border-l border-gray-700 scroll-container overflow-y-auto">
+        <Viewer spec={spec} isValid={isValid} />
+      </div>
+    </div>
   );
 }

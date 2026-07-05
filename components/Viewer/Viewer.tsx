@@ -16,7 +16,7 @@ export default function Viewer({ spec, isValid }: ViewerProps) {
 
   if (!isValid || !spec) {
     return (
-      <div className="h-full flex items-center justify-center text-gray-500">
+      <div className="h-full flex justify-center text-gray-500">
         <div className="text-center">
           <p className="text-lg">No valid OpenAPI spec loaded</p>
           <p className="text-sm mt-2">Edit the spec on the left</p>

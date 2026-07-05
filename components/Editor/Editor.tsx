@@ -133,6 +133,10 @@ export default function Editor({ onSpecChange }: EditorProps) {
         isAuth={isInitialLoad.current.isAuth}
         isSaving={isSaving}
         errors={errors}
+        onSchemaClear={() => {
+          setCode('');
+          validateContent('');
+        }}
         onSchemaSave={handleSchemaSave}
         onFormatSwitch={handleFormatSwitch}
       />
@@ -159,6 +163,14 @@ export default function Editor({ onSpecChange }: EditorProps) {
           {errors.map((error, index) => (
             <div key={index} className="text-sm text-red-400 font-mono">
               ❌ {error}
+              {/* <div className="relative inline-block group">
+                <span className="text-xs text-white hover:text-blue-400 cursor-help">
+                  Read more
+                </span>
+                <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs rounded p-2 whitespace-pre-wrap z-50 shadow-lg">
+                 
+                </div>
+              </div> */}
             </div>
           ))}
         </div>

@@ -8,6 +8,7 @@ type EditorHeaderProps = {
   isAuth: boolean;
   isSaving: boolean;
   errors: string[];
+  onSchemaClear: () => void;
   onSchemaSave: () => void;
   onFormatSwitch: () => void;
 };
@@ -17,6 +18,7 @@ export default function EditorHeader({
   isAuth,
   isSaving,
   errors,
+  onSchemaClear,
   onSchemaSave,
   onFormatSwitch,
 }: EditorHeaderProps) {
@@ -42,6 +44,12 @@ export default function EditorHeader({
       </div>
 
       <div className="flex gap-2 font-mono">
+        <button
+          onClick={onSchemaClear}
+          className="px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 rounded text-white"
+        >
+          Clear
+        </button>
         {isAuth && (
           <button
             onClick={() => onSchemaSave()}

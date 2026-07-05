@@ -29,12 +29,11 @@ export async function parseFormat(content: string): Promise<ParseResult> {
       format: isJson ? FORMAT.JSON : FORMAT.YAML,
     };
   } catch (error) {
-    console.error('❌ Validation failed:', error);
     return {
       valid: false,
       error:
         error instanceof Error
-          ? error.message
+          ? getReadableError(error.message)
           : 'Invalid OpenAPI specification',
     };
   }
@@ -50,3 +49,16 @@ export function convertFormat(
     ? JSON.stringify(data, null, 2)
     : yaml.dump(data, { indent: 2 });
 }
+
+const getReadableError = (message: string): string => {
+  const errors: Record<string, string> = {
+    'expected a document, but the input is empty':
+      'No content provided. Please paste an OpenAPI specification.',
+  };
+
+  for (const [key, value] of Object.entries(errors)) {
+    if (message.includes(key)) return value;
+  }
+
+  return message;
+};

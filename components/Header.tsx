@@ -9,7 +9,26 @@ import { User } from '@supabase/supabase-js';
 export default function Header() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const [isSticky, setIsSticky] = useState(false);
   const supabase = createClient();
+
+  useEffect(() => {
+    const containers = document.querySelectorAll('.scroll-container');
+    let timer: NodeJS.Timeout;
+
+    const onScroll = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        setIsSticky(Array.from(containers).some((el) => el.scrollTop > 0));
+      }, 100);
+    };
+
+    containers.forEach((el) => el.addEventListener('scroll', onScroll));
+    return () => {
+      clearTimeout(timer);
+      containers.forEach((el) => el.removeEventListener('scroll', onScroll));
+    };
+  }, []);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
@@ -28,8 +47,10 @@ export default function Header() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-neutral-900/80 backdrop-blur-sm border-b border-neutral-700">
-      <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+    <nav
+      className={`sticky flex justify-center h-full max-h-[5vh] ${isSticky && '-mt-[4vh] hover:mt-0'} z-50 bg-neutral-900/80 backdrop-blur-sm border-b border-neutral-700 transition-all`}
+    >
+      <div className="w-[80vw] mx-auto px-4 flex items-center justify-between self-center">
         <Link href="/" className="font-bold text-white">
           Swagger UI
         </Link>
