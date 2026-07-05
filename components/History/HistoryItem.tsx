@@ -1,8 +1,8 @@
 import { formatBytes } from '@/lib/formatBytes';
-import { type DatabaseRow } from '@/types/supabase';
+import { type HistoryRow } from '@/types/supabase';
 
 type HistoryItemProps = {
-  item: DatabaseRow;
+  item: HistoryRow;
 };
 
 export default function HistoryItem({ item }: HistoryItemProps) {
