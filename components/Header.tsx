@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
+import { signOut } from '@/app/actions/auth';
 
 export default function Header() {
   const router = useRouter();
@@ -41,9 +42,8 @@ export default function Header() {
   }, []);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-    router.refresh();
+    await signOut();
+    window.location.href = '/';
   };
 
   return (
@@ -56,16 +56,13 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-4 text-sm">
-          <Link href="/about" className="text-neutral-300 hover:text-white">
+          <Link href="/about" className="text-white hover:text-blue-400">
             About
           </Link>
 
           {user ? (
             <>
-              <Link
-                href="/history"
-                className="text-neutral-300 hover:text-white"
-              >
+              <Link href="/history" className="text-white hover:text-blue-400">
                 History
               </Link>
               <button
@@ -79,13 +76,13 @@ export default function Header() {
             <>
               <Link
                 href="/login"
-                className="px-3 py-1 rounded border-2 border-blue-500 hover:border-blue-600 hover:text-blue-300"
+                className="px-3 py-0.5 rounded border-2 border-blue-500 hover:border-blue-600 hover:text-blue-400"
               >
                 Sign In
               </Link>
               <Link
                 href="/signup"
-                className="px-3 py-1 rounded border-2 border-blue-600 bg-blue-600 text-white hover:border-blue-700 hover:bg-blue-700"
+                className="px-3 py-0.5 rounded border-2 border-blue-600 bg-blue-600 text-white hover:border-blue-700 hover:bg-blue-700"
               >
                 Sign Up
               </Link>

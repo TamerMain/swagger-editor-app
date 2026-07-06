@@ -1,4 +1,5 @@
 import SwaggerParser from '@apidevtools/swagger-parser';
+import $RefParser from '@apidevtools/json-schema-ref-parser';
 import * as yaml from 'js-yaml';
 import { FORMAT } from '@/constants/constants';
 import { type Format, type Spec } from '@/types/openapi';
@@ -23,9 +24,13 @@ export async function parseFormat(content: string): Promise<ParseResult> {
     console.log = originalLog;
     console.error = originalError;
 
+
+    // Unwrap $ref syntax
+    const resolved = (await $RefParser.dereference(data)) as Spec;
+
     return {
       valid: true,
-      data,
+      data: resolved,
       format: isJson ? FORMAT.JSON : FORMAT.YAML,
     };
   } catch (error) {

@@ -1,7 +1,7 @@
-import { PARAMETER_TYPE_COLORS } from "@/constants/constants";
-import { Operation } from "@/types/openapi";
+import { PARAMETER_TYPE_COLORS } from '@/constants/constants';
+import { Operation } from '@/types/openapi';
 
-type DisplayParametersProps = { parameters: Operation["parameters"] };
+type DisplayParametersProps = { parameters: Operation['parameters'] };
 
 export default function DisplayParameters({
   parameters,
@@ -28,9 +28,9 @@ export default function DisplayParameters({
             </span>
             <span className="font-mono text-gray-300">
               {param.name}
-              {" "}
               {param.required && (
                 <span className="text-red-400 text-[10px] font-semibold">
+                  {' '}
                   *
                 </span>
               )}
@@ -38,7 +38,11 @@ export default function DisplayParameters({
 
             {param.schema?.type && (
               <span className="text-gray-400 text-[10px]">
-                ({param.schema.type})
+                (
+                {Array.isArray(param.schema.type)
+                  ? param.schema.type.join(' | ')
+                  : param.schema.type}
+                )
               </span>
             )}
             {param.description && (

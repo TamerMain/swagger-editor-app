@@ -57,17 +57,45 @@ export interface Parameter {
 export interface RequestBody {
   description?: string;
   required?: boolean;
-  content: Record<string, { schema?: Schema; default?: unknown }>;
+  content: Record<
+    string,
+    {
+      schema?: Schema;
+      default?: unknown;
+      example?: unknown;
+      examples?: Record<
+        string,
+        { value?: unknown; summary?: string; description?: string }
+      >;
+    }
+  >;
 }
 
 export interface Response {
   description?: string;
-  content?: Record<string, { schema?: Schema; default?: unknown }>;
+  headers?: Record<
+    string,
+    { schema?: Schema; description?: string; required?: boolean }
+  >;
+  links?: Record<string, { operationRef?: string; operationId?: string }>;
+  content?: Record<
+    string,
+    {
+      schema?: Schema;
+      default?: unknown;
+      example?: unknown;
+      examples?: Record<
+        string,
+        { value?: unknown; summary?: string; description?: string }
+      >;
+    }
+  >;
 }
 
 export interface Schema {
   type?: string;
   default?: unknown;
+  example?: unknown;
 }
 
 export type RequestBodyTypes =

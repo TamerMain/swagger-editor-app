@@ -1,0 +1,254 @@
+openapi: 3.0.0
+info:
+  title: Schema Test API
+  version: 1.0.0
+
+servers:
+  - url: https://httpbin.org
+
+components:
+  schemas:
+    # ========== BASIC SCHEMAS ==========
+    
+    # 1. Simple object with required fields
+    # Tests: required, properties, types, format
+    User:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        age:
+          type: integer
+        isActive:
+          type: boolean
+
+    # 2. Another simple object
+    # Tests: pattern (regex) validation
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        zipCode:
+          type: string
+          pattern: "^[0-9]{5}$"
+
+    # ========== COMPOSITION ==========
+    
+    # 3. allOf - combines User + Address
+    # Tests: merging two schemas
+    UserWithAddress:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - $ref: '#/components/schemas/Address'
+
+    # 4. anyOf - can be string OR integer
+    # Tests: union types (OR)
+    SearchResult:
+      anyOf:
+        - type: string
+        - type: integer
+
+    # 5. oneOf with discriminator
+    # Tests: exactly one of multiple options
+    Animal:
+      oneOf:
+        - $ref: '#/components/schemas/Dog'
+        - $ref: '#/components/schemas/Cat'
+      discriminator:
+        propertyName: type
+
+    # ========== NESTED ==========
+    
+    # 6. Object with nested arrays and $refs
+    # Tests: arrays, nested objects, $ref inside arrays
+    Post:
+      type: object
+      required: [id, title]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          $ref: '#/components/schemas/User'
+        tags:
+          type: array
+          items:
+            type: string
+
+    # 7. Recursive (self-referential)
+    # Tests: circular references (needs handling in UI)
+    TreeNode:
+      type: object
+      properties:
+        id:
+          type: integer
+        label:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/TreeNode'
+
+    # ========== EDGE CASES ==========
+    
+    # 8. nullable
+    # Tests: field can be null
+    NullableString:
+      type: string
+      nullable: true
+
+    # 9. enum
+    # Tests: limited set of allowed values
+    Status:
+      type: string
+      enum: [pending, active, inactive, deleted]
+
+    # 10. additionalProperties
+    # Tests: dynamic object keys
+    Metadata:
+      type: object
+      additionalProperties:
+        type: string
+
+    # 11. Vehicle - using oneOf instead of if/then/else
+    # Tests: conditional validation via oneOf
+    Vehicle:
+      oneOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              enum: [car]
+            doors:
+              type: integer
+            engine:
+              type: string
+          required: [type, doors, engine]
+        - type: object
+          properties:
+            type:
+              type: string
+              enum: [motorcycle, truck]
+            wheels:
+              type: integer
+          required: [type, wheels]
+
+    # 12. allOf with $ref + extra fields
+    # Tests: combining reference with additional properties
+    ExtendedUser:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            role:
+              type: string
+            department:
+              type: string
+
+    # ========== DISCRIMINATED UNION ==========
+    
+    # 13. Dog - one option for Animal
+    Dog:
+      type: object
+      required: [type, breed]
+      properties:
+        type:
+          type: string
+          enum: [dog]
+        breed:
+          type: string
+        barkVolume:
+          type: number
+
+    # 14. Cat - another option for Animal
+    Cat:
+      type: object
+      required: [type]
+      properties:
+        type:
+          type: string
+          enum: [cat]
+        furColor:
+          type: string
+        livesLeft:
+          type: integer
+
+paths:
+  # ========== PATH 1: BASIC CRUD ==========
+  # Tests: $ref in request body and response
+  /users:
+    post:
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  # ========== PATH 2: QUERY PARAMS WITH anyOf ==========
+  # Tests: anyOf in parameters (query param can be string OR integer)
+  /search:
+    get:
+      summary: Search
+      parameters:
+        - name: query
+          in: query
+          schema:
+            anyOf:
+              - type: string
+              - type: integer
+      responses:
+        '200':
+          description: Found
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: string
+                  - type: integer
+
+  # ========== PATH 3: ARRAY RESPONSE ==========
+  # Tests: array response with $ref items
+  /posts:
+    get:
+      summary: Get posts
+      responses:
+        '200':
+          description: List of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+
+  # ========== PATH 4: RECURSIVE TREE ==========
+  # Tests: circular reference in response
+  /tree:
+    get:
+      summary: Get tree
+      responses:
+        '200':
+          description: Tree structure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreeNode'

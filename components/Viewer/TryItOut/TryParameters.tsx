@@ -13,8 +13,12 @@ export default function TryParameters({ type, params }: TryParametersProps) {
   if (params.length === 0) return null;
 
   const getPlaceholder = (p: Parameter) => {
+    if (Array.isArray(p.schema?.type)) {
+      return p.schema.type.join(' | ');
+    }
     if (p.schema?.default !== undefined) return String(p.schema.default);
     if (p.schema?.type) return p.schema.type;
+    
     return p.required ? 'required' : 'optional';
   };
 

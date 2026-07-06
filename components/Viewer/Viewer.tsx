@@ -1,8 +1,8 @@
-import { useState } from "react";
-import ViewerHeader from "@/components/Viewer/ViewerHeader";
-import Path from "@/components/Viewer/Path";
-import { getMethods } from "@/lib/getMethods";
-import { type Spec } from "@/types/openapi";
+import { useState } from 'react';
+import ViewerHeader from '@/components/Viewer/ViewerHeader';
+import Path from '@/components/Viewer/Path';
+import { getMethods } from '@/lib/getMethods';
+import { type Spec } from '@/types/openapi';
 
 interface ViewerProps {
   spec: Spec | null;

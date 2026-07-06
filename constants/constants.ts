@@ -52,10 +52,10 @@ export const METHOD_COLORS = {
 } as const;
 
 export const PARAMETER_TYPE_COLORS = {
-  path: 'text-blue-400',
-  query: 'text-green-400',
-  header: 'text-yellow-400',
-  cookie: 'text-pink-400',
+  path: 'text-blue-400/85',
+  query: 'text-green-400/85',
+  header: 'text-yellow-400/85',
+  cookie: 'text-pink-400/85',
 } as const;
 
 export const PARAMETER_TYPE_BADGE_COLORS: Record<Parameter['in'], string> = {
