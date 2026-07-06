@@ -14,18 +14,18 @@ export default function DisplayHeader({
     <div className="flex items-center gap-2 mb-1 text-gray-500">
       <MethodBadge method={method} />
       {operation.summary && (
-        <span className="text-white group-hover/method:text-blue-400 text-sm">{operation.summary}</span>
+        <span className="text-white group-hover/method:text-blue-400 text-sm">
+          {operation.summary}
+        </span>
       )}
       {operation.operationId && (
         <span className="text-gray-500 text-[10px] font-mono">
           {operation.operationId}
         </span>
       )}
+      {' | '}
       {operation.description && (
-        <p className="text-neutral-400 text-xs">
-          {' | '}
-          {operation.description}
-        </p>
+        <p className="text-neutral-400 text-xs">{operation.description}</p>
       )}
       {operation.tags && operation.tags.length > 0 && (
         <div className="flex gap-1 flex-wrap">
