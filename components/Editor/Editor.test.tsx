@@ -19,7 +19,13 @@ vi.mock('@/lib/formatParser', () => ({
 }));
 
 vi.mock('@uiw/react-codemirror', () => ({
-  default: ({ value, onChange }: any) => (
+  default: ({
+    value,
+    onChange,
+  }: {
+    value: string;
+    onChange: (val: string) => void;
+  }) => (
     <textarea
       data-testid="codemirror"
       value={value}
@@ -37,7 +43,15 @@ vi.mock('@/components/Editor/EditorHeader', () => ({
     onSchemaClear,
     onSchemaSave,
     onFormatSwitch,
-  }: any) => (
+  }: {
+    format: string;
+    isAuth: boolean;
+    isSaving: boolean;
+    errors: unknown[];
+    onSchemaClear: () => void;
+    onSchemaSave: () => void;
+    onFormatSwitch: () => void;
+  }) => (
     <div data-testid="editor-header">
       <span data-testid="format">{format}</span>
       <span data-testid="is-auth">{String(isAuth)}</span>
@@ -79,7 +93,7 @@ describe('Editor', () => {
     vi.resetAllMocks();
     global.fetch = vi.fn().mockResolvedValue({
       text: () => Promise.resolve('mock-openapi-content'),
-    }) as any;
+    } as unknown as Response) as unknown as typeof global.fetch;
   });
 
   it('loads the mock spec file for an unauthenticated user', async () => {

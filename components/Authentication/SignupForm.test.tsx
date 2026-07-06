@@ -133,7 +133,7 @@ describe('SignUpForm', () => {
   });
 
   it('shows loading state while submitting', async () => {
-    let resolveSignUp: (value: any) => void;
+    let resolveSignUp: (value: unknown) => void;
     mockSignUp.mockImplementation(
       () =>
         new Promise((resolve) => {
