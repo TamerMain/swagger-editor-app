@@ -97,7 +97,7 @@ describe('SignUpForm', () => {
     ).toBeInTheDocument();
   });
 
-  it('navigates to /login when "Go to Login" is clicked after success', async () => {
+  it('navigates to /signin when "Go to SignIn" is clicked after success', async () => {
     mockSignUp.mockResolvedValue({ error: null });
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
@@ -107,12 +107,12 @@ describe('SignUpForm', () => {
     await user.type(screen.getByLabelText(/confirm password/i), 'password123');
     await user.click(screen.getByRole('button', { name: /sign up/i }));
 
-    const goToLoginButton = await screen.findByRole('button', {
-      name: /go to login/i,
+    const goToSignInButton = await screen.findByRole('button', {
+      name: /go to signin/i,
     });
-    await user.click(goToLoginButton);
+    await user.click(goToSignInButton);
 
-    expect(mockPush).toHaveBeenCalledWith('/login');
+    expect(mockPush).toHaveBeenCalledWith('/signin');
   });
 
   it('displays an error message when signUp fails', async () => {
@@ -162,9 +162,9 @@ describe('SignUpForm', () => {
     });
   });
 
-  it('renders a link to the login page', () => {
+  it('renders a link to the signin page', () => {
     render(<SignUpForm />);
     const link = screen.getByRole('link', { name: /sign in/i });
-    expect(link).toHaveAttribute('href', '/login');
+    expect(link).toHaveAttribute('href', '/signin');
   });
 });

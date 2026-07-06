@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { LoginForm } from './LoginForm';
+import { SignInForm } from './SignInForm';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
@@ -13,7 +13,7 @@ vi.mock('@/lib/supabase/client', () => ({
   createClient: vi.fn(),
 }));
 
-describe('LoginForm', () => {
+describe('SignInForm', () => {
   const mockPush = vi.fn();
   const mockRefresh = vi.fn();
   const mockSignInWithPassword = vi.fn();
@@ -34,7 +34,7 @@ describe('LoginForm', () => {
   });
 
   it('renders email and password fields', () => {
-    render(<LoginForm />);
+    render(<SignInForm />);
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
     expect(
@@ -44,7 +44,7 @@ describe('LoginForm', () => {
 
   it('updates input values when typed into', async () => {
     const user = userEvent.setup();
-    render(<LoginForm />);
+    render(<SignInForm />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -56,10 +56,10 @@ describe('LoginForm', () => {
     expect(passwordInput).toHaveValue('password123');
   });
 
-  it('calls signInWithPassword and redirects on successful login', async () => {
+  it('calls signInWithPassword and redirects on successful signin', async () => {
     mockSignInWithPassword.mockResolvedValue({ error: null });
     const user = userEvent.setup();
-    render(<LoginForm />);
+    render(<SignInForm />);
 
     await user.type(screen.getByLabelText(/email/i), 'test@example.com');
     await user.type(screen.getByLabelText(/password/i), 'password123');
@@ -76,19 +76,19 @@ describe('LoginForm', () => {
     expect(mockRefresh).toHaveBeenCalled();
   });
 
-  it('displays an error message when login fails', async () => {
+  it('displays an error message when signin fails', async () => {
     mockSignInWithPassword.mockResolvedValue({
-      error: { message: 'Invalid login credentials' },
+      error: { message: 'Invalid signin credentials' },
     });
     const user = userEvent.setup();
-    render(<LoginForm />);
+    render(<SignInForm />);
 
     await user.type(screen.getByLabelText(/email/i), 'wrong@example.com');
     await user.type(screen.getByLabelText(/password/i), 'wrongpassword');
     await user.click(screen.getByRole('button', { name: /sign in/i }));
 
     expect(
-      await screen.findByText('Invalid login credentials'),
+      await screen.findByText('Invalid signin credentials'),
     ).toBeInTheDocument();
     expect(mockPush).not.toHaveBeenCalled();
   });
@@ -101,7 +101,7 @@ describe('LoginForm', () => {
         ),
     );
     const user = userEvent.setup();
-    render(<LoginForm />);
+    render(<SignInForm />);
 
     await user.type(screen.getByLabelText(/email/i), 'test@example.com');
     await user.type(screen.getByLabelText(/password/i), 'password123');
@@ -115,7 +115,7 @@ describe('LoginForm', () => {
   });
 
   it('renders a link to the signup page', () => {
-    render(<LoginForm />);
+    render(<SignInForm />);
     const link = screen.getByRole('link', { name: /sign up/i });
     expect(link).toHaveAttribute('href', '/signup');
   });

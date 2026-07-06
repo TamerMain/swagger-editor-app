@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export function LoginForm() {
+export function SignInForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -12,7 +12,7 @@ export function LoginForm() {
   const router = useRouter();
   const supabase = createClient();
 
-  const handleLogin = async (e: React.SubmitEvent) => {
+  const handleSignIn = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -32,7 +32,7 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleLogin} className="space-y-6 text-black">
+    <form onSubmit={handleSignIn} className="space-y-6 text-black">
       {error && (
         <div className="bg-red-50 text-red-600 p-3 rounded text-sm">
           {error}

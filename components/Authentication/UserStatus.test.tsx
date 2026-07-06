@@ -28,7 +28,7 @@ describe('UserStatus', () => {
 
     const link = screen.getByRole('link', { name: /sign in/i });
     expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', '/login');
+    expect(link).toHaveAttribute('href', '/signin');
   });
 
   it('renders the user email when authenticated', async () => {

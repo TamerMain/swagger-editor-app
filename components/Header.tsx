@@ -1,14 +1,12 @@
 'use client';
 
+import { SignOutButton } from './Authentication/SignoutButton';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
-import { signOut } from '@/app/actions/auth';
 
 export default function Header() {
-  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   const supabase = createClient();
@@ -41,11 +39,6 @@ export default function Header() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleSignOut = async () => {
-    await signOut();
-    window.location.href = '/';
-  };
-
   return (
     <nav
       className={`sticky flex justify-center h-full max-h-[5vh] ${isSticky && '-mt-[4vh] hover:mt-0'} z-50 bg-neutral-900/80 backdrop-blur-sm border-b border-neutral-700 transition-all`}
@@ -65,17 +58,12 @@ export default function Header() {
               <Link href="/history" className="text-white hover:text-blue-400">
                 History
               </Link>
-              <button
-                onClick={handleSignOut}
-                className="text-red-400 hover:text-red-300"
-              >
-                Sign Out
-              </button>
+              <SignOutButton />
             </>
           ) : (
             <>
               <Link
-                href="/login"
+                href="/signin"
                 className="px-3 py-0.5 rounded border-2 border-blue-500 hover:border-blue-600 hover:text-blue-400"
               >
                 Sign In

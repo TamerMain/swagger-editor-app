@@ -47,10 +47,10 @@ export function SignUpForm() {
         <div className="bg-green-50 text-green-600 p-4 rounded">
           <p>Check your email for the confirmation link!</p>
           <button
-            onClick={() => router.push('/login')}
+            onClick={() => router.push('/signin')}
             className="mt-4 text-blue-600 hover:underline"
           >
-            Go to Login
+            Go to SignIn
           </button>
         </div>
       </div>
@@ -121,7 +121,7 @@ export function SignUpForm() {
       </button>
 
       <div className="text-sm text-center">
-        <a href="/login" className="text-blue-600 hover:underline">
+        <a href="/signin" className="text-blue-600 hover:underline">
           Already have an account? Sign in
         </a>
       </div>

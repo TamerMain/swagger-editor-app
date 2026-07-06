@@ -9,7 +9,7 @@ type HistoryProps = {
 export default function History({ history }: HistoryProps) {
   if (!history || history.length === 0) {
     return (
-      <div className="p-4">
+      <div className="flex-1 p-4 overflow-auto scroll-container scrollbar-thin scrollbar-thumb-neutral-400">
         <h1 className="text-2xl font-bold mb-4">Request History</h1>
         <div className="text-center py-12">
           <p className="text-gray-500 mb-4">
@@ -29,7 +29,7 @@ export default function History({ history }: HistoryProps) {
   }
 
   return (
-    <div className="p-4">
+    <div className="flex-1 p-4  scroll-container overflow-auto  scrollbar-thin  scrollbar-thumb-neutral-400">
       <h1 className="text-2xl font-bold mb-4">Request History</h1>
       <div className="space-y-2">
         {history.map((item) => (

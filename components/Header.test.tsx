@@ -61,7 +61,7 @@ describe('Header Component', () => {
   };
 
   describe('Unauthenticated User State', () => {
-    it('renders login and signup links when no session exists', async () => {
+    it('renders signin and signup links when no session exists', async () => {
       mockGetUser.mockResolvedValueOnce({ data: { user: null } });
 
       render(<Header />);
@@ -69,7 +69,7 @@ describe('Header Component', () => {
       await waitFor(() => {
         expect(screen.getByRole('link', { name: /sign in/i })).toHaveAttribute(
           'href',
-          '/login',
+          '/signin',
         );
         expect(screen.getByRole('link', { name: /sign up/i })).toHaveAttribute(
           'href',
@@ -131,20 +131,6 @@ describe('Header Component', () => {
       expect(
         screen.queryByRole('link', { name: /history/i }),
       ).not.toBeInTheDocument();
-    });
-
-    it('clears session tokens and redirects on signing out', async () => {
-      mockGetUser.mockResolvedValueOnce({ data: { user: mockUserInstance } });
-      const user = userEvent.setup();
-      render(<Header />);
-      const signOutBtn = await screen.findByRole('button', {
-        name: /sign out/i,
-      });
-      await user.click(signOutBtn);
-
-      expect(mockSignOut).toHaveBeenCalledTimes(1);
-      expect(mockPush).toHaveBeenCalledWith('/');
-      expect(mockRefresh).toHaveBeenCalledTimes(1);
     });
   });
 

@@ -35,7 +35,7 @@ export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   const protectedRoutes = ['/history'];
-  const authRoutes = ['/login', '/signup'];
+  const authRoutes = ['/signin', '/signup'];
 
   //  If not authenticated and trying to access protected route > 401
   if (!user && protectedRoutes.some((route) => path.startsWith(route))) {

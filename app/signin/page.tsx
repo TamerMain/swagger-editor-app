@@ -1,8 +1,8 @@
-import { LoginForm } from "@/components/Authentication/LoginForm";
+import { SignInForm } from "@/components/Authentication/SignInForm";
 
-export default async function LoginPage() {
+export default async function SignInPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="flex-1 flex items-center justify-center">
       <div className="max-w-md w-full space-y-8 p-8 bg-neutral-100 rounded-lg shadow">
         <div>
           <h2 className="text-3xl font-bold text-center text-black">Sign In</h2>
@@ -10,7 +10,7 @@ export default async function LoginPage() {
             Sign in to your account to continue
           </p>
         </div>
-        <LoginForm />
+        <SignInForm />
       </div>
     </div>
   );
