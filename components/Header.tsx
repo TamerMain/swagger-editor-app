@@ -3,13 +3,11 @@
 import { SignOutButton } from './Authentication/SignoutButton';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
+import { useAuth } from '@/lib/context/AuthContext';
 
 export default function Header() {
-  const [user, setUser] = useState<User | null>(null);
+  const { user } = useAuth();
   const [isSticky, setIsSticky] = useState(false);
-  const supabase = createClient();
 
   useEffect(() => {
     const containers = document.querySelectorAll('.scroll-container');
@@ -29,16 +27,6 @@ export default function Header() {
     };
   }, []);
 
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_, session) =>
-      setUser(session?.user ?? null),
-    );
-    return () => subscription.unsubscribe();
-  }, []);
-
   return (
     <nav
       className={`sticky flex justify-center h-full max-h-[5vh] ${isSticky && '-mt-[4vh] hover:mt-0'} z-50 bg-neutral-900/80 backdrop-blur-sm border-b border-neutral-700 transition-all`}
@@ -52,7 +40,6 @@ export default function Header() {
           <Link href="/about" className="text-white hover:text-blue-400">
             About
           </Link>
-
           {user ? (
             <>
               <Link href="/history" className="text-white hover:text-blue-400">

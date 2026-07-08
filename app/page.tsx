@@ -16,7 +16,7 @@ export default function Home() {
     if (result.valid && result.data) {
       setSpec(result.data);
       setIsValid(true);
-    } else {
+    } else {  
       setSpec(null);
       setIsValid(false);
     }

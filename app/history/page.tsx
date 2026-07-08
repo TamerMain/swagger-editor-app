@@ -1,18 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
-import History from "@/components/History/History";
+import { getHistory } from '@/app/actions/history';
+import History from '@/components/History/History';
 
 export default async function HistoryPage() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: history } = await supabase
-    .from("history")
-    .select("*")
-    .eq("user_id", user!.id)
-    .order("timestamp", { ascending: false });
+  const history = await getHistory();
 
   return <History history={history} />;
 }

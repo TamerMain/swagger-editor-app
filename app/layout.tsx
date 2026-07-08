@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { ToastProvider } from '@/lib/context/ToastContext';
+import { AuthProvider } from '@/lib/context/AuthContext';
+import { createClient } from '@/lib/supabase/server';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -19,20 +22,34 @@ export const metadata: Metadata = {
   description: 'Build around OpenAPI Initiative',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let user = null;
+
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch (error) {
+    user = null;
+  }
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased text-neutral-50 bg-neutral-950`}
     >
       <body className="h-screen flex flex-col">
-        <Header />
-        {children}
-        <Footer />
+        <AuthProvider initialUser={user}>
+          <ToastProvider>
+            <Header />
+            {children}
+            <Footer />
+          </ToastProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -2,7 +2,6 @@
 
 import CodeMirror from '@uiw/react-codemirror';
 import EditorHeader from '@/components/Editor/EditorHeader';
-import { createClient } from '@/lib/supabase/client';
 import { json } from '@codemirror/lang-json';
 import { yaml } from '@codemirror/lang-yaml';
 import { oneDark } from '@codemirror/theme-one-dark';
@@ -10,6 +9,9 @@ import { useState, useEffect, useRef } from 'react';
 import { parseFormat, convertFormat } from '@/lib/formatParser';
 import { FORMAT } from '@/constants/constants';
 import { type Format } from '@/types/openapi';
+import { useToast } from '@/lib/context/ToastContext';
+import { useAuth } from '@/lib/context/AuthContext';
+import { loadSchema, saveSchema } from '@/app/actions/editor';
 
 type EditorProps = {
   onSpecChange?: (content: string) => void;
@@ -19,9 +21,10 @@ export default function Editor({ onSpecChange }: EditorProps) {
   const [code, setCode] = useState('');
   const [format, setFormat] = useState<Format>(FORMAT.YAML);
   const [errors, setErrors] = useState<string[]>([]);
-  const isInitialLoad = useRef({ isHydrated: false, isAuth: false });
+  const isInitialLoad = useRef(false);
   const [isSaving, setIsSaving] = useState(false);
-  const supabase = createClient();
+  const { showErrorToast, showSuccessToast } = useToast();
+  const { user } = useAuth();
 
   const validateContent = async (content: string) => {
     const result = await parseFormat(content);
@@ -38,49 +41,34 @@ export default function Editor({ onSpecChange }: EditorProps) {
     }
   };
 
-  useEffect(() => {
-    if (isInitialLoad.current.isHydrated) {
-      return;
-    }
-    isInitialLoad.current.isHydrated = true;
-
-    const loadSpec = async () => {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-
-      try {
-        let content;
-
-        if (user && !userError) {
-          isInitialLoad.current.isAuth = true;
-          const { data } = await supabase
-            .from('userschema')
-            .select('content')
-            .eq('user_id', user.id)
-            .maybeSingle();
-
-          if (data?.content) {
-            content = data.content;
-          }
+  const loadSpec = async () => {
+    try {
+      let content;
+      if (user) {
+        const data = await loadSchema();
+        if (data) {
+          content = data;
         }
-
-        if (!content) {
-          const res = await fetch('/examples/mockoon.yaml');
-          content = await res.text();
-        }
-
-        setCode(content);
-        await validateContent(content);
-      } catch (error) {
-        setErrors(['Failed to load specification file']);
       }
-    };
-    loadSpec();
-  }, []);
+      if (!content) {
+        const res = await fetch('/examples/mockoon.yaml');
+        content = await res.text();
+      }
 
-  const handleChange = async (value: string) => {
+      setCode(content);
+      await validateContent(content);
+    } catch (error) {
+      setErrors(['Failed to load specification file']);
+    }
+  };
+
+  useEffect(() => {
+    if (isInitialLoad.current) return;
+    isInitialLoad.current = true;
+    loadSpec();
+  }, [user]);
+
+  const handleCodeChange = async (value: string) => {
     setCode(value);
     await validateContent(value);
   };
@@ -100,27 +88,21 @@ export default function Editor({ onSpecChange }: EditorProps) {
   const handleSchemaSave = async () => {
     setIsSaving(true);
     try {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-
-      if (userError || !user || errors.length !== 0) {
-        setIsSaving(false);
+      if (!user) {
+        {
+          showErrorToast('Sign In To Save');
+          setIsSaving(false);
+          return;
+        }
+      }
+      if (errors.length > 0) {
+        showErrorToast('Cant Save Schema With Errors');
         return;
       }
-
-      const { error } = await supabase.from('userschema').upsert(
-        {
-          user_id: user.id,
-          content: code,
-        },
-        { onConflict: 'user_id' },
-      );
-
-      if (error) throw error;
+      await saveSchema(code);
+      showSuccessToast('Schema Saved');
     } catch (error) {
-      setErrors(['Failed to save']);
+      showErrorToast('Failed To Save Schema');
     } finally {
       setIsSaving(false);
     }
@@ -130,7 +112,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
     <div className="h-full flex flex-col">
       <EditorHeader
         format={format}
-        isAuth={isInitialLoad.current.isAuth}
+        isAuth={!!user}
         isSaving={isSaving}
         errors={errors}
         onSchemaClear={() => {
@@ -147,7 +129,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
           value={code}
           height="100%"
           extensions={[format === FORMAT.JSON ? json() : yaml(), oneDark]}
-          onChange={handleChange}
+          onChange={handleCodeChange}
           theme="dark"
           basicSetup={{
             lineNumbers: true,
@@ -159,7 +141,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
 
       {/* Error Display */}
       {errors.length > 0 && (
-        <div className="sticky bottom-0 w-full p-3 border-t border-red-500 bg-red-900/50">
+        <div className="sticky bottom-0 w-full p-3 border-t border-red-500 bg-red-950">
           {errors.map((error, index) => (
             <div key={index} className="text-sm text-red-400 font-mono">
               ❌ {error}

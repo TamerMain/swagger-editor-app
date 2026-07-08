@@ -1,3 +1,4 @@
+// __tests__/Header.test.tsx
 import {
   render,
   screen,
@@ -5,39 +6,19 @@ import {
   act,
   waitFor,
 } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { User } from '@supabase/supabase-js';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import Header from './Header';
-import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
+import Header from '@/components/Header';
+import { useAuth } from '@/lib/context/AuthContext';
 
-const mockPush = vi.fn();
-const mockRefresh = vi.fn();
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: mockPush,
-    refresh: mockRefresh,
-  }),
+// Mock useAuth
+vi.mock('@/lib/context/AuthContext', () => ({
+  useAuth: vi.fn(),
 }));
 
-const mockUnsubscribe = vi.fn();
-const mockOnAuthStateChange = vi.fn<
-  (callback: (event: AuthChangeEvent, session: Session | null) => void) => {
-    data: { subscription: { unsubscribe: () => void } };
-  }
->((_callback) => ({
-  data: { subscription: { unsubscribe: mockUnsubscribe } },
-}));
-const mockGetUser = vi.fn().mockResolvedValue({ data: { user: null } });
-const mockSignOut = vi.fn().mockResolvedValue({ error: null });
-
-vi.mock('@/lib/supabase/client', () => ({
-  createClient: () => ({
-    auth: {
-      getUser: mockGetUser,
-      onAuthStateChange: mockOnAuthStateChange,
-      signOut: mockSignOut,
-    },
-  }),
+// Mock SignOutButton
+vi.mock('@/components/Authentication/SignoutButton', () => ({
+  SignOutButton: () => <button>Sign Out</button>,
 }));
 
 describe('Header Component', () => {
@@ -47,6 +28,7 @@ describe('Header Component', () => {
 
   afterEach(() => {
     document.body.innerHTML = '';
+    vi.useRealTimers();
   });
 
   const setupScrollContainer = (scrollTopValue: number) => {
@@ -61,8 +43,8 @@ describe('Header Component', () => {
   };
 
   describe('Unauthenticated User State', () => {
-    it('renders signin and signup links when no session exists', async () => {
-      mockGetUser.mockResolvedValueOnce({ data: { user: null } });
+    it('renders signin and signup links when no user exists', async () => {
+      vi.mocked(useAuth).mockReturnValue({ user: null });
 
       render(<Header />);
 
@@ -87,49 +69,30 @@ describe('Header Component', () => {
   });
 
   describe('Authenticated User State', () => {
-    const mockUserInstance = { id: 'user-123', email: 'test@example.com' };
+    const mockUser = { id: 'user-123', email: 'test@example.com' };
 
-    it('renders history options and sign out actions when active session exists', async () => {
-      mockGetUser.mockResolvedValueOnce({ data: { user: mockUserInstance } });
+    it('renders history and sign out when user is authenticated', async () => {
+      vi.mocked(useAuth).mockReturnValue({
+        user: {
+          id: 'user-123',
+          email: 'test@example.com',
+        } as User,
+      });
+
       render(<Header />);
-      await screen.findByRole('link', { name: /history/i });
-      expect(screen.getByRole('link', { name: /history/i })).toHaveAttribute(
-        'href',
-        '/history',
-      );
-      expect(
-        screen.getByRole('button', { name: /sign out/i }),
-      ).toBeInTheDocument();
+
+      await waitFor(() => {
+        expect(screen.getByRole('link', { name: /history/i })).toHaveAttribute(
+          'href',
+          '/history',
+        );
+        expect(
+          screen.getByRole('button', { name: /sign out/i }),
+        ).toBeInTheDocument();
+      });
+
       expect(
         screen.queryByRole('link', { name: /sign in/i }),
-      ).not.toBeInTheDocument();
-    });
-
-    it('handles auth updates adaptively through state listener subscriptions', async () => {
-      let authCallback: (
-        event: AuthChangeEvent,
-        session: Session | null,
-      ) => void = () => {};
-      mockOnAuthStateChange.mockImplementationOnce((callback) => {
-        authCallback = callback;
-        return { data: { subscription: { unsubscribe: mockUnsubscribe } } };
-      });
-
-      render(<Header />);
-      act(() => {
-        authCallback('SIGNED_IN', { user: mockUserInstance } as Session);
-      });
-
-      expect(
-        await screen.findByRole('link', { name: /history/i }),
-      ).toBeInTheDocument();
-
-      act(() => {
-        authCallback('SIGNED_OUT', null);
-      });
-
-      expect(
-        screen.queryByRole('link', { name: /history/i }),
       ).not.toBeInTheDocument();
     });
   });
@@ -143,8 +106,10 @@ describe('Header Component', () => {
       vi.useRealTimers();
     });
 
-    it('applies sticky repositioning styles when document container scrolls past 0', async () => {
+    it('applies sticky styles when container scrolls past 0', async () => {
       const container = setupScrollContainer(150);
+      vi.mocked(useAuth).mockReturnValue({ user: null });
+
       render(<Header />);
 
       fireEvent.scroll(container);
@@ -157,8 +122,10 @@ describe('Header Component', () => {
       expect(navigationTag.className).toContain('-mt-[4vh]');
     });
 
-    it('removes negative margins if scrolled back up to top index', () => {
+    it('removes sticky styles when scrolled back to top', () => {
       const container = setupScrollContainer(150);
+      vi.mocked(useAuth).mockReturnValue({ user: null });
+
       render(<Header />);
 
       fireEvent.scroll(container);
@@ -180,14 +147,14 @@ describe('Header Component', () => {
     });
   });
 
-  it('unsubscribes from auth listeners and timeouts when component is destroyed', () => {
+  it('cleans up event listeners on unmount', () => {
     const container = setupScrollContainer(0);
     const removeSpy = vi.spyOn(container, 'removeEventListener');
+    vi.mocked(useAuth).mockReturnValue({ user: null });
 
     const { unmount } = render(<Header />);
     unmount();
 
-    expect(mockUnsubscribe).toHaveBeenCalledTimes(1);
     expect(removeSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
   });
 });

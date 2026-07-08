@@ -1,35 +1,28 @@
+// __tests__/SignUpForm.test.tsx
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { SignUpForm } from './SignupForm';
+import { SignUpForm } from '@/components/Authentication/SignupForm';
+import { signUp } from '@/app/actions/auth';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
 
+// Mock the server action
+vi.mock('@/app/actions/auth', () => ({
+  signUp: vi.fn(),
+}));
+
+// Mock useRouter
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
-vi.mock('@/lib/supabase/client', () => ({
-  createClient: vi.fn(),
-}));
-
 describe('SignUpForm', () => {
   const mockPush = vi.fn();
-  const mockRefresh = vi.fn();
-  const mockSignUp = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-
-    (useRouter as ReturnType<typeof vi.fn>).mockReturnValue({
+    (useRouter as any).mockReturnValue({
       push: mockPush,
-      refresh: mockRefresh,
-    });
-
-    (createClient as ReturnType<typeof vi.fn>).mockReturnValue({
-      auth: {
-        signUp: mockSignUp,
-      },
     });
   });
 
@@ -58,11 +51,13 @@ describe('SignUpForm', () => {
     expect(
       await screen.findByText('Passwords do not match'),
     ).toBeInTheDocument();
-    expect(mockSignUp).not.toHaveBeenCalled();
+    expect(signUp).not.toHaveBeenCalled();
   });
 
   it('calls signUp with correct credentials when passwords match', async () => {
-    mockSignUp.mockResolvedValue({ error: null });
+    const mockSignUp = vi.mocked(signUp);
+    mockSignUp.mockResolvedValue(null);
+
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
 
@@ -72,18 +67,14 @@ describe('SignUpForm', () => {
     await user.click(screen.getByRole('button', { name: /sign up/i }));
 
     await waitFor(() => {
-      expect(mockSignUp).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        password: 'password123',
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
+      expect(mockSignUp).toHaveBeenCalledWith('test@example.com', 'password123');
     });
   });
 
   it('shows a success message after successful sign up', async () => {
-    mockSignUp.mockResolvedValue({ error: null });
+    const mockSignUp = vi.mocked(signUp);
+    mockSignUp.mockResolvedValue(null);
+
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
 
@@ -98,7 +89,9 @@ describe('SignUpForm', () => {
   });
 
   it('navigates to /signin when "Go to SignIn" is clicked after success', async () => {
-    mockSignUp.mockResolvedValue({ error: null });
+    const mockSignUp = vi.mocked(signUp);
+    mockSignUp.mockResolvedValue(null);
+
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
 
@@ -116,9 +109,9 @@ describe('SignUpForm', () => {
   });
 
   it('displays an error message when signUp fails', async () => {
-    mockSignUp.mockResolvedValue({
-      error: { message: 'User already registered' },
-    });
+    const mockSignUp = vi.mocked(signUp);
+    mockSignUp.mockResolvedValue('User already registered');
+
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
 
@@ -133,12 +126,9 @@ describe('SignUpForm', () => {
   });
 
   it('shows loading state while submitting', async () => {
-    let resolveSignUp: (value: unknown) => void;
+    const mockSignUp = vi.mocked(signUp);
     mockSignUp.mockImplementation(
-      () =>
-        new Promise((resolve) => {
-          resolveSignUp = resolve;
-        }),
+      () => new Promise((resolve) => setTimeout(() => resolve(null), 100))
     );
 
     const user = userEvent.setup({ delay: null });
@@ -152,8 +142,6 @@ describe('SignUpForm', () => {
     expect(
       screen.getByRole('button', { name: /creating account/i }),
     ).toBeDisabled();
-
-    resolveSignUp!({ error: null });
 
     await waitFor(() => {
       expect(

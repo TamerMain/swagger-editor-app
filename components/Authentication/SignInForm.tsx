@@ -1,7 +1,6 @@
 'use client';
 
-import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
+import { signIn } from '@/app/actions/auth';
 import { useState } from 'react';
 
 export function SignInForm() {
@@ -9,24 +8,16 @@ export function SignInForm() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-  const supabase = createClient();
 
   const handleSignIn = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const signInError = await signIn(email, password);
 
-    if (error) {
-      setError(error.message);
-    } else {
-      router.push('/');
-      router.refresh();
+    if (signInError) {
+      setError(signInError);
     }
     setLoading(false);
   };

@@ -44,7 +44,7 @@ export async function proxy(request: NextRequest) {
     });
   }
 
-  // If authenticated and trying to access auth routes > redirect to home
+  // If authenticated and trying to access auth routes > Redirect to home
   if (user && authRoutes.includes(path)) {
     return NextResponse.redirect(new URL('/', request.url));
   }

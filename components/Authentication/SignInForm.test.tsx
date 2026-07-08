@@ -1,36 +1,18 @@
+// __tests__/SignInForm.test.tsx
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { SignInForm } from './SignInForm';
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { SignInForm } from '@/components/Authentication/SignInForm';
+import { signIn } from '@/app/actions/auth';
 
-vi.mock('next/navigation', () => ({
-  useRouter: vi.fn(),
-}));
-
-vi.mock('@/lib/supabase/client', () => ({
-  createClient: vi.fn(),
+// Mock the server action
+vi.mock('@/app/actions/auth', () => ({
+  signIn: vi.fn(),
 }));
 
 describe('SignInForm', () => {
-  const mockPush = vi.fn();
-  const mockRefresh = vi.fn();
-  const mockSignInWithPassword = vi.fn();
-
   beforeEach(() => {
     vi.clearAllMocks();
-
-    (useRouter as ReturnType<typeof vi.fn>).mockReturnValue({
-      push: mockPush,
-      refresh: mockRefresh,
-    });
-
-    (createClient as ReturnType<typeof vi.fn>).mockReturnValue({
-      auth: {
-        signInWithPassword: mockSignInWithPassword,
-      },
-    });
   });
 
   it('renders email and password fields', () => {
@@ -56,8 +38,10 @@ describe('SignInForm', () => {
     expect(passwordInput).toHaveValue('password123');
   });
 
-  it('calls signInWithPassword and redirects on successful signin', async () => {
-    mockSignInWithPassword.mockResolvedValue({ error: null });
+  it('calls signIn and redirects on successful signin', async () => {
+    const mockSignIn = vi.mocked(signIn);
+    mockSignIn.mockResolvedValue(null); // No error
+
     const user = userEvent.setup();
     render(<SignInForm />);
 
@@ -66,20 +50,14 @@ describe('SignInForm', () => {
     await user.click(screen.getByRole('button', { name: /sign in/i }));
 
     await waitFor(() => {
-      expect(mockSignInWithPassword).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        password: 'password123',
-      });
+      expect(mockSignIn).toHaveBeenCalledWith('test@example.com', 'password123');
     });
-
-    expect(mockPush).toHaveBeenCalledWith('/');
-    expect(mockRefresh).toHaveBeenCalled();
   });
 
   it('displays an error message when signin fails', async () => {
-    mockSignInWithPassword.mockResolvedValue({
-      error: { message: 'Invalid signin credentials' },
-    });
+    const mockSignIn = vi.mocked(signIn);
+    mockSignIn.mockResolvedValue('Invalid signin credentials');
+
     const user = userEvent.setup();
     render(<SignInForm />);
 
@@ -90,16 +68,14 @@ describe('SignInForm', () => {
     expect(
       await screen.findByText('Invalid signin credentials'),
     ).toBeInTheDocument();
-    expect(mockPush).not.toHaveBeenCalled();
   });
 
   it('shows loading state while submitting', async () => {
-    mockSignInWithPassword.mockImplementation(
-      () =>
-        new Promise((resolve) =>
-          setTimeout(() => resolve({ error: null }), 100),
-        ),
+    const mockSignIn = vi.mocked(signIn);
+    mockSignIn.mockImplementation(
+      () => new Promise((resolve) => setTimeout(() => resolve(null), 100))
     );
+
     const user = userEvent.setup();
     render(<SignInForm />);
 
@@ -110,7 +86,7 @@ describe('SignInForm', () => {
     expect(screen.getByRole('button', { name: /signing in/i })).toBeDisabled();
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalled();
+      expect(mockSignIn).toHaveBeenCalled();
     });
   });
 
