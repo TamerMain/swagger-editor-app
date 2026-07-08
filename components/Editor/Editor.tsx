@@ -69,13 +69,12 @@ export default function Editor({ onSpecChange }: EditorProps) {
     loadSpec();
   }, [user]);
 
-  const handleCodeChange = useCallback(
-    debounce(async (value: string) => {
-      setCode(value);
-      await validateContent(value);
-    }, 300),
-    [],
-  );
+  const handleCodeChange = useCallback((value: string) => {
+    debounce(async (val: string) => {
+      setCode(val);
+      await validateContent(val);
+    }, 300)(value);
+  }, []);
 
   const handleFormatSwitch = () => {
     try {

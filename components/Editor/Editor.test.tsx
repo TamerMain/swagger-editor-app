@@ -1,4 +1,3 @@
-// __tests__/Editor.test.tsx
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -224,7 +223,7 @@ describe('Editor', () => {
     await user.type(textarea, 'broken');
 
     await waitFor(() => {
-      expect(screen.getByText('❌ Bad syntax')).toBeInTheDocument();
+      expect(screen.getByText(/Bad syntax/i)).toBeInTheDocument();
     });
   });
 

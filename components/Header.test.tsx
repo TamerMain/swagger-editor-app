@@ -1,4 +1,3 @@
-// __tests__/Header.test.tsx
 import {
   render,
   screen,

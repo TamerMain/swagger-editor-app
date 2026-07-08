@@ -1,4 +1,3 @@
-// __tests__/SignUpForm.test.tsx
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -21,7 +20,7 @@ describe('SignUpForm', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useRouter as any).mockReturnValue({
+    vi.mocked(useRouter).mockReturnValue({
       push: mockPush,
     });
   });
