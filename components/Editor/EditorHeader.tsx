@@ -65,11 +65,11 @@ export default function EditorHeader({
         )}
         <button
           onClick={onFormatSwitch}
-          className={`px-2 py-2 text-xs rounded cursor-pointer ${
+          className={`px-2 py-2 text-xs rounded ${
             format === FORMAT.JSON
               ? 'bg-green-600 hover:bg-green-700'
               : 'bg-blue-600 hover:bg-blue-700'
-          }`}
+          } ${errors.length > 0 ? 'bg-gray-600 hover:bg-gray-600' : ''}`}
           disabled={errors.length > 0}
         >
           Switch to {format === FORMAT.JSON ? 'YAML' : 'JSON'}

@@ -24,7 +24,6 @@ export async function parseFormat(content: string): Promise<ParseResult> {
     console.log = originalLog;
     console.error = originalError;
 
-
     // Unwrap $ref syntax
     const resolved = (await $RefParser.dereference(data)) as Spec;
 

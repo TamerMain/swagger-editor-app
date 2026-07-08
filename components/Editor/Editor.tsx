@@ -5,13 +5,14 @@ import EditorHeader from '@/components/Editor/EditorHeader';
 import { json } from '@codemirror/lang-json';
 import { yaml } from '@codemirror/lang-yaml';
 import { oneDark } from '@codemirror/theme-one-dark';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { parseFormat, convertFormat } from '@/lib/formatParser';
 import { FORMAT } from '@/constants/constants';
 import { type Format } from '@/types/openapi';
 import { useToast } from '@/lib/context/ToastContext';
 import { useAuth } from '@/lib/context/AuthContext';
 import { loadSchema, saveSchema } from '@/app/actions/editor';
+import { debounce } from '@/lib/debounce';
 
 type EditorProps = {
   onSpecChange?: (content: string) => void;
@@ -68,10 +69,13 @@ export default function Editor({ onSpecChange }: EditorProps) {
     loadSpec();
   }, [user]);
 
-  const handleCodeChange = async (value: string) => {
-    setCode(value);
-    await validateContent(value);
-  };
+  const handleCodeChange = useCallback(
+    debounce(async (value: string) => {
+      setCode(value);
+      await validateContent(value);
+    }, 300),
+    [],
+  );
 
   const handleFormatSwitch = () => {
     try {
@@ -126,6 +130,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
       {/* Code Editor */}
       <div className="flex-1">
         <CodeMirror
+          key={format}
           value={code}
           height="100%"
           extensions={[format === FORMAT.JSON ? json() : yaml(), oneDark]}
@@ -144,15 +149,15 @@ export default function Editor({ onSpecChange }: EditorProps) {
         <div className="sticky bottom-0 w-full p-3 border-t border-red-500 bg-red-950">
           {errors.map((error, index) => (
             <div key={index} className="text-sm text-red-400 font-mono">
-              ❌ {error}
-              {/* <div className="relative inline-block group">
-                <span className="text-xs text-white hover:text-blue-400 cursor-help">
+              ❌ Swagger schema validation failed.{' '}
+              <div className="relative inline-block group">
+                <span className="text-sm text-white hover:text-blue-400 cursor-help">
                   Read more
                 </span>
-                <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs rounded p-2 whitespace-pre-wrap z-50 shadow-lg">
-                 
+                <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block bg-[#282c34] border border-neutral-800 text-gray-400 text-xs rounded p-2 whitespace-pre-wrap z-50 shadow-lg">
+                  {error}
                 </div>
-              </div> */}
+              </div>
             </div>
           ))}
         </div>
