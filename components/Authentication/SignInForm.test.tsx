@@ -1,3 +1,4 @@
+// __tests__/SignInForm.test.tsx
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -37,9 +38,9 @@ describe('SignInForm', () => {
     expect(passwordInput).toHaveValue('password123');
   });
 
-  it('calls signIn and redirects on successful signin', async () => {
+  it('calls signIn on successful signin', async () => {
     const mockSignIn = vi.mocked(signIn);
-    mockSignIn.mockResolvedValue(null); // No error
+    mockSignIn.mockResolvedValue(null);
 
     const user = userEvent.setup();
     render(<SignInForm />);

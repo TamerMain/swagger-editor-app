@@ -18,8 +18,11 @@ export function SignInForm() {
 
     if (signInError) {
       setError(signInError);
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    window.location.href = '/';
   };
 
   return (

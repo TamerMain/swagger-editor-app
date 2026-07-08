@@ -19,7 +19,6 @@ export async function signUp(email: string, password: string) {
   }
 
   revalidatePath('/');
-  redirect('/');
 }
 
 export async function signIn(email: string, password: string) {
@@ -34,7 +33,6 @@ export async function signIn(email: string, password: string) {
   }
 
   revalidatePath('/');
-  redirect('/');
 }
 
 export async function signOut() {

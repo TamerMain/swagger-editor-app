@@ -1,53 +1,48 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { signUp } from '@/app/actions/auth'
+import { useState } from 'react';
+import { signUp } from '@/app/actions/auth';
 
 export function SignUpForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const router = useRouter()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSignUp = async (e: React.SubmitEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match')
-      setLoading(false)
-      return
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
     }
 
-    const signUpError = await signUp(email, password)
+    const signUpError = await signUp(email, password);
 
     if (signUpError) {
-      setError(signUpError)
+      setError(signUpError);
     } else {
-      setSuccess(true)
+      setSuccess(true);
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   if (success) {
     return (
       <div className="text-center">
         <div className="bg-green-50 text-green-600 p-4 rounded">
           <p>Check your email for the confirmation link!</p>
-          <button
-            onClick={() => router.push('/signin')}
-            className="mt-4 text-blue-600 hover:underline"
-          >
-            Go to SignIn
-          </button>
+          <a href="/signin" className="text-blue-600 hover:underline">
+            Go to signin
+          </a>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -59,7 +54,10 @@ export function SignUpForm() {
       )}
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-gray-700"
+        >
           Email
         </label>
         <input
@@ -74,7 +72,10 @@ export function SignUpForm() {
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700"
+        >
           Password
         </label>
         <input
@@ -87,11 +88,16 @@ export function SignUpForm() {
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           placeholder="••••••••"
         />
-        <p className="mt-1 text-xs text-gray-500">Must be at least 6 characters</p>
+        <p className="mt-1 text-xs text-gray-500">
+          Must be at least 6 characters
+        </p>
       </div>
 
       <div>
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="confirmPassword"
+          className="block text-sm font-medium text-gray-700"
+        >
           Confirm Password
         </label>
         <input
@@ -119,5 +125,5 @@ export function SignUpForm() {
         </a>
       </div>
     </form>
-  )
+  );
 }

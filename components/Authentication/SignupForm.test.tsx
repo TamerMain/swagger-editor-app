@@ -1,3 +1,4 @@
+// __tests__/SignUpForm.test.tsx
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -99,12 +100,13 @@ describe('SignUpForm', () => {
     await user.type(screen.getByLabelText(/confirm password/i), 'password123');
     await user.click(screen.getByRole('button', { name: /sign up/i }));
 
-    const goToSignInButton = await screen.findByRole('button', {
+    const goToSignInLink = await screen.findByRole('link', {
       name: /go to signin/i,
     });
-    await user.click(goToSignInButton);
+    await user.click(goToSignInLink);
 
-    expect(mockPush).toHaveBeenCalledWith('/signin');
+    // Check that the link exists and has correct href
+    expect(goToSignInLink).toHaveAttribute('href', '/signin');
   });
 
   it('displays an error message when signUp fails', async () => {
