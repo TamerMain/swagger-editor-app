@@ -8,10 +8,6 @@ servers:
 
 components:
   schemas:
-    # ========== BASIC SCHEMAS ==========
-    
-    # 1. Simple object with required fields
-    # Tests: required, properties, types, format
     User:
       type: object
       required: [id, name]
@@ -28,8 +24,6 @@ components:
         isActive:
           type: boolean
 
-    # 2. Another simple object
-    # Tests: pattern (regex) validation
     Address:
       type: object
       properties:
@@ -41,24 +35,16 @@ components:
           type: string
           pattern: "^[0-9]{5}$"
 
-    # ========== COMPOSITION ==========
-    
-    # 3. allOf - combines User + Address
-    # Tests: merging two schemas
     UserWithAddress:
       allOf:
         - $ref: '#/components/schemas/User'
         - $ref: '#/components/schemas/Address'
 
-    # 4. anyOf - can be string OR integer
-    # Tests: union types (OR)
     SearchResult:
       anyOf:
         - type: string
         - type: integer
 
-    # 5. oneOf with discriminator
-    # Tests: exactly one of multiple options
     Animal:
       oneOf:
         - $ref: '#/components/schemas/Dog'
@@ -66,10 +52,6 @@ components:
       discriminator:
         propertyName: type
 
-    # ========== NESTED ==========
-    
-    # 6. Object with nested arrays and $refs
-    # Tests: arrays, nested objects, $ref inside arrays
     Post:
       type: object
       required: [id, title]
@@ -85,8 +67,6 @@ components:
           items:
             type: string
 
-    # 7. Recursive (self-referential)
-    # Tests: circular references (needs handling in UI)
     TreeNode:
       type: object
       properties:
@@ -99,29 +79,19 @@ components:
           items:
             $ref: '#/components/schemas/TreeNode'
 
-    # ========== EDGE CASES ==========
-    
-    # 8. nullable
-    # Tests: field can be null
     NullableString:
       type: string
       nullable: true
 
-    # 9. enum
-    # Tests: limited set of allowed values
     Status:
       type: string
       enum: [pending, active, inactive, deleted]
 
-    # 10. additionalProperties
-    # Tests: dynamic object keys
     Metadata:
       type: object
       additionalProperties:
         type: string
 
-    # 11. Vehicle - using oneOf instead of if/then/else
-    # Tests: conditional validation via oneOf
     Vehicle:
       oneOf:
         - type: object
@@ -143,8 +113,6 @@ components:
               type: integer
           required: [type, wheels]
 
-    # 12. allOf with $ref + extra fields
-    # Tests: combining reference with additional properties
     ExtendedUser:
       allOf:
         - $ref: '#/components/schemas/User'
@@ -155,9 +123,6 @@ components:
             department:
               type: string
 
-    # ========== DISCRIMINATED UNION ==========
-    
-    # 13. Dog - one option for Animal
     Dog:
       type: object
       required: [type, breed]
@@ -170,7 +135,6 @@ components:
         barkVolume:
           type: number
 
-    # 14. Cat - another option for Animal
     Cat:
       type: object
       required: [type]
@@ -184,9 +148,9 @@ components:
           type: integer
 
 paths:
-  # ========== PATH 1: BASIC CRUD ==========
+  # ===== TEST 1: Basic CRUD with $ref =====
   # Tests: $ref in request body and response
-  /users:
+  /1-users:
     post:
       summary: Create user
       requestBody:
@@ -203,11 +167,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
 
-  # ========== PATH 2: QUERY PARAMS WITH anyOf ==========
-  # Tests: anyOf in parameters (query param can be string OR integer)
-  /search:
+  # ===== TEST 2: allOf merging =====
+  # Tests: allOf combines User + Address
+  /2-users-with-address:
+    post:
+      summary: Create user with address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserWithAddress'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithAddress'
+
+  # ===== TEST 3: anyOf (union type) =====
+  # Tests: anyOf in query param and response
+  /3-search:
     get:
-      summary: Search
+      summary: Search (anyOf)
       parameters:
         - name: query
           in: query
@@ -221,15 +204,26 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
-                  - type: string
-                  - type: integer
+                $ref: '#/components/schemas/SearchResult'
 
-  # ========== PATH 3: ARRAY RESPONSE ==========
-  # Tests: array response with $ref items
-  /posts:
+  # ===== TEST 4: oneOf with discriminator =====
+  # Tests: oneOf + discriminator
+  /4-animal:
     get:
-      summary: Get posts
+      summary: Get animal (oneOf)
+      responses:
+        '200':
+          description: Animal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+
+  # ===== TEST 5: nested objects and arrays =====
+  # Tests: nested $ref, arrays, nested objects
+  /5-posts:
+    get:
+      summary: Get posts (nested)
       responses:
         '200':
           description: List of posts
@@ -240,11 +234,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/Post'
 
-  # ========== PATH 4: RECURSIVE TREE ==========
-  # Tests: circular reference in response
-  /tree:
+  # ===== TEST 6: circular reference =====
+  # Tests: recursive TreeNode (circular)
+  /6-tree:
     get:
-      summary: Get tree
+      summary: Get tree (circular)
       responses:
         '200':
           description: Tree structure
@@ -252,3 +246,68 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TreeNode'
+
+  # ===== TEST 7: nullable field =====
+  # Tests: nullable: true
+  /7-nullable:
+    get:
+      summary: Get nullable string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableString'
+
+  # ===== TEST 8: enum =====
+  # Tests: enum values
+  /8-status:
+    get:
+      summary: Get status (enum)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  # ===== TEST 9: additionalProperties =====
+  # Tests: dynamic object keys
+  /9-metadata:
+    get:
+      summary: Get metadata (additionalProperties)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metadata'
+
+  # ===== TEST 10: oneOf with conditional validation =====
+  # Tests: Vehicle oneOf (car vs motorcycle/truck)
+  /10-vehicle:
+    get:
+      summary: Get vehicle (oneOf)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+
+  # ===== TEST 11: allOf + $ref + extra fields =====
+  # Tests: ExtendedUser (allOf with $ref)
+  /11-extended-user:
+    get:
+      summary: Get extended user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedUser'

@@ -1,5 +1,6 @@
 import { getStatusColor } from '@/constants/constants';
 import { Operation } from '@/types/openapi';
+import { safeStringify } from '@/lib/safeStringify';
 
 type DisplayResponseProps = { responses: Operation['responses'] };
 
@@ -44,7 +45,7 @@ export default function DisplayResponses({ responses }: DisplayResponseProps) {
                         Schema:
                       </div>
                       <pre className="mt-1 p-2 bg-neutral-800/50 rounded text-[10px] overflow-auto max-h-40">
-                        {JSON.stringify(schema, null, 2)}
+                        {safeStringify(schema)}
                       </pre>
                     </div>
                   )}
@@ -54,7 +55,7 @@ export default function DisplayResponses({ responses }: DisplayResponseProps) {
                         Example:
                       </div>
                       <pre className="mt-1 p-2 bg-neutral-800/50 rounded text-[10px] overflow-auto max-h-40">
-                        {JSON.stringify(example, null, 2)}
+                        {safeStringify(example)}
                       </pre>
                     </div>
                   )}

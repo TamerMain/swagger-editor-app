@@ -1,4 +1,5 @@
 import { getStatusColor } from '@/constants/constants';
+import { safeStringify } from '@/lib/safeStringify';
 
 type TryResponseProps = {
   response: {
@@ -24,7 +25,7 @@ export default function TryResponse({ response, error }: TryResponseProps) {
   const bodyString =
     typeof displayBody === 'string'
       ? displayBody
-      : JSON.stringify(displayBody, null, 2);
+      : safeStringify(displayBody);
 
   const errorMessage =
     typeof displayBody === 'object' &&

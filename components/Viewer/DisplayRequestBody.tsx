@@ -1,4 +1,5 @@
 import { Operation } from '@/types/openapi';
+import { safeStringify } from '@/lib/safeStringify';
 
 type DisplayRequestBodyProps = { requestBody: Operation['requestBody'] };
 
@@ -33,7 +34,7 @@ export default function DisplayRequestBody({
                 Schema
               </summary>
               <pre className="mt-1 p-2 bg-neutral-900/50 rounded text-[10px] overflow-auto max-h-40">
-                {JSON.stringify(schema, null, 2)}
+                {safeStringify(schema)}
               </pre>
             </details>
           )}
@@ -43,7 +44,7 @@ export default function DisplayRequestBody({
                 Example
               </summary>
               <pre className="mt-1 p-2 bg-neutral-900/50 rounded text-[10px] overflow-auto max-h-40">
-                {JSON.stringify(example, null, 2)}
+                {safeStringify(example)}
               </pre>
             </details>
           )}

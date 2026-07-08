@@ -1,5 +1,6 @@
 import { Operation } from '@/types/openapi';
 import { TRY_IT_OUT_FIELDS } from '@/constants/constants';
+import { safeStringify } from '@/lib/safeStringify';
 
 type TryHeadersProps = {
   headerParams: Operation['parameters'];
@@ -26,7 +27,7 @@ export default function TryHeaders({ headerParams = [] }: TryHeadersProps) {
         placeholder={
           isEmpty
             ? '{\n  "key": "value"\n}'
-            : JSON.stringify(headerDefault, null, 2)
+            : safeStringify (headerDefault)
         }
         className="w-full h-16 px-3 py-2 bg-neutral-900 border border-neutral-700 rounded text-white text-xs font-mono"
       />
