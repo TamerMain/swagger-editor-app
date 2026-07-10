@@ -40,7 +40,7 @@ export default function DisplayRequestBody({
           )}
           {example && (
             <details className="mt-2">
-              <summary className="cursor-pointer text-[10px] text-blue-400 hover:text-blue-300">
+              <summary className="cursor-pointer text-[10px] text-white hover:text-blue-300">
                 Example
               </summary>
               <pre className="mt-1 p-2 bg-neutral-900/50 rounded text-[10px] overflow-auto max-h-40">

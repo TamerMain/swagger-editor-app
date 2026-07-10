@@ -33,11 +33,8 @@ describe('History Component', () => {
         screen.getByText(/You haven't executed any requests yet/i),
       ).toBeInTheDocument();
       expect(
-        screen.getByRole('link', { name: /go to editor/i }),
+        screen.getByRole('link', { name: /go home/i }),
       ).toHaveAttribute('href', '/');
-      expect(
-        screen.getByRole('link', { name: /go to viewer/i }),
-      ).toHaveAttribute('href', '/viewer');
     });
 
     it('renders empty placeholder layout when history array is empty', () => {
@@ -68,6 +65,37 @@ describe('History Component', () => {
       expect(
         screen.queryByText(/You haven't executed any requests yet/i),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('handles null history gracefully', () => {
+      render(<History history={null} />);
+      expect(
+        screen.getByText(/You haven't executed any requests yet/i),
+      ).toBeInTheDocument();
+    });
+
+    it('handles undefined history gracefully', () => {
+      render(<History history={undefined as unknown as HistoryRow[] | null} />);
+      expect(
+        screen.getByText(/You haven't executed any requests yet/i),
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('has proper heading level for title', () => {
+      render(<History history={mockHistoryData} />);
+      const heading = screen.getByRole('heading', { level: 1 });
+      expect(heading).toHaveTextContent('Request History');
+    });
+
+    it('has proper link attributes for navigation', () => {
+      render(<History history={null} />);
+      const editorLink = screen.getByRole('link', { name: /go home/i });
+      
+      expect(editorLink).toHaveAttribute('href', '/');
     });
   });
 });

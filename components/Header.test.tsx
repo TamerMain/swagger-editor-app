@@ -68,7 +68,6 @@ describe('Header Component', () => {
   });
 
   describe('Authenticated User State', () => {
-    const mockUser = { id: 'user-123', email: 'test@example.com' };
 
     it('renders history and sign out when user is authenticated', async () => {
       vi.mocked(useAuth).mockReturnValue({
@@ -118,7 +117,7 @@ describe('Header Component', () => {
       });
 
       const navigationTag = screen.getByRole('navigation');
-      expect(navigationTag.className).toContain('-mt-[4vh]');
+      expect(navigationTag.className).toContain('max-h-[3vh]');
     });
 
     it('removes sticky styles when scrolled back to top', () => {

@@ -74,3 +74,15 @@ export const getStatusColor = (status: string) => {
     return 'bg-red-500/20 text-red-400 border-red-500/30';
   return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
 };
+
+export const getHistoryStatusColor = (code: number) => {
+  if (code === 0) return 'text-red-300 bg-red-900 border-red-700';
+  if (code >= 200 && code < 300)
+    return 'text-green-400 bg-green-900 border-green-700';
+  if (code >= 300 && code < 400)
+    return 'text-blue-400 bg-blue-900 border-blue-700';
+  if (code >= 400 && code < 500)
+    return 'text-yellow-400 bg-yellow-900 border-yellow-700';
+  if (code >= 500) return 'text-red-300 bg-red-500 border-red-700';
+  return 'text-gray-400 bg-gray-900 border-gray-700';
+};

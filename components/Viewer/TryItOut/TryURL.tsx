@@ -9,7 +9,7 @@ export default function TryURL({ servers }: TryURLProps) {
   return (
     <div>
       <label className="text-xs text-neutral-400 block mb-1">
-        URL<span className="text-red-500"> *</span>
+        Base URL<span className="text-red-500"> *</span>
       </label>
       <input
         name={TRY_IT_OUT_FIELDS.URL}

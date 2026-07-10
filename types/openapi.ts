@@ -52,6 +52,7 @@ export interface Parameter {
   required?: boolean;
   description?: string;
   schema?: Schema;
+  example?: unknown;
 }
 
 export interface RequestBody {

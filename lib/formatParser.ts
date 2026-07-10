@@ -13,7 +13,8 @@ export interface ParseResult {
 
 export async function parseFormat(content: string): Promise<ParseResult> {
   try {
-    const isJson = content.trim().startsWith('{');
+    const format = detectFormat(content);
+    const isJson = format === 'json';
     const data = isJson ? JSON.parse(content) : yaml.load(content);
 
     const originalLog = console.log;
@@ -52,6 +53,27 @@ export function convertFormat(
   return to === FORMAT.JSON
     ? JSON.stringify(data, null, 2)
     : yaml.dump(data, { indent: 2 });
+}
+
+function detectFormat(content: string): 'json' | 'yaml' {
+  const trimmed = content.trim();
+
+  if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+    return 'json';
+  }
+
+  if (/^(openapi|swagger|info|paths|components):/i.test(trimmed)) {
+    return 'yaml';
+  }
+
+  if (!trimmed) return 'yaml';
+  
+  try {
+    JSON.parse(trimmed);
+    return 'json';
+  } catch {
+    return 'yaml';
+  }
 }
 
 const getReadableError = (message: string): string => {

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Viewer from './Viewer';
-import { type Spec, type PathItem, type HttpMethods } from '@/types/openapi';
+import { type Spec, type PathItem } from '@/types/openapi';
 import { getMethods } from '@/lib/getMethods';
 
 vi.mock('@/lib/getMethods', () => ({

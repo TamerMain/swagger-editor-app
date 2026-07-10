@@ -1,4 +1,3 @@
-// __tests__/SignUpForm.test.tsx
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -18,11 +17,21 @@ vi.mock('next/navigation', () => ({
 
 describe('SignUpForm', () => {
   const mockPush = vi.fn();
+  const mockRefresh = vi.fn();
+  const mockReplace = vi.fn();
+  const mockBack = vi.fn();
+  const mockForward = vi.fn();
+  const mockPrefetch = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(useRouter).mockReturnValue({
       push: mockPush,
+      refresh: mockRefresh,
+      replace: mockReplace,
+      back: mockBack,
+      forward: mockForward,
+      prefetch: mockPrefetch,
     });
   });
 
@@ -67,7 +76,10 @@ describe('SignUpForm', () => {
     await user.click(screen.getByRole('button', { name: /sign up/i }));
 
     await waitFor(() => {
-      expect(mockSignUp).toHaveBeenCalledWith('test@example.com', 'password123');
+      expect(mockSignUp).toHaveBeenCalledWith(
+        'test@example.com',
+        'password123',
+      );
     });
   });
 
@@ -88,7 +100,7 @@ describe('SignUpForm', () => {
     ).toBeInTheDocument();
   });
 
-  it('navigates to /signin when "Go to SignIn" is clicked after success', async () => {
+  it('navigates to /signin when "Go to Sign In" is clicked after success', async () => {
     const mockSignUp = vi.mocked(signUp);
     mockSignUp.mockResolvedValue(null);
 
@@ -101,7 +113,7 @@ describe('SignUpForm', () => {
     await user.click(screen.getByRole('button', { name: /sign up/i }));
 
     const goToSignInLink = await screen.findByRole('link', {
-      name: /go to signin/i,
+      name: /go to sign in/i,
     });
     await user.click(goToSignInLink);
 
@@ -129,7 +141,7 @@ describe('SignUpForm', () => {
   it('shows loading state while submitting', async () => {
     const mockSignUp = vi.mocked(signUp);
     mockSignUp.mockImplementation(
-      () => new Promise((resolve) => setTimeout(() => resolve(null), 100))
+      () => new Promise((resolve) => setTimeout(() => resolve(null), 100)),
     );
 
     const user = userEvent.setup({ delay: null });

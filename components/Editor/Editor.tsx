@@ -5,7 +5,7 @@ import EditorHeader from '@/components/Editor/EditorHeader';
 import { json } from '@codemirror/lang-json';
 import { yaml } from '@codemirror/lang-yaml';
 import { oneDark } from '@codemirror/theme-one-dark';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { parseFormat, convertFormat } from '@/lib/formatParser';
 import { FORMAT } from '@/constants/constants';
 import { type Format } from '@/types/openapi';
@@ -27,20 +27,23 @@ export default function Editor({ onSpecChange }: EditorProps) {
   const { showErrorToast, showSuccessToast } = useToast();
   const { user } = useAuth();
 
-  const validateContent = async (content: string) => {
-    const result = await parseFormat(content);
+  const validateContent = useCallback(
+    async (content: string) => {
+      const result = await parseFormat(content);
 
-    if (result.valid) {
-      setErrors([]);
-      if (result.format && result.format !== format) {
-        setFormat(result.format);
+      if (result.valid) {
+        setErrors([]);
+        if (result.format && result.format !== format) {
+          setFormat(result.format);
+        }
+        onSpecChange?.(content);
+      } else {
+        setErrors([result.error || 'Invalid specification']);
+        onSpecChange?.('');
       }
-      onSpecChange?.(content);
-    } else {
-      setErrors([result.error || 'Invalid specification']);
-      onSpecChange?.('');
-    }
-  };
+    },
+    [format, onSpecChange],
+  );
 
   const loadSpec = async () => {
     try {
@@ -58,7 +61,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
 
       setCode(content);
       await validateContent(content);
-    } catch (error) {
+    } catch {
       setErrors(['Failed to load specification file']);
     }
   };
@@ -69,12 +72,14 @@ export default function Editor({ onSpecChange }: EditorProps) {
     loadSpec();
   }, [user]);
 
-  const handleCodeChange = useCallback((value: string) => {
-    debounce(async (val: string) => {
-      setCode(val);
-      await validateContent(val);
-    }, 300)(value);
-  }, []);
+  const handleCodeChange = useMemo(
+    () =>
+      debounce(async (value: string) => {
+        setCode(value);
+        await validateContent(value);
+      }, 300),
+    [validateContent],
+  );
 
   const handleFormatSwitch = () => {
     try {
@@ -83,7 +88,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
       setCode(converted);
       setFormat(newFormat);
       setErrors([]);
-    } catch (error) {
+    } catch {
       setErrors(['Failed to convert format']);
     }
   };
@@ -104,7 +109,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
       }
       await saveSchema(code);
       showSuccessToast('Schema Saved');
-    } catch (error) {
+    } catch {
       showErrorToast('Failed To Save Schema');
     } finally {
       setIsSaving(false);
@@ -126,7 +131,6 @@ export default function Editor({ onSpecChange }: EditorProps) {
         onFormatSwitch={handleFormatSwitch}
       />
 
-      {/* Code Editor */}
       <div className="flex-1">
         <CodeMirror
           key={format}
@@ -143,7 +147,6 @@ export default function Editor({ onSpecChange }: EditorProps) {
         />
       </div>
 
-      {/* Error Display */}
       {errors.length > 0 && (
         <div className="sticky bottom-0 w-full p-3 border-t border-red-500 bg-red-950">
           {errors.map((error, index) => (

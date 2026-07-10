@@ -2,7 +2,6 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export async function signUp(email: string, password: string) {
   const supabase = await createClient();
@@ -19,6 +18,7 @@ export async function signUp(email: string, password: string) {
   }
 
   revalidatePath('/');
+  return null;
 }
 
 export async function signIn(email: string, password: string) {
@@ -33,6 +33,7 @@ export async function signIn(email: string, password: string) {
   }
 
   revalidatePath('/');
+  return null;
 }
 
 export async function signOut() {

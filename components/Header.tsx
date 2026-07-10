@@ -29,7 +29,7 @@ export default function Header() {
 
   return (
     <nav
-      className={`sticky flex justify-center h-full max-h-[5vh] ${isSticky && '-mt-[4vh] hover:mt-0'} z-50 bg-neutral-900/80 backdrop-blur-sm border-b border-neutral-700 transition-all`}
+      className={`sticky flex justify-center h-full ${isSticky ? 'max-h-[3vh] hover:max-h-[5vh]' : 'max-h-[5vh]'} z-50 bg-neutral-900/80 backdrop-blur-sm border-b border-neutral-700 transition-all`}
     >
       <div className="w-[80vw] mx-auto px-4 flex items-center justify-between self-center">
         <Link href="/" className="font-bold text-white">
@@ -51,13 +51,13 @@ export default function Header() {
             <>
               <Link
                 href="/signin"
-                className="px-3 py-0.5 rounded border-2 border-blue-500 hover:border-blue-600 hover:text-blue-400"
+                className={`px-3 ${isSticky ? '' : 'py-0.5'} rounded border-2 border-blue-500 hover:border-blue-600 hover:text-blue-400`}
               >
                 Sign In
               </Link>
               <Link
                 href="/signup"
-                className="px-3 py-0.5 rounded border-2 border-blue-600 bg-blue-600 text-white hover:border-blue-700 hover:bg-blue-700"
+                className={`px-3 ${isSticky ? '' : 'py-0.5'} rounded border-2 border-blue-600 bg-blue-600 text-white hover:border-blue-700 hover:bg-blue-700`}
               >
                 Sign Up
               </Link>
