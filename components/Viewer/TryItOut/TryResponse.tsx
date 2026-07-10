@@ -23,9 +23,7 @@ export default function TryResponse({ response, error }: TryResponseProps) {
   }
 
   const bodyString =
-    typeof displayBody === 'string'
-      ? displayBody
-      : safeStringify(displayBody);
+    typeof displayBody === 'string' ? displayBody : safeStringify(displayBody);
 
   const errorMessage =
     typeof displayBody === 'object' &&
@@ -47,12 +45,23 @@ export default function TryResponse({ response, error }: TryResponseProps) {
           {!response.ok && <span className="text-xs text-red-400">Error</span>}
         </div>
         <button
+          type="button"
           onClick={() => navigator.clipboard.writeText(bodyString)}
           className="text-xs text-blue-400 hover:text-blue-300"
         >
           Copy
         </button>
       </div>
+      {response.headers && Object.keys(response.headers).length > 0 && (
+        <details className="mt-2">
+          <summary className="cursor-pointer text-[10px] text-gray-400 hover:text-white">
+            Headers
+          </summary>
+          <pre className="mt-1 text-[10px] text-gray-400 overflow-auto max-h-40">
+            {safeStringify(response.headers)}
+          </pre>
+        </details>
+      )}
       {error && (
         <div className="mt-2 text-xs text-red-400 bg-red-950/30 p-2 rounded border border-red-800">
           ❌ {error}

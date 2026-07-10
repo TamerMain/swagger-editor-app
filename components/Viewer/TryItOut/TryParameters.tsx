@@ -3,6 +3,7 @@ import {
   TRY_IT_OUT_FIELDS,
 } from '@/constants/constants';
 import { type ParameterType, type Parameter } from '@/types/openapi';
+import { useState, useEffect, useRef } from 'react';
 
 type TryParametersProps = {
   type: ParameterType;
@@ -10,7 +11,8 @@ type TryParametersProps = {
 };
 
 export default function TryParameters({ type, params }: TryParametersProps) {
-  if (params.length === 0) return null;
+  const [values, setValues] = useState<Record<string, string>>({});
+  const isFirstRender = useRef(true);
 
   const getPlaceholder = (p: Parameter) => {
     if (Array.isArray(p.schema?.type)) {
@@ -18,14 +20,40 @@ export default function TryParameters({ type, params }: TryParametersProps) {
     }
     if (p.schema?.default !== undefined) return String(p.schema.default);
     if (p.schema?.type) return p.schema.type;
-    
+
     return p.required ? 'required' : 'optional';
   };
+
+  const getDefaultValue = (p: Parameter): string => {
+    if (p.example !== undefined) return String(p.example);
+    if (p.schema?.example !== undefined) return String(p.schema.example);
+    if (p.schema?.default !== undefined) return String(p.schema.default);
+    return '';
+  };
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const initialValues: Record<string, string> = {};
+    params.forEach((p) => {
+      const val = getDefaultValue(p);
+      if (val) initialValues[p.name] = val;
+    });
+    setValues(initialValues);
+  }, [params]);
+
+  const handleChange = (name: string, value: string) => {
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  if (params.length === 0) return null;
 
   return (
     <div>
       <h2 className="text-xs text-neutral-400 capitalize mb-1">
-        {`${type} Response`}
+        {`${type} Parameter`}
       </h2>
       {params.map((p) => (
         <div
@@ -43,6 +71,8 @@ export default function TryParameters({ type, params }: TryParametersProps) {
           <input
             name={`${TRY_IT_OUT_FIELDS.PARAMETER}_${type}_${p.name}`}
             type="text"
+            value={values[p.name] || ''}
+            onChange={(e) => handleChange(p.name, e.target.value)}
             placeholder={getPlaceholder(p)}
             className="flex-1 px-3 py-1 bg-neutral-900 border border-neutral-700 rounded text-white text-xs"
           />

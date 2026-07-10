@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Operation } from '@/types/openapi';
 import { BODY_TYPES, TRY_IT_OUT_FIELDS } from '@/constants/constants';
 import { BodyTypes } from '@/types/openapi';
+import { safeStringify } from '@/lib/safeStringify';
 
 type FormDataField = { key: string; value: string | File };
 
@@ -13,12 +14,34 @@ type TryBodyProps = {
 export default function TryBody({ requestBody, method }: TryBodyProps) {
   const [bodyType, setBodyType] = useState<BodyTypes>(BODY_TYPES.JSON);
   const [body, setBody] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [, setSelectedFile] = useState<File | null>(null);
   const [formData, setFormData] = useState<Record<string, FormDataField>>({});
+  const isFirstRender = useRef(true);
+
+  const getSchemaExample = () => {
+    const content = requestBody?.content?.['application/json'];
+    return content?.example || content?.schema?.example || null;
+  };
+  const schemaExample = getSchemaExample();
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (schemaExample && bodyType === BODY_TYPES.JSON) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setBody(safeStringify(schemaExample));
+    }
+  }, [schemaExample, bodyType]);
 
   if (!requestBody || ['get', 'delete'].includes(method.toLowerCase())) {
     return null;
   }
+
+  const jsonPlaceholder = schemaExample
+    ? safeStringify(schemaExample)
+    : '{\n  "key": "value"\n}';
 
   const addField = () => {
     const id =
@@ -73,7 +96,7 @@ export default function TryBody({ requestBody, method }: TryBodyProps) {
           name={TRY_IT_OUT_FIELDS.BODY.JSON}
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          placeholder={'{\n  "key": "value"\n}'}
+          placeholder={jsonPlaceholder}
           className="w-full h-24 px-3 py-2 bg-neutral-900 border border-neutral-700 rounded text-white text-xs font-mono"
         />
       )}

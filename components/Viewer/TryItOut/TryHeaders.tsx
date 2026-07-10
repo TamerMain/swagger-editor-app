@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react';
 import { Operation } from '@/types/openapi';
 import { TRY_IT_OUT_FIELDS } from '@/constants/constants';
 import { safeStringify } from '@/lib/safeStringify';
@@ -7,6 +8,9 @@ type TryHeadersProps = {
 };
 
 export default function TryHeaders({ headerParams = [] }: TryHeadersProps) {
+  const [value, setValue] = useState('');
+    const isFirstRender = useRef(true);
+
   const headerDefault = headerParams.reduce(
     (acc, p) => {
       acc[p.name] = String(p.schema?.default ?? p.schema?.type ?? '');
@@ -16,6 +20,20 @@ export default function TryHeaders({ headerParams = [] }: TryHeadersProps) {
   );
 
   const isEmpty = Object.keys(headerDefault).length === 0;
+  const placeholder = isEmpty
+    ? '{\n  "key": "value"\n}'
+    : safeStringify(headerDefault);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (!isEmpty) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setValue(safeStringify(headerDefault));
+    }
+  }, [isEmpty, headerDefault]);
 
   return (
     <div>
@@ -24,11 +42,9 @@ export default function TryHeaders({ headerParams = [] }: TryHeadersProps) {
       </label>
       <textarea
         name={TRY_IT_OUT_FIELDS.HEADERS}
-        placeholder={
-          isEmpty
-            ? '{\n  "key": "value"\n}'
-            : safeStringify (headerDefault)
-        }
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={placeholder}
         className="w-full h-16 px-3 py-2 bg-neutral-900 border border-neutral-700 rounded text-white text-xs font-mono"
       />
     </div>
