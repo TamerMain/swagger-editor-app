@@ -7,20 +7,27 @@ type HistoryProps = {
 };
 
 export default function History({ history }: HistoryProps) {
-  if (!history || history.length === 0) {
+  const sortedHistory = history
+    ? [...history].sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+      )
+    : null;
+
+  if (!sortedHistory || sortedHistory.length === 0) {
     return (
       <div className="flex-1 p-4 overflow-auto scroll-container scrollbar-thin scrollbar-thumb-neutral-400">
-        <h1 className="text-2xl font-bold mb-4">Request History</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center">Request History</h1>
         <div className="text-center py-12">
-          <p className="text-gray-500 mb-4">
+          <p className="text-gray-400 mb-4">
             You haven&apos;t executed any requests yet
           </p>
           <div className="space-x-4">
-            <Link href="/" className="text-blue-500 hover:underline">
-              Go to Editor
-            </Link>
-            <Link href="/viewer" className="text-blue-500 hover:underline">
-              Go to Viewer
+            <Link
+              href="/"
+              className="px-3 py-2 rounded border-2 border-blue-600 bg-blue-600 text-white hover:border-blue-700 hover:bg-blue-700"
+            >
+              Go Home
             </Link>
           </div>
         </div>
@@ -29,10 +36,10 @@ export default function History({ history }: HistoryProps) {
   }
 
   return (
-    <div className="flex-1 p-4  scroll-container overflow-auto  scrollbar-thin  scrollbar-thumb-neutral-400">
+    <div className="flex-1 p-4 scroll-container overflow-auto scrollbar-thin scrollbar-thumb-neutral-400">
       <h1 className="text-2xl font-bold mb-4">Request History</h1>
       <div className="space-y-2">
-        {history.map((item) => (
+        {sortedHistory.map((item) => (
           <HistoryItem key={item.id} item={item} />
         ))}
       </div>
