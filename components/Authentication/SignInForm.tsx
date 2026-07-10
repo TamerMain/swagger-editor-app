@@ -1,6 +1,7 @@
 'use client';
 
 import { signIn } from '@/app/actions/auth';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export function SignInForm() {
@@ -14,15 +15,21 @@ export function SignInForm() {
     setLoading(true);
     setError(null);
 
-    const signInError = await signIn(email, password);
+    try {
+      const signInError = await signIn(email, password);
 
-    if (signInError) {
-      setError(signInError);
+      if (signInError) {
+        setError(signInError);
+        setLoading(false);
+        return;
+      }
+
+      window.location.href = '/';
+    } catch {
+      const message = 'Something went wrong. Please try again.';
+      setError(message);
       setLoading(false);
-      return;
     }
-
-    window.location.href = '/';
   };
 
   return (
@@ -80,9 +87,9 @@ export function SignInForm() {
       </div>
 
       <div className="text-sm text-center">
-        <a href="/signup" className="text-blue-600 hover:underline">
+        <Link href="/signup" className="text-blue-600 hover:underline">
           Don&apos;t have an account? Sign up
-        </a>
+        </Link>
       </div>
     </form>
   );

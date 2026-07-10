@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { signUp } from '@/app/actions/auth';
 
 export function SignUpForm() {
@@ -22,14 +23,20 @@ export function SignUpForm() {
       return;
     }
 
-    const signUpError = await signUp(email, password);
+    try {
+      const signUpError = await signUp(email, password);
 
-    if (signUpError) {
-      setError(signUpError);
-    } else {
-      setSuccess(true);
+      if (signUpError) {
+        setError(signUpError);
+      } else {
+        setSuccess(true);
+      }
+    } catch {
+      const message = 'Something went wrong. Please try again.';
+      setError(message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   if (success) {
@@ -37,9 +44,9 @@ export function SignUpForm() {
       <div className="text-center">
         <div className="bg-green-50 text-green-600 p-4 rounded">
           <p>Check your email for the confirmation link!</p>
-          <a href="/signin" className="text-blue-600 hover:underline">
-            Go to signin
-          </a>
+          <Link href="/signin" className="text-blue-600 hover:underline">
+            Go to Sign In
+          </Link>
         </div>
       </div>
     );
@@ -120,9 +127,9 @@ export function SignUpForm() {
       </button>
 
       <div className="text-sm text-center">
-        <a href="/signin" className="text-blue-600 hover:underline">
+        <Link href="/signin" className="text-blue-600 hover:underline">
           Already have an account? Sign in
-        </a>
+        </Link>
       </div>
     </form>
   );
