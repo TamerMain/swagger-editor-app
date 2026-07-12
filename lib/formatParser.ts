@@ -67,7 +67,7 @@ function detectFormat(content: string): 'json' | 'yaml' {
   }
 
   if (!trimmed) return 'yaml';
-  
+
   try {
     JSON.parse(trimmed);
     return 'json';

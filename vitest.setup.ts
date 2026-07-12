@@ -9,5 +9,7 @@ vi.mock('next/headers', () => ({
   })),
 }));
 
-process.env.NEXT_PUBLIC_SUPABASE_URL="https://vjdnmpuimmjleqknqqtu.supabase.co"
-process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_2hMafG7r5oAld7lOgZmbwA_9mzq3wwj"
+process.env.NEXT_PUBLIC_SUPABASE_URL =
+  'https://vjdnmpuimmjleqknqqtu.supabase.co';
+process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY =
+  'sb_publishable_2hMafG7r5oAld7lOgZmbwA_9mzq3wwj';

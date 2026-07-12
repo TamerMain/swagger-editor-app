@@ -3,7 +3,6 @@
 import { signOut } from '@/app/actions/auth';
 
 export function SignOutButton() {
-
   const handleSignOut = async () => {
     await signOut();
     window.location.href = '/';

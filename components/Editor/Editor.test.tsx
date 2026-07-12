@@ -24,7 +24,13 @@ vi.mock('@/lib/formatParser', () => ({
 
 // Mock CodeMirror
 vi.mock('@uiw/react-codemirror', () => ({
-  default: ({ value, onChange }: { value: string; onChange: (val: string) => void }) => (
+  default: ({
+    value,
+    onChange,
+  }: {
+    value: string;
+    onChange: (val: string) => void;
+  }) => (
     <textarea
       data-testid="codemirror"
       value={value}
@@ -90,7 +96,7 @@ describe('Editor', () => {
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
@@ -98,7 +104,9 @@ describe('Editor', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('codemirror')).toHaveValue('mock-openapi-content');
+      expect(screen.getByTestId('codemirror')).toHaveValue(
+        'mock-openapi-content',
+      );
     });
 
     expect(screen.getByTestId('is-auth')).toHaveTextContent('false');
@@ -122,11 +130,13 @@ describe('Editor', () => {
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId('codemirror')).toHaveValue('saved-user-content');
+      expect(screen.getByTestId('codemirror')).toHaveValue(
+        'saved-user-content',
+      );
     });
 
     expect(global.fetch).not.toHaveBeenCalled();
@@ -151,7 +161,7 @@ describe('Editor', () => {
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
@@ -159,7 +169,9 @@ describe('Editor', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('codemirror')).toHaveValue('mock-openapi-content');
+      expect(screen.getByTestId('codemirror')).toHaveValue(
+        'mock-openapi-content',
+      );
     });
   });
 
@@ -181,7 +193,7 @@ describe('Editor', () => {
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
@@ -199,23 +211,27 @@ describe('Editor', () => {
     vi.mocked(loadSchema).mockImplementation(mockLoadSchema);
 
     const { parseFormat } = await import('@/lib/formatParser');
-    const mockParseFormat = vi.fn().mockImplementation(async (content: string) => {
-      if (content === 'mock-openapi-content') {
-        return { valid: true, format: 'yaml' };
-      }
-      return { valid: false, error: 'Bad syntax' };
-    });
+    const mockParseFormat = vi
+      .fn()
+      .mockImplementation(async (content: string) => {
+        if (content === 'mock-openapi-content') {
+          return { valid: true, format: 'yaml' };
+        }
+        return { valid: false, error: 'Bad syntax' };
+      });
     vi.mocked(parseFormat).mockImplementation(mockParseFormat);
 
     const user = userEvent.setup({ delay: null });
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId('codemirror')).toHaveValue('mock-openapi-content');
+      expect(screen.getByTestId('codemirror')).toHaveValue(
+        'mock-openapi-content',
+      );
     });
 
     const textarea = screen.getByTestId('codemirror');
@@ -241,7 +257,7 @@ describe('Editor', () => {
       format: 'yaml',
     });
     vi.mocked(parseFormat).mockImplementation(mockParseFormat);
-    
+
     const mockConvertFormat = vi.fn().mockReturnValue('{ "converted": true }');
     vi.mocked(convertFormat).mockImplementation(mockConvertFormat);
 
@@ -249,7 +265,7 @@ describe('Editor', () => {
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
@@ -260,7 +276,9 @@ describe('Editor', () => {
 
     expect(convertFormat).toHaveBeenCalled();
     await waitFor(() => {
-      expect(screen.getByTestId('codemirror')).toHaveValue('{ "converted": true }');
+      expect(screen.getByTestId('codemirror')).toHaveValue(
+        '{ "converted": true }',
+      );
     });
     expect(screen.getByTestId('format')).toHaveTextContent('json');
   });
@@ -279,7 +297,7 @@ describe('Editor', () => {
       format: 'yaml',
     });
     vi.mocked(parseFormat).mockImplementation(mockParseFormat);
-    
+
     const mockConvertFormat = vi.fn().mockImplementation(() => {
       throw new Error('bad conversion');
     });
@@ -289,11 +307,13 @@ describe('Editor', () => {
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId('codemirror')).toHaveValue('mock-openapi-content');
+      expect(screen.getByTestId('codemirror')).toHaveValue(
+        'mock-openapi-content',
+      );
     });
 
     await user.click(screen.getByRole('button', { name: /switch format/i }));
@@ -310,7 +330,7 @@ describe('Editor', () => {
     const { loadSchema, saveSchema } = await import('@/app/actions/editor');
     const mockLoadSchema = vi.fn().mockResolvedValue('existing');
     vi.mocked(loadSchema).mockImplementation(mockLoadSchema);
-    
+
     const mockSaveSchema = vi.fn().mockResolvedValue(undefined);
     vi.mocked(saveSchema).mockImplementation(mockSaveSchema);
 
@@ -325,7 +345,7 @@ describe('Editor', () => {
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
@@ -346,7 +366,7 @@ describe('Editor', () => {
     const { loadSchema, saveSchema } = await import('@/app/actions/editor');
     const mockLoadSchema = vi.fn().mockResolvedValue('existing');
     vi.mocked(loadSchema).mockImplementation(mockLoadSchema);
-    
+
     const mockSaveSchema = vi.fn().mockResolvedValue(undefined);
     vi.mocked(saveSchema).mockImplementation(mockSaveSchema);
 
@@ -361,7 +381,7 @@ describe('Editor', () => {
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
@@ -380,7 +400,7 @@ describe('Editor', () => {
     const { loadSchema, saveSchema } = await import('@/app/actions/editor');
     const mockLoadSchema = vi.fn().mockResolvedValue(null);
     vi.mocked(loadSchema).mockImplementation(mockLoadSchema);
-    
+
     const mockSaveSchema = vi.fn().mockResolvedValue(undefined);
     vi.mocked(saveSchema).mockImplementation(mockSaveSchema);
 
@@ -395,11 +415,13 @@ describe('Editor', () => {
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId('codemirror')).toHaveValue('mock-openapi-content');
+      expect(screen.getByTestId('codemirror')).toHaveValue(
+        'mock-openapi-content',
+      );
     });
 
     await user.click(screen.getByRole('button', { name: /^save$/i }));
@@ -426,11 +448,13 @@ describe('Editor', () => {
     render(
       <ToastProvider>
         <Editor />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId('codemirror')).toHaveValue('mock-openapi-content');
+      expect(screen.getByTestId('codemirror')).toHaveValue(
+        'mock-openapi-content',
+      );
     });
 
     await user.click(screen.getByRole('button', { name: /clear/i }));

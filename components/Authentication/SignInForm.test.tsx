@@ -49,7 +49,10 @@ describe('SignInForm', () => {
     await user.click(screen.getByRole('button', { name: /sign in/i }));
 
     await waitFor(() => {
-      expect(mockSignIn).toHaveBeenCalledWith('test@example.com', 'password123');
+      expect(mockSignIn).toHaveBeenCalledWith(
+        'test@example.com',
+        'password123',
+      );
     });
   });
 
@@ -72,7 +75,7 @@ describe('SignInForm', () => {
   it('shows loading state while submitting', async () => {
     const mockSignIn = vi.mocked(signIn);
     mockSignIn.mockImplementation(
-      () => new Promise((resolve) => setTimeout(() => resolve(null), 100))
+      () => new Promise((resolve) => setTimeout(() => resolve(null), 100)),
     );
 
     const user = userEvent.setup();

@@ -68,7 +68,6 @@ describe('Header Component', () => {
   });
 
   describe('Authenticated User State', () => {
-
     it('renders history and sign out when user is authenticated', async () => {
       vi.mocked(useAuth).mockReturnValue({
         user: {

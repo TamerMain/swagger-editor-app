@@ -1,10 +1,10 @@
-import PathHeader from "@/components/Viewer/PathHeader";
-import PathMethod from "@/components/Viewer/PathMethod";
-import { getMethods } from "@/lib/getMethods";
-import { Spec, PathItem } from "@/types/openapi";
+import PathHeader from '@/components/Viewer/PathHeader';
+import PathMethod from '@/components/Viewer/PathMethod';
+import { getMethods } from '@/lib/getMethods';
+import { Spec, PathItem } from '@/types/openapi';
 
 type PathProps = {
-  servers: Spec["servers"];
+  servers: Spec['servers'];
   path: string;
   pathItem: PathItem;
   isExpanded: boolean;

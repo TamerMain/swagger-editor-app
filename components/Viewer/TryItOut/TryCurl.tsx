@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { buildUrl, buildHeaders, buildBody } from "@/lib/requestBuilder";
-import { PARAMETER_TYPES, TRY_IT_OUT_FIELDS } from "@/constants/constants";
-import { Spec, Operation, HttpMethods, BodyTypes } from "@/types/openapi";
+import { buildUrl, buildHeaders, buildBody } from '@/lib/requestBuilder';
+import { PARAMETER_TYPES, TRY_IT_OUT_FIELDS } from '@/constants/constants';
+import { Spec, Operation, HttpMethods, BodyTypes } from '@/types/openapi';
 
 type TryCurlProps = {
-  servers: Spec["servers"];
+  servers: Spec['servers'];
   method: HttpMethods;
   operation: Operation;
   path: string;
@@ -20,7 +20,7 @@ export default function TryCurl({
   const handleCurl = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const form = e.currentTarget.closest("form");
+    const form = e.currentTarget.closest('form');
     if (!form) return;
 
     const data = new FormData(form);
@@ -39,14 +39,14 @@ export default function TryCurl({
     });
 
     const bodyType =
-      (data.get(TRY_IT_OUT_FIELDS.BODY.CURRENT_TYPE) as BodyTypes) || "json";
+      (data.get(TRY_IT_OUT_FIELDS.BODY.CURRENT_TYPE) as BodyTypes) || 'json';
     const headers = buildHeaders({
       data,
       headerParams,
       customHeaders: data.get(TRY_IT_OUT_FIELDS.HEADERS) as string,
       contentType:
         Object.keys(operation.requestBody?.content || {})[0] ||
-        "application/json",
+        'application/json',
       bodyType,
     });
 
@@ -59,7 +59,7 @@ export default function TryCurl({
     });
 
     if (body) {
-      const bodyStr = typeof body === "string" ? body : JSON.stringify(body);
+      const bodyStr = typeof body === 'string' ? body : JSON.stringify(body);
       curl += ` \\\n  -d '${bodyStr}'`;
     }
 

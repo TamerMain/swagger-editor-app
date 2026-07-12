@@ -34,7 +34,7 @@ export default function HistoryItem({ item }: HistoryItemProps) {
           <span>{new Date(item.timestamp).toLocaleString()}</span>
         </div>
       </div>
-      
+
       <div className="mt-2 flex items-center gap-4 text-xs text-neutral-400">
         <span>📤 Request: {formatBytes(item.request_size)}</span>
         <span>📥 Response: {formatBytes(item.response_size)}</span>

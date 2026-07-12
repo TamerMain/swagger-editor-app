@@ -1,4 +1,4 @@
-import { type Spec } from "@/types/openapi";
+import { type Spec } from '@/types/openapi';
 
 type ViewerHeaderProps = { spec: Spec; totalOperations: number };
 
@@ -21,7 +21,7 @@ export default function ViewerHeader({
           {spec.servers.map((server, index) => (
             <div key={index} className="text-xs text-gray-300">
               {server.url}
-              {" | "}
+              {' | '}
               {server.description && `${server.description}`}
             </div>
           ))}

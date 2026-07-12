@@ -1,5 +1,5 @@
-import PathMethodBadge from "@/components/Viewer/PathMethodBadge";
-import { type HttpMethods } from "@/types/openapi";
+import PathMethodBadge from '@/components/Viewer/PathMethodBadge';
+import { type HttpMethods } from '@/types/openapi';
 
 type PathHeaderProps = {
   path: string;
@@ -21,14 +21,16 @@ export default function PathHeader({
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-white font-mono text-sm group-hover/path:text-blue-400">{path}</span>
+          <span className="text-white font-mono text-sm group-hover/path:text-blue-400">
+            {path}
+          </span>
           <div className="flex gap-1">
             {methods.map((method) => (
               <PathMethodBadge key={method} method={method} />
             ))}
           </div>
         </div>
-        <span className="text-gray-500 text-xs">{isExpanded ? "▼" : "▷"}</span>
+        <span className="text-gray-500 text-xs">{isExpanded ? '▼' : '▷'}</span>
       </div>
     </div>
   );

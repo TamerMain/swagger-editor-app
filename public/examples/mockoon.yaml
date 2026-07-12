@@ -76,7 +76,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-    
+
     post:
       tags: [Users]
       summary: Create a new user
@@ -103,8 +103,8 @@ paths:
         description: User ID
         schema:
           type: string
-        example: "1"
-    
+        example: '1'
+
     get:
       tags: [Users]
       summary: Get user by ID
@@ -117,7 +117,7 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: User not found
-    
+
     put:
       tags: [Users]
       summary: Update entire user
@@ -137,7 +137,7 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: User not found
-    
+
     patch:
       tags: [Users]
       summary: Partially update user
@@ -164,7 +164,7 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: User not found
-    
+
     delete:
       tags: [Users]
       summary: Delete a user
@@ -206,7 +206,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Post'
-    
+
     post:
       tags: [Posts]
       summary: Create a post
@@ -231,7 +231,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       tags: [Posts]
       summary: Get post by ID
@@ -244,7 +244,7 @@ paths:
                 $ref: '#/components/schemas/Post'
         '404':
           description: Post not found
-    
+
     put:
       tags: [Posts]
       summary: Update entire post
@@ -261,7 +261,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Post'
-    
+
     patch:
       tags: [Posts]
       summary: Partially update post
@@ -283,7 +283,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Post'
-    
+
     delete:
       tags: [Posts]
       summary: Delete a post
@@ -323,7 +323,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Todo'
-    
+
     post:
       tags: [Todos]
       summary: Create a todo
@@ -348,7 +348,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       tags: [Todos]
       summary: Get todo by ID
@@ -359,7 +359,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Todo'
-    
+
     put:
       tags: [Todos]
       summary: Update entire todo
@@ -376,7 +376,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Todo'
-    
+
     patch:
       tags: [Todos]
       summary: Partially update todo
@@ -398,7 +398,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Todo'
-    
+
     delete:
       tags: [Todos]
       summary: Delete a todo
@@ -433,7 +433,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Movie'
-    
+
   /movies/{movieId}:
     parameters:
       - name: movieId
@@ -441,7 +441,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       tags: [Movies]
       summary: Get movie by ID
@@ -480,7 +480,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Company'
-    
+
     post:
       tags: [Companies]
       summary: Create a company
@@ -505,7 +505,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       tags: [Companies]
       summary: Get company by ID
@@ -516,7 +516,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Company'
-    
+
     put:
       tags: [Companies]
       summary: Update entire company
@@ -533,7 +533,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Company'
-    
+
     patch:
       tags: [Companies]
       summary: Partially update company
@@ -555,7 +555,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Company'
-    
+
     delete:
       tags: [Companies]
       summary: Delete a company
@@ -590,7 +590,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contact'
-    
+
     post:
       tags: [Contacts]
       summary: Create a contact
@@ -615,7 +615,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       tags: [Contacts]
       summary: Get contact by ID
@@ -626,7 +626,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
-    
+
     put:
       tags: [Contacts]
       summary: Update entire contact
@@ -643,7 +643,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
-    
+
     patch:
       tags: [Contacts]
       summary: Partially update contact
@@ -667,7 +667,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
-    
+
     delete:
       tags: [Contacts]
       summary: Delete a contact
@@ -702,7 +702,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Photo'
-    
+
     post:
       tags: [Photos]
       summary: Create a photo
@@ -727,7 +727,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       tags: [Photos]
       summary: Get photo by ID
@@ -738,7 +738,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Photo'
-    
+
     put:
       tags: [Photos]
       summary: Update entire photo
@@ -755,7 +755,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Photo'
-    
+
     patch:
       tags: [Photos]
       summary: Partially update photo
@@ -777,7 +777,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Photo'
-    
+
     delete:
       tags: [Photos]
       summary: Delete a photo
@@ -821,7 +821,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       tags: [Pokemons]
       summary: Get pokemon by ID
@@ -860,7 +860,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Sale'
-    
+
     post:
       tags: [Sales]
       summary: Create a sale
@@ -885,7 +885,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       tags: [Sales]
       summary: Get sale by ID
@@ -896,7 +896,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Sale'
-    
+
     put:
       tags: [Sales]
       summary: Update entire sale
@@ -913,7 +913,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Sale'
-    
+
     patch:
       tags: [Sales]
       summary: Partially update sale
@@ -935,7 +935,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Sale'
-    
+
     delete:
       tags: [Sales]
       summary: Delete a sale
@@ -970,7 +970,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Customer'
-    
+
     post:
       tags: [Customers]
       summary: Create a customer
@@ -995,7 +995,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       tags: [Customers]
       summary: Get customer by ID
@@ -1006,7 +1006,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
-    
+
     put:
       tags: [Customers]
       summary: Update entire customer
@@ -1023,7 +1023,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
-    
+
     patch:
       tags: [Customers]
       summary: Partially update customer
@@ -1045,7 +1045,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
-    
+
     delete:
       tags: [Customers]
       summary: Delete a customer
@@ -1080,7 +1080,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Notification'
-    
+
     post:
       tags: [Notifications]
       summary: Create a notification
@@ -1105,7 +1105,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       tags: [Notifications]
       summary: Get notification by ID
@@ -1116,7 +1116,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Notification'
-    
+
     put:
       tags: [Notifications]
       summary: Update entire notification
@@ -1133,7 +1133,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Notification'
-    
+
     patch:
       tags: [Notifications]
       summary: Partially update notification
@@ -1155,7 +1155,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Notification'
-    
+
     delete:
       tags: [Notifications]
       summary: Delete a notification
@@ -1171,23 +1171,23 @@ components:
       properties:
         id:
           type: string
-          example: "1"
+          example: '1'
         name:
           type: string
-          example: "John Doe"
+          example: 'John Doe'
         username:
           type: string
-          example: "johndoe"
+          example: 'johndoe'
         email:
           type: string
           format: email
-          example: "john@example.com"
+          example: 'john@example.com'
         phone:
           type: string
-          example: "1-770-736-8031"
+          example: '1-770-736-8031'
         website:
           type: string
-          example: "johndoe.com"
+          example: 'johndoe.com'
         company:
           type: object
           properties:

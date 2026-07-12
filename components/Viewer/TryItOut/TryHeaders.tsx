@@ -9,7 +9,7 @@ type TryHeadersProps = {
 
 export default function TryHeaders({ headerParams = [] }: TryHeadersProps) {
   const [value, setValue] = useState('');
-    const isFirstRender = useRef(true);
+  const isFirstRender = useRef(true);
 
   const headerDefault = headerParams.reduce(
     (acc, p) => {

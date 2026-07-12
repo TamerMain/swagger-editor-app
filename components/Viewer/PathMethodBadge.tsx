@@ -1,5 +1,5 @@
-import { type HttpMethods } from "@/types/openapi";
-import { METHOD_COLORS } from "@/constants/constants";
+import { type HttpMethods } from '@/types/openapi';
+import { METHOD_COLORS } from '@/constants/constants';
 
 type PathMethodBadgeProps = { method: HttpMethods };
 

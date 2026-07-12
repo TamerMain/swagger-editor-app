@@ -1,11 +1,11 @@
-import { RequestBodyTypes } from "@/types/openapi";
+import { RequestBodyTypes } from '@/types/openapi';
 
 export function calculateBodySize(body: RequestBodyTypes): number {
   // 1. No Body
   if (!body) return 0;
 
   // 2. Strings
-  if (typeof body === "string") {
+  if (typeof body === 'string') {
     return new Blob([body]).size;
   }
 
@@ -25,7 +25,7 @@ export function calculateBodySize(body: RequestBodyTypes): number {
     for (const [, value] of body.entries()) {
       if (value instanceof File) {
         size += value.size;
-      } else if (typeof value === "string") {
+      } else if (typeof value === 'string') {
         size += new Blob([value]).size;
       }
     }
@@ -43,7 +43,7 @@ export function calculateBodySize(body: RequestBodyTypes): number {
   }
 
   // 8. JSON Objects
-  if (body && typeof body === "object") {
+  if (body && typeof body === 'object') {
     try {
       return new Blob([JSON.stringify(body)]).size;
     } catch {
@@ -52,7 +52,7 @@ export function calculateBodySize(body: RequestBodyTypes): number {
   }
 
   // 9. Numbers, Booleans, etc.
-  if (typeof body === "number" || typeof body === "boolean") {
+  if (typeof body === 'number' || typeof body === 'boolean') {
     return new Blob([String(body)]).size;
   }
 

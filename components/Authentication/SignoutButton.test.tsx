@@ -7,7 +7,6 @@ vi.mock('@/app/actions/auth', () => ({
   signOut: vi.fn().mockResolvedValue({ error: null }),
 }));
 
-
 describe('SignOutButton', () => {
   const originalLocation = window.location;
 
@@ -29,13 +28,15 @@ describe('SignOutButton', () => {
 
   it('renders a signout button', () => {
     render(<SignOutButton />);
-    expect(screen.getByRole('button', { name: /Sign Out/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Sign Out/i }),
+    ).toBeInTheDocument();
   });
 
   it('calls signOut and redirects to / when clicked', async () => {
     const { signOut } = await import('@/app/actions/auth');
     const user = userEvent.setup();
-    
+
     render(<SignOutButton />);
     await user.click(screen.getByRole('button', { name: /Sign Out/i }));
 

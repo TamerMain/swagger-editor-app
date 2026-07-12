@@ -10,7 +10,9 @@ const History = dynamic(() => import('@/components/History/History'), {
 
 export default async function HistoryPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     return redirect('/');

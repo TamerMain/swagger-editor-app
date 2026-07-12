@@ -86,3 +86,8 @@ export const getHistoryStatusColor = (code: number) => {
   if (code >= 500) return 'text-red-300 bg-red-500 border-red-700';
   return 'text-gray-400 bg-gray-900 border-gray-700';
 };
+
+export const LOCALES = ['en', 'ru'] as const;
+export type Locale = (typeof LOCALES)[number];
+export const DEFAULT_LOCALE: Locale = 'en';
+export const LOCALE_COOKIE = 'locale';

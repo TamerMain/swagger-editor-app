@@ -32,9 +32,10 @@ describe('History Component', () => {
       expect(
         screen.getByText(/You haven't executed any requests yet/i),
       ).toBeInTheDocument();
-      expect(
-        screen.getByRole('link', { name: /go home/i }),
-      ).toHaveAttribute('href', '/');
+      expect(screen.getByRole('link', { name: /go home/i })).toHaveAttribute(
+        'href',
+        '/',
+      );
     });
 
     it('renders empty placeholder layout when history array is empty', () => {
@@ -94,7 +95,7 @@ describe('History Component', () => {
     it('has proper link attributes for navigation', () => {
       render(<History history={null} />);
       const editorLink = screen.getByRole('link', { name: /go home/i });
-      
+
       expect(editorLink).toHaveAttribute('href', '/');
     });
   });

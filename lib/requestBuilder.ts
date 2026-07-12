@@ -2,12 +2,17 @@ import {
   TRY_IT_OUT_FIELDS,
   PARAMETER_TYPES,
   BODY_TYPES,
-} from "@/constants/constants";
-import { type BodyTypes, Spec, Parameter, RequestBodyTypes } from "@/types/openapi";
+} from '@/constants/constants';
+import {
+  type BodyTypes,
+  Spec,
+  Parameter,
+  RequestBodyTypes,
+} from '@/types/openapi';
 
 type BuildUrlParams = {
   data: FormData;
-  servers: Spec["servers"];
+  servers: Spec['servers'];
   path: string;
   pathParams: Parameter[];
   queryParams: Parameter[];
@@ -22,8 +27,8 @@ export function buildUrl({
 }: BuildUrlParams): string {
   // Get base URL (first server URL by default)
   const baseUrl =
-    (data.get(TRY_IT_OUT_FIELDS.URL) as string) || servers?.[0]?.url || "";
-  const cleanBase = baseUrl.replace(/\/$/, "");
+    (data.get(TRY_IT_OUT_FIELDS.URL) as string) || servers?.[0]?.url || '';
+  const cleanBase = baseUrl.replace(/\/$/, '');
 
   // Replace path params
   let fullPath = path;
@@ -31,7 +36,7 @@ export function buildUrl({
     const value =
       (data.get(
         `${TRY_IT_OUT_FIELDS.PARAMETER}_${PARAMETER_TYPES.PATH}_${p.name}`,
-      ) as string) || "";
+      ) as string) || '';
     fullPath = fullPath.replace(`{${p.name}}`, value);
   });
 
@@ -44,7 +49,7 @@ export function buildUrl({
       return value ? `${p.name}=${encodeURIComponent(value)}` : null;
     })
     .filter(Boolean)
-    .join("&");
+    .join('&');
 
   const url = `${cleanBase}${fullPath}`;
   return queryStrings ? `${url}?${queryStrings}` : url;
@@ -80,7 +85,7 @@ export function buildHeaders({
     contentType &&
     (bodyType === BODY_TYPES.JSON || bodyType === BODY_TYPES.TEXT)
   ) {
-    headers["Content-Type"] = contentType;
+    headers['Content-Type'] = contentType;
   }
 
   // Add Custom headers
@@ -101,7 +106,10 @@ type BuildBodyParams = {
   bodyType: BodyTypes;
 };
 
-export function buildBody({ data, bodyType }: BuildBodyParams): RequestBodyTypes {
+export function buildBody({
+  data,
+  bodyType,
+}: BuildBodyParams): RequestBodyTypes {
   if (bodyType === BODY_TYPES.JSON) {
     const raw = data.get(TRY_IT_OUT_FIELDS.BODY.JSON) as string;
     if (!raw || !raw.trim()) return undefined;
@@ -120,7 +128,7 @@ export function buildBody({ data, bodyType }: BuildBodyParams): RequestBodyTypes
     const file = data.get(TRY_IT_OUT_FIELDS.BODY.FILE);
     if (file instanceof File) {
       const fd = new FormData();
-      fd.append("file", file);
+      fd.append('file', file);
       return fd;
     }
     return undefined;
@@ -130,7 +138,7 @@ export function buildBody({ data, bodyType }: BuildBodyParams): RequestBodyTypes
     const fd = new FormData();
     for (const [key, value] of data) {
       if (key.startsWith(`${TRY_IT_OUT_FIELDS.BODY.FORM_DATA.KEY}_`)) {
-        const id = key.replace(`${TRY_IT_OUT_FIELDS.BODY.FORM_DATA.KEY}`, "");
+        const id = key.replace(`${TRY_IT_OUT_FIELDS.BODY.FORM_DATA.KEY}`, '');
         const fieldKey = value as string;
         const fieldValue = data.get(
           `${TRY_IT_OUT_FIELDS.BODY.FORM_DATA.VALUE}_${id}`,
