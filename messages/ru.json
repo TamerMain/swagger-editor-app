@@ -78,6 +78,13 @@
       "openapi": "OpenAPI Initiative"
     }
   },
+  "Error": {
+    "title": "Что-то пошло не так",
+    "description": "Попробуйте ещё раз или вернитесь на главную",
+    "tryAgain": "Попробовать снова",
+    "goHome": "На главную",
+    "fallback": "Что-то пошло не так"
+  },
 
   "Navigation": {
     "home": "Главная",

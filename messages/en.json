@@ -79,6 +79,13 @@
       "openapi": "OpenAPI Initiative"
     }
   },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "Please try again or go back home.",
+    "tryAgain": "Try again",
+    "goHome": "Go home",
+    "fallback": "Something went wrong"
+  },
 
   "Navigation": {
     "home": "Home",
