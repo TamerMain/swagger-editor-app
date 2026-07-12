@@ -92,3 +92,20 @@ export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = 'en';
 export const LOCALE_COOKIE = 'locale';
 export const PASSWORD_MIN_LENGTH = 8;
+
+export const TEAM = [
+  { name: 'Artur Viniarski', role: 'lead', github: 'TamerMain' },
+  { name: 'Vladimir Tugutov', role: 'developer', github: 'vladimirtugutov' },
+  { name: 'Mariam Makhashvili', role: 'developer', github: 'marimaxashvili' },
+] as const;
+
+export const TECH_STACK = [
+  'Next.js 16',
+  'React 19',
+  'TypeScript',
+  'Tailwind CSS 4',
+  'Supabase',
+  'CodeMirror',
+  'next-intl',
+  'Vitest',
+] as const;

@@ -10,9 +10,7 @@ export default async function SignUpPage() {
           <h2 className="text-3xl font-bold text-center text-black">
             {t('createAccount')}
           </h2>
-          <p className="mt-2 text-center text-gray-600">
-            {t('Sign up to get started')}
-          </p>
+          <p className="mt-2 text-center text-gray-600">{t('subtitle')}</p>
         </div>
         <SignUpForm />
       </div>

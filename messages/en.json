@@ -61,6 +61,24 @@
     "executing": "Executing...",
     "errors": { "requestFailed": "Request failed" }
   },
+  "About": {
+    "title": "About the project",
+    "project": "A Swagger/OpenAPI editor and viewer with a built-in REST client. Paste an OpenAPI specification in JSON or YAML, explore the endpoints and execute requests straight from the browser — requests are proxied through the server, so CORS is never an issue.",
+    "course": {
+      "title": "RS School",
+      "description": "This application is the final project of the React course at RS School — a free, community-driven education program run by The Rolling Scopes. The course covers React, TypeScript, state management, testing and modern full-stack frameworks."
+    },
+    "team": {
+      "title": "Team",
+      "roles": { "lead": "Team lead", "developer": "Developer" }
+    },
+    "stack": { "title": "Tech stack" },
+    "links": {
+      "title": "Links",
+      "editor": "Open the editor",
+      "openapi": "OpenAPI Initiative"
+    }
+  },
 
   "Navigation": {
     "home": "Home",
@@ -89,24 +107,6 @@
     "notFound": "Book not found",
     "tryAgain": "Try searching for this book again",
     "loading": "Loading detailed information..."
-  },
-  "About": {
-    "backToSearch": "← Back to Search",
-    "title": "About This Application",
-    "authorInfo": "Author Information",
-    "name": "Name",
-    "github": "GitHub",
-    "course": "Course",
-    "courseInfo": "Course Information",
-    "courseDescription": "This application was created as part of the RS School React course.",
-    "courseLink": "RS School React Course",
-    "appFeatures": "Application Features",
-    "feature1": "Search books using Open Library API",
-    "feature2": "Pagination support",
-    "feature3": "Detailed book view",
-    "feature4": "URL-based navigation",
-    "feature5": "Next.js App Router integration",
-    "feature6": "Custom hooks for localStorage"
   },
   "Export": {
     "noItems": "No items selected for export",

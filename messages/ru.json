@@ -60,6 +60,24 @@
     "executing": "Выполняется...",
     "errors": { "requestFailed": "Не удалось выполнить запрос" }
   },
+  "About": {
+    "title": "О проекте",
+    "project": "Редактор и просмотрщик Swagger/OpenAPI со встроенным REST-клиентом. Вставьте спецификацию OpenAPI в формате JSON или YAML, изучайте эндпоинты и выполняйте запросы прямо из браузера — запросы идут через сервер, поэтому CORS не мешает.",
+    "course": {
+      "title": "RS School",
+      "description": "Приложение — финальный проект курса React в RS School, бесплатной образовательной программы сообщества The Rolling Scopes. Курс охватывает React, TypeScript, управление состоянием, тестирование и современные фулстек-фреймворки."
+    },
+    "team": {
+      "title": "Команда",
+      "roles": { "lead": "Тимлид", "developer": "Разработчик" }
+    },
+    "stack": { "title": "Стек технологий" },
+    "links": {
+      "title": "Ссылки",
+      "editor": "Открыть редактор",
+      "openapi": "OpenAPI Initiative"
+    }
+  },
 
   "Navigation": {
     "home": "Главная",
@@ -88,24 +106,6 @@
     "notFound": "Книга не найдена",
     "tryAgain": "Попробуйте найти эту книгу снова",
     "loading": "Загрузка подробной информации..."
-  },
-  "About": {
-    "backToSearch": "← Назад к поиску",
-    "title": "О приложении",
-    "authorInfo": "Информация об авторе",
-    "name": "Имя",
-    "github": "GitHub",
-    "course": "Курс",
-    "courseInfo": "Информация о курсе",
-    "courseDescription": "Это приложение было создано в рамках курса RS School React.",
-    "courseLink": "Курс RS School React",
-    "appFeatures": "Возможности приложения",
-    "feature1": "Поиск книг через Open Library API",
-    "feature2": "Поддержка пагинации",
-    "feature3": "Детальный просмотр книг",
-    "feature4": "Навигация на основе URL",
-    "feature5": "Интеграция с Next.js App Router",
-    "feature6": "Пользовательские хуки для localStorage"
   },
   "Export": {
     "noItems": "Нет выбранных элементов для экспорта",
