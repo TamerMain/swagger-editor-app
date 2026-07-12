@@ -54,6 +54,12 @@
       "passwordsMismatch": "Пароли не совпадают"
     }
   },
+  "TryItOut": {
+    "title": "Попробовать",
+    "execute": "Выполнить",
+    "executing": "Выполняется...",
+    "errors": { "requestFailed": "Не удалось выполнить запрос" }
+  },
 
   "Navigation": {
     "home": "Главная",

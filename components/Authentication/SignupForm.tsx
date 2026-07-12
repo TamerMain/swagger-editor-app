@@ -18,7 +18,7 @@ export function SignUpForm() {
   const [errors, setErrors] = useState<FormErrorCode[]>([]);
   const [success, setSuccess] = useState(false);
 
-  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignUp = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const invalid: FormErrorCode[] = [

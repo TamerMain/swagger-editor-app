@@ -1,4 +1,7 @@
+'use client';
+
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { executeRequest } from '@/app/actions/tryout';
 import { buildUrl, buildHeaders, buildBody } from '@/lib/requestBuilder';
 import TryParameters from './TryParameters';
@@ -29,6 +32,8 @@ export default function TryItOut({
   operation,
   path,
 }: TryItOutProps) {
+  const t = useTranslations('TryItOut');
+
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<ResponseData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -78,7 +83,7 @@ export default function TryItOut({
       const result = await executeRequest(url, method, { headers, body });
       setResponse(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Request failed');
+      setError(err instanceof Error ? err.message : t('errors.requestFailed'));
     } finally {
       setLoading(false);
     }
@@ -88,7 +93,7 @@ export default function TryItOut({
     <div className="mt-4">
       <details>
         <summary className="w-fit px-2 py-1 text-white hover:text-blue-400 cursor-pointer text-xs border-2 rounded border-transparent">
-          Try It Out
+          {t('title')}
         </summary>
         <form onSubmit={handleSubmit}>
           <div className="mt-3">
@@ -115,7 +120,7 @@ export default function TryItOut({
                   className="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-white text-sm"
                   disabled={loading}
                 >
-                  Execute
+                  {t('execute')}
                 </button>
                 <TryCurl
                   servers={servers}

@@ -14,7 +14,7 @@ export function SignInForm() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<AuthActionError[]>([]);
 
-  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const invalid = [...validateEmail(email), ...validatePassword(password)];

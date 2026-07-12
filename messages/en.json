@@ -55,6 +55,12 @@
       "passwordsMismatch": "Passwords do not match"
     }
   },
+  "TryItOut": {
+    "title": "Try It Out",
+    "execute": "Execute",
+    "executing": "Executing...",
+    "errors": { "requestFailed": "Request failed" }
+  },
 
   "Navigation": {
     "home": "Home",
