@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export default function Footer() {
+  const t = useTranslations('Footer');
   const [isSticky, setIsSticky] = useState(false);
   useEffect(() => {
     const containers = document.querySelectorAll('.scroll-container');
@@ -33,14 +35,14 @@ export default function Footer() {
         >
           <div className="w-[80vw] mx-auto px-4 flex items-center justify-between self-center">
             <span className="text-sm text-neutral-300">
-              © {new Date().getFullYear()} Swagger UI
+              {t('copyright', { year: String(new Date().getFullYear()) })}
             </span>
 
             <Link
               href="/about"
               className="text-sm text-neutral-300 hover:text-white transition"
             >
-              About
+              {t('about')}
             </Link>
           </div>
         </footer>

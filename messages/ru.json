@@ -10,6 +10,10 @@
     "signOut": "Выйти",
     "about": "О проекте"
   },
+  "Footer": {
+    "copyright": "© {year} Swagger UI",
+    "about": "О проекте"
+  },
 
   "Navigation": {
     "home": "Главная",

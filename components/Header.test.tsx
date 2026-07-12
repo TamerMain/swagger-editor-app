@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent, act, waitFor } from '@/lib/test-utils';
 import { User } from '@supabase/supabase-js';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Header from '@/components/Header';

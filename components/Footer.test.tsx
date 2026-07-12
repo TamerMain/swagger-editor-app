@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@/lib/test-utils';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Footer from './Footer';
 
