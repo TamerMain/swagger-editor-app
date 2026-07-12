@@ -1,8 +1,10 @@
 'use client';
 
 import { signOut } from '@/app/actions/auth';
+import { useTranslations } from 'next-intl';
 
 export function SignOutButton() {
+  const t = useTranslations('Header');
   const handleSignOut = async () => {
     await signOut();
     window.location.href = '/';
@@ -10,7 +12,7 @@ export function SignOutButton() {
 
   return (
     <button onClick={handleSignOut} className="text-red-400 hover:text-red-300">
-      Sign Out
+      {t('signOut')}
     </button>
   );
 }

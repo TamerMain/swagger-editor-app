@@ -1,11 +1,14 @@
 'use client';
 
 import { SignOutButton } from './Authentication/SignoutButton';
+import LanguageSwitcher from './LanguageSwitcher';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/lib/context/AuthContext';
 
 export default function Header() {
+  const t = useTranslations('Header');
   const { user } = useAuth();
   const [isSticky, setIsSticky] = useState(false);
 
@@ -37,13 +40,15 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-4 text-sm">
+          <LanguageSwitcher />
+
           <Link href="/about" className="text-white hover:text-blue-400">
-            About
+            {t('about')}
           </Link>
           {user ? (
             <>
               <Link href="/history" className="text-white hover:text-blue-400">
-                History
+                {t('history')}
               </Link>
               <SignOutButton />
             </>
@@ -53,13 +58,13 @@ export default function Header() {
                 href="/signin"
                 className={`px-3 ${isSticky ? '' : 'py-0.5'} rounded border-2 border-blue-500 hover:border-blue-600 hover:text-blue-400`}
               >
-                Sign In
+                {t('signIn')}
               </Link>
               <Link
                 href="/signup"
                 className={`px-3 ${isSticky ? '' : 'py-0.5'} rounded border-2 border-blue-600 bg-blue-600 text-white hover:border-blue-700 hover:bg-blue-700`}
               >
-                Sign Up
+                {t('signUp')}
               </Link>
             </>
           )}
