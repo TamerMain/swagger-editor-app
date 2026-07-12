@@ -22,21 +22,37 @@
     "signIn": {
       "title": "Sign In",
       "submit": "Sign In",
-      "toSignUp": "Don't have an account? Sign Up"
+      "toSignUp": "Don't have an account? Sign Up",
+      "subtitle": "Sign in to your account to continue",
+      "success": "Successfully signed in!",
+      "loading": "Signing in..."
     },
     "signUp": {
       "title": "Sign Up",
       "submit": "Sign Up",
-      "toSignIn": "Already have an account? Sign In"
+      "createAccount": "Create Account",
+      "pageTitle": "Create Account",
+      "subtitle": "Sign up to get started",
+      "loading": "Creating account...",
+      "toSignIn": "Already have an account? Sign in",
+      "success": "Check your email for the confirmation link!",
+      "goToSignIn": "Go to Sign In"
     },
-    "fields": { "email": "Email", "password": "Password" },
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "passwordHint": "At least 8 characters, including a letter, a digit and a special character"
+    },
     "errors": {
       "emailInvalid": "Enter a valid email",
       "passwordTooShort": "Password must be at least 8 characters",
       "passwordNoLetter": "Password must contain at least one letter",
       "passwordNoDigit": "Password must contain at least one digit",
       "passwordNoSpecial": "Password must contain at least one special character",
-      "credentialsInvalid": "Invalid email or password"
+      "credentialsInvalid": "Invalid email or password",
+      "emailTaken": "This email is already registered",
+      "passwordsMismatch": "Passwords do not match"
     }
   },
 

@@ -1,38 +1,33 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@/lib/test-utils';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SignUpForm } from '@/components/Authentication/SignupForm';
 import { signUp } from '@/app/actions/auth';
-import { useRouter } from 'next/navigation';
 
-// Mock the server action
 vi.mock('@/app/actions/auth', () => ({
   signUp: vi.fn(),
 }));
 
-// Mock useRouter
-vi.mock('next/navigation', () => ({
-  useRouter: vi.fn(),
-}));
+const VALID_EMAIL = 'test@example.com';
+const VALID_PASSWORD = 'Passw0rd!';
+
+const fillForm = async (
+  user: ReturnType<typeof userEvent.setup>,
+  {
+    email = VALID_EMAIL,
+    password = VALID_PASSWORD,
+    confirm = VALID_PASSWORD,
+  } = {},
+) => {
+  await user.type(screen.getByLabelText(/^email$/i), email);
+  await user.type(screen.getByLabelText(/^password$/i), password);
+  await user.type(screen.getByLabelText(/confirm password/i), confirm);
+  await user.click(screen.getByRole('button', { name: /sign up/i }));
+};
 
 describe('SignUpForm', () => {
-  const mockPush = vi.fn();
-  const mockRefresh = vi.fn();
-  const mockReplace = vi.fn();
-  const mockBack = vi.fn();
-  const mockForward = vi.fn();
-  const mockPrefetch = vi.fn();
-
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useRouter).mockReturnValue({
-      push: mockPush,
-      refresh: mockRefresh,
-      replace: mockReplace,
-      back: mockBack,
-      forward: mockForward,
-      prefetch: mockPrefetch,
-    });
   });
 
   it('renders email, password, and confirm password fields', () => {
@@ -49,13 +44,7 @@ describe('SignUpForm', () => {
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
 
-    await user.type(screen.getByLabelText(/^email$/i), 'test@example.com');
-    await user.type(screen.getByLabelText(/^password$/i), 'password123');
-    await user.type(
-      screen.getByLabelText(/confirm password/i),
-      'differentpassword',
-    );
-    await user.click(screen.getByRole('button', { name: /sign up/i }));
+    await fillForm(user, { confirm: 'Different1!' });
 
     expect(
       await screen.findByText('Passwords do not match'),
@@ -63,94 +52,79 @@ describe('SignUpForm', () => {
     expect(signUp).not.toHaveBeenCalled();
   });
 
+  it('rejects a weak password before submitting', async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<SignUpForm />);
+
+    await fillForm(user, { password: 'password', confirm: 'password' });
+
+    expect(await screen.findByText(/at least one digit/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/at least one special character/i),
+    ).toBeInTheDocument();
+    expect(signUp).not.toHaveBeenCalled();
+  });
+
   it('calls signUp with correct credentials when passwords match', async () => {
-    const mockSignUp = vi.mocked(signUp);
-    mockSignUp.mockResolvedValue(null);
+    vi.mocked(signUp).mockResolvedValue(null);
 
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
 
-    await user.type(screen.getByLabelText(/^email$/i), 'test@example.com');
-    await user.type(screen.getByLabelText(/^password$/i), 'password123');
-    await user.type(screen.getByLabelText(/confirm password/i), 'password123');
-    await user.click(screen.getByRole('button', { name: /sign up/i }));
+    await fillForm(user);
 
     await waitFor(() => {
-      expect(mockSignUp).toHaveBeenCalledWith(
-        'test@example.com',
-        'password123',
-      );
+      expect(signUp).toHaveBeenCalledWith(VALID_EMAIL, VALID_PASSWORD);
     });
   });
 
   it('shows a success message after successful sign up', async () => {
-    const mockSignUp = vi.mocked(signUp);
-    mockSignUp.mockResolvedValue(null);
+    vi.mocked(signUp).mockResolvedValue(null);
 
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
 
-    await user.type(screen.getByLabelText(/^email$/i), 'test@example.com');
-    await user.type(screen.getByLabelText(/^password$/i), 'password123');
-    await user.type(screen.getByLabelText(/confirm password/i), 'password123');
-    await user.click(screen.getByRole('button', { name: /sign up/i }));
+    await fillForm(user);
 
     expect(
       await screen.findByText(/check your email for the confirmation link/i),
     ).toBeInTheDocument();
   });
 
-  it('navigates to /signin when "Go to Sign In" is clicked after success', async () => {
-    const mockSignUp = vi.mocked(signUp);
-    mockSignUp.mockResolvedValue(null);
+  it('links to /signin after success', async () => {
+    vi.mocked(signUp).mockResolvedValue(null);
 
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
 
-    await user.type(screen.getByLabelText(/^email$/i), 'test@example.com');
-    await user.type(screen.getByLabelText(/^password$/i), 'password123');
-    await user.type(screen.getByLabelText(/confirm password/i), 'password123');
-    await user.click(screen.getByRole('button', { name: /sign up/i }));
+    await fillForm(user);
 
-    const goToSignInLink = await screen.findByRole('link', {
-      name: /go to sign in/i,
-    });
-    await user.click(goToSignInLink);
-
-    // Check that the link exists and has correct href
-    expect(goToSignInLink).toHaveAttribute('href', '/signin');
+    const link = await screen.findByRole('link', { name: /go to sign in/i });
+    expect(link).toHaveAttribute('href', '/signin');
   });
 
-  it('displays an error message when signUp fails', async () => {
-    const mockSignUp = vi.mocked(signUp);
-    mockSignUp.mockResolvedValue('User already registered');
+  it('displays a localized error message when signUp fails', async () => {
+    vi.mocked(signUp).mockResolvedValue('emailTaken');
 
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
 
-    await user.type(screen.getByLabelText(/^email$/i), 'test@example.com');
-    await user.type(screen.getByLabelText(/^password$/i), 'password123');
-    await user.type(screen.getByLabelText(/confirm password/i), 'password123');
-    await user.click(screen.getByRole('button', { name: /sign up/i }));
+    await fillForm(user);
 
     expect(
-      await screen.findByText('User already registered'),
+      await screen.findByText('This email is already registered'),
     ).toBeInTheDocument();
   });
 
   it('shows loading state while submitting', async () => {
-    const mockSignUp = vi.mocked(signUp);
-    mockSignUp.mockImplementation(
+    vi.mocked(signUp).mockImplementation(
       () => new Promise((resolve) => setTimeout(() => resolve(null), 100)),
     );
 
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);
 
-    await user.type(screen.getByLabelText(/^email$/i), 'test@example.com');
-    await user.type(screen.getByLabelText(/^password$/i), 'password123');
-    await user.type(screen.getByLabelText(/confirm password/i), 'password123');
-    await user.click(screen.getByRole('button', { name: /sign up/i }));
+    await fillForm(user);
 
     expect(
       screen.getByRole('button', { name: /creating account/i }),
@@ -165,7 +139,9 @@ describe('SignUpForm', () => {
 
   it('renders a link to the signin page', () => {
     render(<SignUpForm />);
-    const link = screen.getByRole('link', { name: /sign in/i });
-    expect(link).toHaveAttribute('href', '/signin');
+    expect(screen.getByRole('link', { name: /sign in/i })).toHaveAttribute(
+      'href',
+      '/signin',
+    );
   });
 });
