@@ -18,6 +18,27 @@
     "label": "Language",
     "locale": { "en": "English", "ru": "Русский" }
   },
+  "Auth": {
+    "signIn": {
+      "title": "Sign In",
+      "submit": "Sign In",
+      "toSignUp": "Don't have an account? Sign Up"
+    },
+    "signUp": {
+      "title": "Sign Up",
+      "submit": "Sign Up",
+      "toSignIn": "Already have an account? Sign In"
+    },
+    "fields": { "email": "Email", "password": "Password" },
+    "errors": {
+      "emailInvalid": "Enter a valid email",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordNoLetter": "Password must contain at least one letter",
+      "passwordNoDigit": "Password must contain at least one digit",
+      "passwordNoSpecial": "Password must contain at least one special character",
+      "credentialsInvalid": "Invalid email or password"
+    }
+  },
 
   "Navigation": {
     "home": "Home",

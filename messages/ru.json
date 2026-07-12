@@ -18,6 +18,30 @@
     "label": "Язык",
     "locale": { "en": "English", "ru": "Русский" }
   },
+  "Auth": {
+    "signIn": {
+      "title": "Вход",
+      "submit": "Войти",
+      "toSignUp": "Нет аккаунта? Зарегистрироваться"
+    },
+    "signUp": {
+      "title": "Регистрация",
+      "submit": "Зарегистрироваться",
+      "toSignIn": "Уже есть аккаунт? Войти"
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Пароль"
+    },
+    "errors": {
+      "emailInvalid": "Введите корректный email",
+      "passwordTooShort": "Пароль должен содержать не менее 8 символов",
+      "passwordNoLetter": "Пароль должен содержать хотя бы одну букву",
+      "passwordNoDigit": "Пароль должен содержать хотя бы одну цифру",
+      "passwordNoSpecial": "Пароль должен содержать хотя бы один спецсимвол",
+      "credentialsInvalid": "Неверный email или пароль"
+    }
+  },
 
   "Navigation": {
     "home": "Главная",
