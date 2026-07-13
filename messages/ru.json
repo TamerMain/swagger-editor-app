@@ -100,6 +100,15 @@
       "saveFailed": "Не удалось сохранить схему"
     }
   },
+  "EditorHeader": {
+    "format": "Формат:",
+    "valid": "Спецификация OpenAPI 3.0 корректна",
+    "clear": "Очистить",
+    "save": "Сохранить схему",
+    "saving": "Сохранение...",
+    "invalidSchema": "Схема невалидна",
+    "switchTo": "Переключить на {format}"
+  },
   "Navigation": {
     "home": "Главная",
     "about": "О проекте"

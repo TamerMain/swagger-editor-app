@@ -101,6 +101,15 @@
       "saveFailed": "Failed To Save Schema"
     }
   },
+  "EditorHeader": {
+    "format": "Format:",
+    "valid": "Valid OpenAPI 3.0 Specification",
+    "clear": "Clear",
+    "save": "Save Schema",
+    "saving": "Saving...",
+    "invalidSchema": "Invalid Schema",
+    "switchTo": "Switch to {format}"
+  },
 
   "Navigation": {
     "home": "Home",

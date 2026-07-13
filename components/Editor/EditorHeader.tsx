@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { FORMAT } from '@/constants/constants';
 import { type Format } from '@/types/openapi';
 
@@ -22,10 +23,13 @@ export default function EditorHeader({
   onSchemaSave,
   onFormatSwitch,
 }: EditorHeaderProps) {
+  const t = useTranslations('EditorHeader');
+  const targetFormat = format === FORMAT.JSON ? 'YAML' : 'JSON';
+
   return (
     <div className="flex items-center justify-between p-3 bg-neutral-900 border-b border-neutral-700">
       <div className="flex items-center gap-3">
-        <span className="text-sm text-neutral-400">Format:</span>
+        <span className="text-sm text-neutral-400">{t('format')}</span>
         <span
           className={`px-2 py-1 text-xs border-2 rounded font-mono ${
             format === FORMAT.JSON
@@ -37,9 +41,7 @@ export default function EditorHeader({
         </span>
 
         {errors.length === 0 && (
-          <span className="text-xs text-green-500">
-            Valid OpenAPI 3.0 Specification
-          </span>
+          <span className="text-xs text-green-500">{t('valid')}</span>
         )}
       </div>
 
@@ -48,7 +50,7 @@ export default function EditorHeader({
           onClick={onSchemaClear}
           className="px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 rounded text-white"
         >
-          Clear
+          {t('clear')}
         </button>
         {isAuth && (
           <button
@@ -57,10 +59,10 @@ export default function EditorHeader({
             disabled={errors.length > 0}
           >
             {isSaving
-              ? 'Saving...'
+              ? t('saving')
               : errors.length > 0
-                ? 'Invalid Schema'
-                : 'Save Schema'}
+                ? t('invalidSchema')
+                : t('save')}
           </button>
         )}
         <button
@@ -72,7 +74,7 @@ export default function EditorHeader({
           } ${errors.length > 0 ? 'bg-gray-600 hover:bg-gray-600' : ''}`}
           disabled={errors.length > 0}
         >
-          Switch to {format === FORMAT.JSON ? 'YAML' : 'JSON'}
+          {t('switchTo', { format: targetFormat })}
         </button>
       </div>
     </div>
