@@ -156,6 +156,7 @@
     "empty": "You haven't executed any requests yet",
     "goHome": "Go Home",
     "request": "Request",
-    "response": "Response"
+    "response": "Response",
+    "loading": "Loading..."
   }
 }

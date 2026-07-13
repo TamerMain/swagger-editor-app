@@ -2,9 +2,10 @@ import dynamic from 'next/dynamic';
 import { getHistory } from '@/app/actions/history';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import HistoryFallback from '@/components/History/HistoryFallback';
 
 const History = dynamic(() => import('@/components/History/History'), {
-  loading: () => <div>Loading...</div>,
+  loading: () => <HistoryFallback />,
   ssr: true,
 });
 
