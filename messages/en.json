@@ -34,7 +34,8 @@
       "loading": "Creating account...",
       "toSignIn": "Already have an account? Sign in",
       "success": "Check your email for the confirmation link!",
-      "goToSignIn": "Go to Sign In"
+      "goToSignIn": "Go to Sign In",
+      "createAccount": "Create Account"
     },
     "fields": {
       "email": "Email",

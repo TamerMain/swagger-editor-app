@@ -95,8 +95,11 @@ export async function proxy(request: NextRequest) {
     </html>
     `,
       {
-        status: 401,
-        headers: { 'Content-Type': 'text/html' },
+        status: 401, 
+        headers: {
+      'Content-Type': 'text/html',
+      'WWW-Authenticate': 'Bearer realm="swagger-editor-app"',
+    },
       },
     );
   }

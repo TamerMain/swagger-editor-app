@@ -3,11 +3,15 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
   const t = useTranslations('Footer');
   const [isSticky, setIsSticky] = useState(false);
+  const pathname = usePathname();
+
   useEffect(() => {
+    setIsSticky(false);
     const containers = document.querySelectorAll('.scroll-container');
     let timer: NodeJS.Timeout;
 
@@ -25,7 +29,7 @@ export default function Footer() {
       clearTimeout(timer);
       containers.forEach((el) => el.removeEventListener('scroll', onScroll));
     };
-  }, []);
+  }, [pathname]);
 
   return (
     <>

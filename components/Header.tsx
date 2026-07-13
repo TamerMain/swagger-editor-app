@@ -6,13 +6,16 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/lib/context/AuthContext';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const t = useTranslations('Header');
   const { user } = useAuth();
+  const pathname = usePathname();
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
+    setIsSticky(false);
     const containers = document.querySelectorAll('.scroll-container');
     let timer: NodeJS.Timeout;
 
@@ -28,7 +31,7 @@ export default function Header() {
       clearTimeout(timer);
       containers.forEach((el) => el.removeEventListener('scroll', onScroll));
     };
-  }, []);
+  }, [pathname]);
 
   return (
     <nav
