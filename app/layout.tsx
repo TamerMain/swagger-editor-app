@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
-import { getLocale } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -21,10 +21,14 @@ const geistMono = Geist_Mono({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: 'Swagger UI',
-  description: 'Build around OpenAPI Initiative',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Metadata');
+
+  return {
+    title: t('title'),
+    description: t('description'),
+  };
+}
 
 export default async function RootLayout({
   children,
