@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@/lib/test-utils';
 import { describe, it, expect } from 'vitest';
 import DisplayResponses from './DisplayResponses';
 import { type Operation, type Response } from '@/types/openapi';

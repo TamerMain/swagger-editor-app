@@ -114,7 +114,20 @@
     "requestBody": "Тело запроса",
     "contentTypes": "Типы контента",
     "schema": "Схема",
-    "example": "Пример"
+    "example": "Пример",
+    "responses": "Ответы",
+    "empty": {
+      "title": "Валидная спецификация OpenAPI не загружена",
+      "hint": "Отредактируйте спецификацию слева"
+    },
+    "noPaths": "В спецификации не определено ни одного пути"
+  },
+  "ViewerHeader": {
+    "version": "Версия",
+    "servers": "Серверы",
+    "paths": "Пути",
+    "operations": "Операции",
+    "schemas": "Схемы"
   },
   "Navigation": {
     "home": "Главная",

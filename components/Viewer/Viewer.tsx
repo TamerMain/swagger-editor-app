@@ -1,4 +1,7 @@
+'use client';
+
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import ViewerHeader from '@/components/Viewer/ViewerHeader';
 import Path from '@/components/Viewer/Path';
 import { getMethods } from '@/lib/getMethods';
@@ -10,6 +13,7 @@ interface ViewerProps {
 }
 
 export default function Viewer({ spec, isValid }: ViewerProps) {
+  const t = useTranslations('Viewer');
   const [expandedPaths, setExpandedPaths] = useState<Record<string, boolean>>(
     {},
   );
@@ -18,8 +22,8 @@ export default function Viewer({ spec, isValid }: ViewerProps) {
     return (
       <div className="h-full flex justify-center text-gray-500">
         <div className="text-center">
-          <p className="text-lg">No valid OpenAPI spec loaded</p>
-          <p className="text-sm mt-2">Edit the spec on the left</p>
+          <p className="text-lg">{t('empty.title')}</p>
+          <p className="text-sm mt-2">{t('empty.hint')}</p>
         </div>
       </div>
     );
@@ -58,7 +62,7 @@ export default function Viewer({ spec, isValid }: ViewerProps) {
 
       {!hasPaths && (
         <div className="text-center text-gray-500 py-8">
-          <p>No paths defined in the specification</p>
+          <p>{t('noPaths')}</p>
         </div>
       )}
     </div>

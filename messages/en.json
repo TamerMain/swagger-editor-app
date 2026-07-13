@@ -115,7 +115,20 @@
     "requestBody": "Request Body",
     "contentTypes": "Content Types",
     "schema": "Schema",
-    "example": "Example"
+    "example": "Example",
+    "responses": "Responses",
+    "empty": {
+      "title": "No valid OpenAPI spec loaded",
+      "hint": "Edit the spec on the left"
+    },
+    "noPaths": "No paths defined in the specification"
+  },
+  "ViewerHeader": {
+    "version": "Version",
+    "servers": "Servers",
+    "paths": "Paths",
+    "operations": "Operations",
+    "schemas": "Schemas"
   },
 
   "Navigation": {

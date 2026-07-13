@@ -26,11 +26,10 @@ export default function PathMethod({
   pathLevelParameters = [],
 }: PathMethodProps) {
   const mergedParameters = [
-    ...(operation.parameters || []), // Operation level parameters
-    ...(pathLevelParameters || []), // PathItem level parameters
+    ...(operation.parameters || []),
+    ...(pathLevelParameters || []),
   ];
 
-  // Remove duplicates. Keep more specific parameters
   const uniqueParameters = mergedParameters.filter(
     (param, index, self) =>
       index ===

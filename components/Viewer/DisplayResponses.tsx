@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { getStatusColor } from '@/constants/constants';
 import { Operation } from '@/types/openapi';
 import { safeStringify } from '@/lib/safeStringify';
@@ -5,12 +6,13 @@ import { safeStringify } from '@/lib/safeStringify';
 type DisplayResponseProps = { responses: Operation['responses'] };
 
 export default function DisplayResponses({ responses }: DisplayResponseProps) {
+  const t = useTranslations('Viewer');
   if (!responses || Object.keys(responses).length === 0) return null;
 
   return (
     <div className="ml-1 mt-2">
       <div className="text-neutral-400 text-xs font-semibold mb-1">
-        Responses
+        {t('responses')}
       </div>
       <div className="flex flex-col gap-2">
         {Object.entries(responses).map(([status, response]) => {
@@ -42,7 +44,7 @@ export default function DisplayResponses({ responses }: DisplayResponseProps) {
                   {schema && (
                     <div className="text-xs text-neutral-300">
                       <div className="text-neutral-400 text-[10px] font-semibold">
-                        Schema:
+                        {t('schema')}:
                       </div>
                       <pre className="mt-1 p-2 bg-neutral-800/50 rounded text-[10px] overflow-auto max-h-40">
                         {safeStringify(schema)}
@@ -52,7 +54,7 @@ export default function DisplayResponses({ responses }: DisplayResponseProps) {
                   {example && (
                     <div className="text-xs text-neutral-300 mt-2">
                       <div className="text-neutral-400 text-[10px] font-semibold">
-                        Example:
+                        {t('example')}:
                       </div>
                       <pre className="mt-1 p-2 bg-neutral-800/50 rounded text-[10px] overflow-auto max-h-40">
                         {safeStringify(example)}
