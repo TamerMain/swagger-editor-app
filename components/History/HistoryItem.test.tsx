@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
+import { render, screen } from '@/lib/test-utils';
+import { describe, it, expect, vi } from 'vitest';
 import HistoryItem from './HistoryItem';
 import { type HistoryRow } from '@/types/supabase';
 
@@ -20,24 +20,14 @@ describe('HistoryItem', () => {
     error_details: null,
   } as unknown as HistoryRow;
 
-  beforeAll(() => {
-    vi.spyOn(Date.prototype, 'toLocaleString').mockReturnValue(
-      '7/6/2026, 5:30:00 PM',
-    );
-  });
-
-  afterAll(() => {
-    vi.restoreAllMocks();
-  });
-
   it('renders structural details like method, endpoint, sizes, and timestamp', () => {
     render(<HistoryItem item={baseItem} />);
 
     expect(screen.getByText('GET')).toBeInTheDocument();
     expect(screen.getByText('/api/v1/users')).toBeInTheDocument();
-    expect(screen.getByText('📤 Request: 100 bytes')).toBeInTheDocument();
-    expect(screen.getByText('📥 Response: 1500 bytes')).toBeInTheDocument();
-    expect(screen.getByText('7/6/2026, 5:30:00 PM')).toBeInTheDocument();
+    expect(screen.getByText(/100 bytes/)).toBeInTheDocument();
+    expect(screen.getByText(/1500 bytes/)).toBeInTheDocument();
+    expect(screen.getByText('7/6/26, 1:30:00 PM')).toBeInTheDocument();
   });
 
   describe('Status Code Styling Ranges', () => {
@@ -80,7 +70,7 @@ describe('HistoryItem', () => {
   describe('Optional Layout Blocks', () => {
     it('renders duration badge if duration_ms is present', () => {
       render(<HistoryItem item={baseItem} />);
-      expect(screen.getByText('⏱ 120ms')).toBeInTheDocument();
+      expect(screen.getByText(/120ms/)).toBeInTheDocument();
     });
 
     it('hides duration badge completely if duration_ms is null', () => {

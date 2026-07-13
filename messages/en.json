@@ -150,5 +150,12 @@
   "NotFound": {
     "title": "Page not found",
     "goHome": "Go Home"
+  },
+  "History": {
+    "title": "Request History",
+    "empty": "You haven't executed any requests yet",
+    "goHome": "Go Home",
+    "request": "Request",
+    "response": "Response"
   }
 }

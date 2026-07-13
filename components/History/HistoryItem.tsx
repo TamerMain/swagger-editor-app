@@ -1,3 +1,4 @@
+import { useFormatter, useTranslations } from 'next-intl';
 import { formatBytes } from '@/lib/formatBytes';
 import { type HistoryRow } from '@/types/supabase';
 import { METHOD_COLORS, getHistoryStatusColor } from '@/constants/constants';
@@ -7,6 +8,9 @@ type HistoryItemProps = {
 };
 
 export default function HistoryItem({ item }: HistoryItemProps) {
+  const t = useTranslations('History');
+  const format = useFormatter();
+
   return (
     <div className="p-3 border border-neutral-800 rounded bg-neutral-900/50">
       <div className="flex justify-between items-start">
@@ -31,13 +35,22 @@ export default function HistoryItem({ item }: HistoryItemProps) {
         </div>
         <div className="text-sm text-neutral-500 flex items-center gap-3 flex-shrink-0 ml-4">
           {item.duration_ms && <span>⏱ {item.duration_ms}ms</span>}
-          <span>{new Date(item.timestamp).toLocaleString()}</span>
+          <span>
+            {format.dateTime(new Date(item.timestamp), {
+              dateStyle: 'short',
+              timeStyle: 'medium',
+            })}
+          </span>
         </div>
       </div>
 
       <div className="mt-2 flex items-center gap-4 text-xs text-neutral-400">
-        <span>📤 Request: {formatBytes(item.request_size)}</span>
-        <span>📥 Response: {formatBytes(item.response_size)}</span>
+        <span>
+          📤 {t('request')}: {formatBytes(item.request_size)}
+        </span>
+        <span>
+          📥 {t('response')}: {formatBytes(item.response_size)}
+        </span>
       </div>
       {item.error_details && (
         <div className="mt-2 text-xs w-fit text-red-400 bg-red-950/30 p-2 rounded border border-red-800">

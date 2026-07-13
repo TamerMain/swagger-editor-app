@@ -5,7 +5,7 @@ import messages from '@/messages/en.json';
 
 function Wrapper({ children }: { children: ReactNode }) {
   return (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
       {children}
     </NextIntlClientProvider>
   );
