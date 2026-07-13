@@ -13,12 +13,14 @@ import { useToast } from '@/lib/context/ToastContext';
 import { useAuth } from '@/lib/context/AuthContext';
 import { loadSchema, saveSchema } from '@/app/actions/editor';
 import { debounce } from '@/lib/debounce';
+import { useTranslations } from 'next-intl';
 
 type EditorProps = {
   onSpecChange?: (content: string) => void;
 };
 
 export default function Editor({ onSpecChange }: EditorProps) {
+  const t = useTranslations('Editor');
   const [code, setCode] = useState('');
   const [format, setFormat] = useState<Format>(FORMAT.YAML);
   const [errors, setErrors] = useState<string[]>([]);
@@ -38,14 +40,14 @@ export default function Editor({ onSpecChange }: EditorProps) {
         }
         onSpecChange?.(content);
       } else {
-        setErrors([result.error || 'Invalid specification']);
+        setErrors([result.error || t('errors.invalidSpec')]);
         onSpecChange?.('');
       }
     },
-    [format, onSpecChange],
+    [format, onSpecChange, t],
   );
 
-  const loadSpec = async () => {
+  const loadSpec = useCallback(async () => {
     try {
       let content;
       if (user) {
@@ -62,15 +64,15 @@ export default function Editor({ onSpecChange }: EditorProps) {
       setCode(content);
       await validateContent(content);
     } catch {
-      setErrors(['Failed to load specification file']);
+      setErrors([t('errors.loadFailed')]);
     }
-  };
+  }, [user, validateContent, t]);
 
   useEffect(() => {
     if (isInitialLoad.current) return;
     isInitialLoad.current = true;
     loadSpec();
-  }, [user]);
+  }, [loadSpec]);
 
   const handleCodeChange = useMemo(
     () =>
@@ -89,7 +91,7 @@ export default function Editor({ onSpecChange }: EditorProps) {
       setFormat(newFormat);
       setErrors([]);
     } catch {
-      setErrors(['Failed to convert format']);
+      setErrors([t('errors.convertFailed')]);
     }
   };
 
@@ -97,20 +99,17 @@ export default function Editor({ onSpecChange }: EditorProps) {
     setIsSaving(true);
     try {
       if (!user) {
-        {
-          showErrorToast('Sign In To Save');
-          setIsSaving(false);
-          return;
-        }
+        showErrorToast(t('toasts.signInToSave'));
+        return;
       }
       if (errors.length > 0) {
-        showErrorToast('Cant Save Schema With Errors');
+        showErrorToast(t('toasts.cantSaveWithErrors'));
         return;
       }
       await saveSchema(code);
-      showSuccessToast('Schema Saved');
+      showSuccessToast(t('toasts.saved'));
     } catch {
-      showErrorToast('Failed To Save Schema');
+      showErrorToast(t('toasts.saveFailed'));
     } finally {
       setIsSaving(false);
     }
@@ -151,10 +150,10 @@ export default function Editor({ onSpecChange }: EditorProps) {
         <div className="sticky bottom-0 w-full p-3 border-t border-red-500 bg-red-950">
           {errors.map((error, index) => (
             <div key={index} className="text-sm text-red-400 font-mono">
-              ❌ Swagger schema validation failed.{' '}
+              {t('validationFailed')}{' '}
               <div className="relative inline-block group">
                 <span className="text-sm text-white hover:text-blue-400 cursor-help">
-                  Read more
+                  {t('readMore')}
                 </span>
                 <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block bg-[#282c34] border border-neutral-800 text-gray-400 text-xs rounded p-2 whitespace-pre-wrap z-50 shadow-lg">
                   {error}

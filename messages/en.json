@@ -86,6 +86,21 @@
     "goHome": "Go home",
     "fallback": "Something went wrong"
   },
+  "Editor": {
+    "validationFailed": "❌ Swagger schema validation failed.",
+    "readMore": "Read more",
+    "errors": {
+      "invalidSpec": "Invalid specification",
+      "loadFailed": "Failed to load specification file",
+      "convertFailed": "Failed to convert format"
+    },
+    "toasts": {
+      "signInToSave": "Sign In To Save",
+      "cantSaveWithErrors": "Can't Save Schema With Errors",
+      "saved": "Schema Saved",
+      "saveFailed": "Failed To Save Schema"
+    }
+  },
 
   "Navigation": {
     "home": "Home",

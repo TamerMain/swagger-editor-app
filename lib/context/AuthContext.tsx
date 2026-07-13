@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
   ReactNode,
+  useMemo,
 } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
@@ -24,7 +25,7 @@ export function AuthProvider({
   initialUser?: User | null;
 }) {
   const [user, setUser] = useState<User | null>(initialUser);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((_, session) => {
@@ -32,7 +33,7 @@ export function AuthProvider({
     });
 
     return () => data.subscription.unsubscribe();
-  }, []);
+  }, [supabase]);
 
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
