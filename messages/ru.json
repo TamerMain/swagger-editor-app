@@ -109,6 +109,13 @@
     "invalidSchema": "Схема невалидна",
     "switchTo": "Переключить на {format}"
   },
+  "Viewer": {
+    "parameters": "Параметры ({count})",
+    "requestBody": "Тело запроса",
+    "contentTypes": "Типы контента",
+    "schema": "Схема",
+    "example": "Пример"
+  },
   "Navigation": {
     "home": "Главная",
     "about": "О проекте"

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { PARAMETER_TYPE_COLORS } from '@/constants/constants';
 import { Operation } from '@/types/openapi';
 
@@ -6,6 +7,7 @@ type DisplayParametersProps = { parameters: Operation['parameters'] };
 export default function DisplayParameters({
   parameters,
 }: DisplayParametersProps) {
+  const t = useTranslations('Viewer');
   if (!parameters || parameters.length === 0) {
     return null;
   }
@@ -13,7 +15,7 @@ export default function DisplayParameters({
   return (
     <div className="ml-1">
       <div className="text-neutral-400 text-xs font-semibold mb-1">
-        Parameters ({parameters.length})
+        {t('parameters', { count: String(parameters.length) })}
       </div>
       <div className="mt-2 space-y-1.5">
         {parameters.map((param, idx) => (

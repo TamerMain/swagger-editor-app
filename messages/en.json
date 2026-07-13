@@ -110,6 +110,13 @@
     "invalidSchema": "Invalid Schema",
     "switchTo": "Switch to {format}"
   },
+  "Viewer": {
+    "parameters": "Parameters ({count})",
+    "requestBody": "Request Body",
+    "contentTypes": "Content Types",
+    "schema": "Schema",
+    "example": "Example"
+  },
 
   "Navigation": {
     "home": "Home",
