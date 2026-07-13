@@ -1,28 +1,24 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@/lib/test-utils';
 import userEvent from '@testing-library/user-event';
 import Editor from '@/components/Editor/Editor';
 import { ToastProvider } from '@/lib/context/ToastContext';
 import { useAuth } from '@/lib/context/AuthContext';
 
-// Mock useAuth
 vi.mock('@/lib/context/AuthContext', () => ({
   useAuth: vi.fn(),
 }));
 
-// Mock server actions
 vi.mock('@/app/actions/editor', () => ({
   loadSchema: vi.fn(),
   saveSchema: vi.fn(),
 }));
 
-// Mock parseFormat and convertFormat
 vi.mock('@/lib/formatParser', () => ({
   parseFormat: vi.fn(),
   convertFormat: vi.fn(),
 }));
 
-// Mock CodeMirror
 vi.mock('@uiw/react-codemirror', () => ({
   default: ({
     value,
@@ -39,7 +35,6 @@ vi.mock('@uiw/react-codemirror', () => ({
   ),
 }));
 
-// Mock EditorHeader
 vi.mock('@/components/Editor/EditorHeader', () => ({
   default: ({
     format,
