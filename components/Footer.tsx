@@ -11,6 +11,7 @@ export default function Footer() {
   const pathname = usePathname();
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     setIsSticky(false);
     const containers = document.querySelectorAll('.scroll-container');
     let timer: NodeJS.Timeout;
