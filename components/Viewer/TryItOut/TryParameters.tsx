@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import {
   PARAMETER_TYPE_COLORS,
   TRY_IT_OUT_FIELDS,
@@ -11,6 +12,7 @@ type TryParametersProps = {
 };
 
 export default function TryParameters({ type, params }: TryParametersProps) {
+  const t = useTranslations('TryItOut');
   const [values, setValues] = useState<Record<string, string>>({});
   const isFirstRender = useRef(true);
 
@@ -21,7 +23,7 @@ export default function TryParameters({ type, params }: TryParametersProps) {
     if (p.schema?.default !== undefined) return String(p.schema.default);
     if (p.schema?.type) return p.schema.type;
 
-    return p.required ? 'required' : 'optional';
+    return p.required ? t('required') : t('optional');
   };
 
   const getDefaultValue = (p: Parameter): string => {
@@ -53,7 +55,7 @@ export default function TryParameters({ type, params }: TryParametersProps) {
   return (
     <div>
       <h2 className="text-xs text-neutral-400 capitalize mb-1">
-        {`${type} Parameter`}
+        {t('parameterType', { type })}
       </h2>
       {params.map((p) => (
         <div

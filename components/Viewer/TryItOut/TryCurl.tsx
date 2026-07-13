@@ -1,6 +1,8 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { buildUrl, buildHeaders, buildBody } from '@/lib/requestBuilder';
+import { useToast } from '@/lib/context/ToastContext';
 import { PARAMETER_TYPES, TRY_IT_OUT_FIELDS } from '@/constants/constants';
 import { Spec, Operation, HttpMethods, BodyTypes } from '@/types/openapi';
 
@@ -17,7 +19,10 @@ export default function TryCurl({
   operation,
   path,
 }: TryCurlProps) {
-  const handleCurl = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const t = useTranslations('TryItOut');
+  const { showSuccessToast, showErrorToast } = useToast();
+
+  const handleCurl = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const form = e.currentTarget.closest('form');
@@ -63,7 +68,12 @@ export default function TryCurl({
       curl += ` \\\n  -d '${bodyStr}'`;
     }
 
-    navigator.clipboard.writeText(curl);
+    try {
+      await navigator.clipboard.writeText(curl);
+      showSuccessToast(t('curlCopied'));
+    } catch {
+      showErrorToast(t('errors.copyFailed'));
+    }
   };
 
   return (

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Spec } from '@/types/openapi';
 import { TRY_IT_OUT_FIELDS } from '@/constants/constants';
 
@@ -6,10 +7,13 @@ type TryURLProps = {
 };
 
 export default function TryURL({ servers }: TryURLProps) {
+  const t = useTranslations('TryItOut');
+
   return (
     <div>
       <label className="text-xs text-neutral-400 block mb-1">
-        Base URL<span className="text-red-500"> *</span>
+        {t('baseUrl')}
+        <span className="text-red-500"> *</span>
       </label>
       <input
         name={TRY_IT_OUT_FIELDS.URL}

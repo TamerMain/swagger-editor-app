@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { getStatusColor } from '@/constants/constants';
 import { safeStringify } from '@/lib/safeStringify';
 
@@ -13,6 +14,7 @@ type TryResponseProps = {
 };
 
 export default function TryResponse({ response, error }: TryResponseProps) {
+  const t = useTranslations('TryItOut');
   let displayBody = response.body;
   if (typeof response.body === 'string') {
     try {
@@ -42,20 +44,22 @@ export default function TryResponse({ response, error }: TryResponseProps) {
             {response.status || 'ERR'}{' '}
             {response.statusText && `- ${response.statusText}`}
           </span>
-          {!response.ok && <span className="text-xs text-red-400">Error</span>}
+          {!response.ok && (
+            <span className="text-xs text-red-400">{t('error')}</span>
+          )}
         </div>
         <button
           type="button"
           onClick={() => navigator.clipboard.writeText(bodyString)}
           className="text-xs text-blue-400 hover:text-blue-300"
         >
-          Copy
+          {t('copy')}
         </button>
       </div>
       {response.headers && Object.keys(response.headers).length > 0 && (
         <details className="mt-2">
           <summary className="cursor-pointer text-[10px] text-gray-400 hover:text-white">
-            Headers
+            {t('headers')}
           </summary>
           <pre className="mt-1 text-[10px] text-gray-400 overflow-auto max-h-40">
             {safeStringify(response.headers)}

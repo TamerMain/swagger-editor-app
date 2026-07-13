@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { useState, useEffect, useRef } from 'react';
 import { Operation } from '@/types/openapi';
 import { TRY_IT_OUT_FIELDS } from '@/constants/constants';
@@ -8,6 +9,7 @@ type TryHeadersProps = {
 };
 
 export default function TryHeaders({ headerParams = [] }: TryHeadersProps) {
+  const t = useTranslations('TryItOut');
   const [value, setValue] = useState('');
   const isFirstRender = useRef(true);
 
@@ -38,7 +40,7 @@ export default function TryHeaders({ headerParams = [] }: TryHeadersProps) {
   return (
     <div>
       <label className="text-xs text-neutral-400 block mb-1">
-        Custom Headers
+        {t('customHeaders')}
       </label>
       <textarea
         name={TRY_IT_OUT_FIELDS.HEADERS}
