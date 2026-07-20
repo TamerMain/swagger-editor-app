@@ -1,0 +1,163 @@
+{
+  "Metadata": {
+    "title": "Swagger UI",
+    "description": "Build around OpenAPI Initiative"
+  },
+  "Header": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "history": "History",
+    "signOut": "Sign Out",
+    "about": "About"
+  },
+  "Footer": {
+    "copyright": "© {year} Swagger UI",
+    "about": "About"
+  },
+  "LanguageSwitcher": {
+    "label": "Language",
+    "locale": { "en": "English", "ru": "Русский" }
+  },
+  "Auth": {
+    "signIn": {
+      "title": "Sign In",
+      "submit": "Sign In",
+      "toSignUp": "Don't have an account? Sign Up",
+      "subtitle": "Sign in to your account to continue",
+      "loading": "Signing in..."
+    },
+    "signUp": {
+      "title": "Sign Up",
+      "submit": "Sign Up",
+      "pageTitle": "Create Account",
+      "subtitle": "Sign up to get started",
+      "loading": "Creating account...",
+      "toSignIn": "Already have an account? Sign in",
+      "success": "Check your email for the confirmation link!",
+      "goToSignIn": "Go to Sign In",
+      "createAccount": "Create Account"
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "passwordHint": "At least 8 characters, including a letter, a digit and a special character"
+    },
+    "errors": {
+      "emailInvalid": "Enter a valid email",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordNoLetter": "Password must contain at least one letter",
+      "passwordNoDigit": "Password must contain at least one digit",
+      "passwordNoSpecial": "Password must contain at least one special character",
+      "credentialsInvalid": "Invalid email or password",
+      "emailTaken": "This email is already registered",
+      "passwordsMismatch": "Passwords do not match",
+      "emailNotConfirmed": "Please confirm your email first",
+      "rateLimited": "Too many attempts. Please try again later",
+      "unknown": "Something went wrong. Please try again"
+    }
+  },
+  "Editor": {
+    "validationFailed": "❌ Swagger schema validation failed.",
+    "readMore": "Read more",
+    "errors": {
+      "invalidSpec": "Invalid specification",
+      "loadFailed": "Failed to load specification file",
+      "convertFailed": "Failed to convert format"
+    },
+    "toasts": {
+      "signInToSave": "Sign In To Save",
+      "cantSaveWithErrors": "Can't Save Schema With Errors",
+      "saved": "Schema Saved",
+      "saveFailed": "Failed To Save Schema"
+    }
+  },
+  "EditorHeader": {
+    "format": "Format:",
+    "valid": "Valid OpenAPI 3.0 Specification",
+    "clear": "Clear",
+    "save": "Save Schema",
+    "saving": "Saving...",
+    "invalidSchema": "Invalid Schema",
+    "switchTo": "Switch to {format}"
+  },
+  "Viewer": {
+    "parameters": "Parameters ({count})",
+    "requestBody": "Request Body",
+    "contentTypes": "Content Types",
+    "schema": "Schema",
+    "example": "Example",
+    "responses": "Responses",
+    "empty": {
+      "title": "No valid OpenAPI spec loaded",
+      "hint": "Edit the spec on the left"
+    },
+    "noPaths": "No paths defined in the specification"
+  },
+  "ViewerHeader": {
+    "version": "Version",
+    "servers": "Servers",
+    "paths": "Paths",
+    "operations": "Operations",
+    "schemas": "Schemas"
+  },
+  "TryItOut": {
+    "title": "Try It Out",
+    "execute": "Execute",
+    "baseUrl": "Base URL",
+    "parameterType": "{type} Parameter",
+    "required": "required",
+    "optional": "optional",
+    "customHeaders": "Custom Headers",
+    "requestBody": "Request Body",
+    "plainTextPlaceholder": "Plain text content",
+    "keyPlaceholder": "key",
+    "valuePlaceholder": "value",
+    "addField": "+ Add Field",
+    "error": "Error",
+    "copy": "Copy",
+    "headers": "Headers",
+    "curlCopied": "cURL copied to clipboard",
+    "errors": {
+      "requestFailed": "Request failed",
+      "copyFailed": "Failed to copy"
+    }
+  },
+  "About": {
+    "title": "About the project",
+    "project": "A Swagger/OpenAPI editor and viewer with a built-in REST client. Paste an OpenAPI specification in JSON or YAML, explore the endpoints and execute requests straight from the browser — requests are proxied through the server, so CORS is never an issue.",
+    "course": {
+      "title": "RS School",
+      "description": "This application is the final project of the React course at RS School — a free, community-driven education program run by The Rolling Scopes. The course covers React, TypeScript, state management, testing and modern full-stack frameworks."
+    },
+    "team": {
+      "title": "Team",
+      "roles": { "lead": "Team lead", "developer": "Developer" }
+    },
+    "stack": { "title": "Tech stack" },
+    "links": {
+      "title": "Links",
+      "editor": "Open the editor",
+      "openapi": "OpenAPI Initiative"
+    }
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "Please try again or go back home.",
+    "tryAgain": "Try again",
+    "goHome": "Go home",
+    "fallback": "Something went wrong"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "goHome": "Go Home"
+  },
+  "History": {
+    "title": "Request History",
+    "empty": "You haven't executed any requests yet",
+    "goHome": "Go Home",
+    "request": "Request",
+    "response": "Response",
+    "loading": "Loading..."
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "Metadata": {
+    "title": "Swagger UI",
+    "description": "Построено вокруг OpenAPI Initiative"
+  },
+  "Header": {
+    "signIn": "Войти",
+    "signUp": "Регистрация",
+    "history": "История",
+    "signOut": "Выйти",
+    "about": "О проекте"
+  },
+  "Footer": {
+    "copyright": "© {year} Swagger UI",
+    "about": "О проекте"
+  },
+  "LanguageSwitcher": {
+    "label": "Язык",
+    "locale": { "en": "English", "ru": "Русский" }
+  },
+  "Auth": {
+    "signIn": {
+      "title": "Вход",
+      "submit": "Войти",
+      "toSignUp": "Нет аккаунта? Зарегистрироваться",
+      "subtitle": "Войдите в аккаунт, чтобы продолжить",
+      "loading": "Вход..."
+    },
+    "signUp": {
+      "title": "Регистрация",
+      "submit": "Зарегистрироваться",
+      "pageTitle": "Создание аккаунта",
+      "subtitle": "Зарегистрируйтесь, чтобы начать",
+      "loading": "Создание аккаунта...",
+      "toSignIn": "Уже есть аккаунт? Войти",
+      "success": "Проверьте почту — мы отправили ссылку для подтверждения!",
+      "goToSignIn": "Перейти ко входу",
+      "createAccount": "Создайте аккаунт"
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Пароль",
+      "confirmPassword": "Подтверждение пароля",
+      "passwordHint": "Не менее 8 символов, минимум одна буква, цифра и спецсимвол"
+    },
+    "errors": {
+      "emailInvalid": "Введите корректный email",
+      "passwordTooShort": "Пароль должен содержать не менее 8 символов",
+      "passwordNoLetter": "Пароль должен содержать хотя бы одну букву",
+      "passwordNoDigit": "Пароль должен содержать хотя бы одну цифру",
+      "passwordNoSpecial": "Пароль должен содержать хотя бы один спецсимвол",
+      "credentialsInvalid": "Неверный email или пароль",
+      "emailTaken": "Этот email уже зарегистрирован",
+      "passwordsMismatch": "Пароли не совпадают",
+      "emailNotConfirmed": "Сначала подтвердите email",
+      "rateLimited": "Слишком много попыток. Попробуйте позже",
+      "unknown": "Что-то пошло не так. Попробуйте ещё раз"
+    }
+  },
+  "Editor": {
+    "validationFailed": "❌ Ошибка валидации схемы Swagger.",
+    "readMore": "Подробнее",
+    "errors": {
+      "invalidSpec": "Некорректная спецификация",
+      "loadFailed": "Не удалось загрузить файл спецификации",
+      "convertFailed": "Не удалось сконвертировать формат"
+    },
+    "toasts": {
+      "signInToSave": "Войдите, чтобы сохранить",
+      "cantSaveWithErrors": "Нельзя сохранить схему с ошибками",
+      "saved": "Схема сохранена",
+      "saveFailed": "Не удалось сохранить схему"
+    }
+  },
+  "EditorHeader": {
+    "format": "Формат:",
+    "valid": "Спецификация OpenAPI 3.0 корректна",
+    "clear": "Очистить",
+    "save": "Сохранить схему",
+    "saving": "Сохранение...",
+    "invalidSchema": "Схема невалидна",
+    "switchTo": "Переключить на {format}"
+  },
+  "Viewer": {
+    "parameters": "Параметры ({count})",
+    "requestBody": "Тело запроса",
+    "contentTypes": "Типы контента",
+    "schema": "Схема",
+    "example": "Пример",
+    "responses": "Ответы",
+    "empty": {
+      "title": "Валидная спецификация OpenAPI не загружена",
+      "hint": "Отредактируйте спецификацию в редакторе"
+    },
+    "noPaths": "В спецификации не определено ни одного пути"
+  },
+  "ViewerHeader": {
+    "version": "Версия",
+    "servers": "Серверы",
+    "paths": "Пути",
+    "operations": "Операции",
+    "schemas": "Схемы"
+  },
+  "TryItOut": {
+    "title": "Попробовать",
+    "execute": "Выполнить",
+    "baseUrl": "Базовый URL",
+    "parameterType": "Параметр {type}",
+    "required": "обязательный",
+    "optional": "необязательный",
+    "customHeaders": "Свои заголовки",
+    "requestBody": "Тело запроса",
+    "plainTextPlaceholder": "Текстовое содержимое",
+    "keyPlaceholder": "ключ",
+    "valuePlaceholder": "значение",
+    "addField": "+ Добавить поле",
+    "error": "Ошибка",
+    "copy": "Копировать",
+    "headers": "Заголовки",
+    "curlCopied": "cURL скопирован в буфер обмена",
+    "errors": {
+      "requestFailed": "Не удалось выполнить запрос",
+      "copyFailed": "Не удалось скопировать"
+    }
+  },
+  "About": {
+    "title": "О проекте",
+    "project": "Редактор и просмотрщик Swagger/OpenAPI со встроенным REST-клиентом. Вставьте спецификацию OpenAPI в формате JSON или YAML, изучайте эндпоинты и выполняйте запросы прямо из браузера — запросы идут через сервер, поэтому CORS не мешает.",
+    "course": {
+      "title": "RS School",
+      "description": "Приложение — финальный проект курса React в RS School, бесплатной образовательной программы сообщества The Rolling Scopes. Курс охватывает React, TypeScript, управление состоянием, тестирование и современные фулстек-фреймворки."
+    },
+    "team": {
+      "title": "Команда",
+      "roles": { "lead": "Тимлид", "developer": "Разработчик" }
+    },
+    "stack": { "title": "Стек технологий" },
+    "links": {
+      "title": "Ссылки",
+      "editor": "Открыть редактор",
+      "openapi": "OpenAPI Initiative"
+    }
+  },
+  "Error": {
+    "title": "Что-то пошло не так",
+    "description": "Попробуйте ещё раз или вернитесь на главную.",
+    "tryAgain": "Попробовать снова",
+    "goHome": "На главную",
+    "fallback": "Что-то пошло не так"
+  },
+  "NotFound": {
+    "title": "Страница не найдена",
+    "goHome": "Вернуться на главную"
+  },
+  "History": {
+    "title": "История запросов",
+    "empty": "Вы ещё не выполнили ни одного запроса",
+    "goHome": "На главную",
+    "request": "Запрос",
+    "response": "Ответ",
+    "loading": "Загрузка..."
+  }
+}

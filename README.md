@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+1. Deployment: [Vercel](https://swagger-editor-app-six.vercel.app/)
 
-## Getting Started
+2. Video breakdown: [Youtube](https://www.youtube.com/watch?v=DSE4uTGFUFw)
 
-First, run the development server:
+3. How to run it locally
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Create .env.local in the root
+
+With this lines:
+
+```javascript
+NEXT_PUBLIC_SUPABASE_URL = 'https://vjdnmpuimmjleqknqqtu.supabase.co';
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_2hMafG7r5oAld7lOgZmbwA_9mzq3wwj';
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Or create your own supabase with built-in authentication:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![Supabase Setup](README.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+<details>
+<summary>History</summary>
 
-## Learn More
+```sql
+-- Users are automatically created by Supabase Auth
 
-To learn more about Next.js, take a look at the following resources:
+-- Table
+CREATE TABLE history (
+id BIGSERIAL PRIMARY KEY,
+user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+endpoint TEXT NOT NULL,
+method TEXT NOT NULL,
+status_code INTEGER NOT NULL,
+duration_ms INTEGER,
+request_size INTEGER,
+response_size INTEGER,
+error_details TEXT,
+timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-- Index for fast queries
+CREATE INDEX idx_history_user_id ON history(user_id);
+CREATE INDEX idx_history_timestamp ON history(timestamp DESC);
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+-- RLS
+ALTER TABLE history ENABLE ROW LEVEL SECURITY;
 
-## Deploy on Vercel
+-- Users can only see their own history
+CREATE POLICY "Users can view own history"
+ON history
+FOR SELECT
+USING (auth.uid() = user_id);
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-- Users can insert their own history
+CREATE POLICY "Users can insert own history"
+ON history
+FOR INSERT
+WITH CHECK (auth.uid() = user_id);
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+</details>
+
+
+
+<details>
+<summary>Saved User Specification</summary>
+
+```sql
+-- Table
+CREATE TABLE userschema (
+id BIGSERIAL PRIMARY KEY,
+user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE UNIQUE,
+content TEXT NOT NULL
+);
+
+-- RLS
+ALTER TABLE userschema ENABLE ROW LEVEL SECURITY;
+
+-- Users can manage own spec
+CREATE POLICY "Users can manage own spec"
+ON userschema
+USING (auth.uid() = user_id)
+WITH CHECK (auth.uid() = user_id);
+```
+
+</details>

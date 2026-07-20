@@ -1,0 +1,427 @@
+openapi: 3.0.0
+info:
+  title: Full Demo API
+  description: Complete API with all parameter types, request/response examples, and schemas
+  version: 1.0.0
+
+servers:
+  - url: https://httpbin.org
+
+paths:
+  # ========== GET with QUERY + HEADER + COOKIE params ==========
+  /get:
+    get:
+      summary: GET with all parameter types
+      description: Demonstrates query, header, and cookie parameters with response schema example
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Number of items to return
+          schema:
+            type: integer
+            default: 10
+          example: 5
+        - name: offset
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+          example: 0
+        - name: X-Request-ID
+          in: header
+          required: true
+          description: Unique request identifier for tracing
+          schema:
+            type: string
+          example: req-123-abc
+        - name: X-API-Version
+          in: header
+          description: API version
+          schema:
+            type: string
+            enum: [v1, v2, v3]
+            default: v1
+          example: v2
+        - name: sessionId
+          in: cookie
+          required: false
+          description: Session identifier from cookie
+          schema:
+            type: string
+          example: sess-xyz-789
+        - name: preferredLang
+          in: cookie
+          description: User language preference
+          schema:
+            type: string
+            enum: [en, es, fr, de]
+            default: en
+          example: es
+      responses:
+        '200':
+          description: Successful response with headers and body
+          headers:
+            X-RateLimit-Limit:
+              description: Rate limit per hour
+              schema:
+                type: integer
+            X-RateLimit-Remaining:
+              description: Remaining requests this hour
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  args:
+                    type: object
+                    description: Query parameters received
+                  headers:
+                    type: object
+                    description: Headers received
+                  cookies:
+                    type: object
+                    description: Cookies received
+                  url:
+                    type: string
+              example:
+                args:
+                  limit: 5
+                  offset: 0
+                headers:
+                  X-Request-ID: req-123-abc
+                  X-API-Version: v2
+                  Cookie: sessionId=sess-xyz-789; preferredLang=es
+                cookies:
+                  sessionId: sess-xyz-789
+                  preferredLang: es
+                url: "https://httpbin.org/get?limit=5&offset=0"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Invalid query parameters"
+
+  # ========== POST with PATH + HEADER + BODY ==========
+  /posts/{postId}:
+    parameters:
+      - name: postId
+        in: path
+        required: true
+        description: The post identifier
+        schema:
+          type: string
+          pattern: "^[a-zA-Z0-9-]+$"
+        example: post-123
+
+    post:
+      summary: POST with path, header, and body
+      description: Demonstrates path parameter, header authentication, and request body schema with examples
+      parameters:
+        - name: X-Content-Type
+          in: header
+          required: false
+          description: Force response content type
+          schema:
+            type: string
+            enum: [json, xml]
+            default: json
+          example: json
+        - name: X-Debug
+          in: header
+          required: false
+          description: Enable debug mode
+          schema:
+            type: boolean
+            default: false
+          example: true
+      requestBody:
+        required: true
+        description: Post data to create
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, body]
+              properties:
+                title:
+                  type: string
+                  minLength: 3
+                  maxLength: 100
+                  example: "My First Post"
+                body:
+                  type: string
+                  minLength: 10
+                  maxLength: 5000
+                  example: "This is the full content of my first post..."
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  example: ["demo", "test", "api"]
+                metadata:
+                  type: object
+                  properties:
+                    author:
+                      type: string
+                    category:
+                      type: string
+                  example:
+                    author: "John Doe"
+                    category: "Technology"
+            examples:
+              simple:
+                summary: Simple post
+                value:
+                  title: "Hello World"
+                  body: "This is a test post"
+              full:
+                summary: Full post with all fields
+                value:
+                  title: "My First Post"
+                  body: "This is the full content of my first post with all the details."
+                  tags: ["demo", "test", "api"]
+                  metadata:
+                    author: "John Doe"
+                    category: "Technology"
+      responses:
+        '201':
+          description: Post created successfully
+          headers:
+            Location:
+              description: URL of the created resource
+              schema:
+                type: string
+            X-Post-ID:
+              description: ID of the created post
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  body:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      type: string
+                  metadata:
+                    type: object
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+              example:
+                id: post-123
+                title: "My First Post"
+                body: "This is the full content of my first post..."
+                tags: ["demo", "test", "api"]
+                metadata:
+                  author: "John Doe"
+                  category: "Technology"
+                createdAt: "2024-01-15T10:30:00Z"
+                updatedAt: "2024-01-15T10:30:00Z"
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: object
+              example:
+                error: "Validation failed"
+                details:
+                  title: "Title must be at least 3 characters"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Authentication required"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Internal server error"
+
+  # ========== PUT with COOKIE + HEADER + BODY ==========
+  /put:
+    put:
+      summary: PUT with cookie and header params
+      description: Demonstrates cookie and header parameters with request body
+      parameters:
+        - name: X-Request-ID
+          in: header
+          required: true
+          schema:
+            type: string
+          example: req-456-def
+        - name: X-Content-Type
+          in: header
+          schema:
+            type: string
+            enum: [application/json, application/xml]
+            default: application/json
+        - name: userSession
+          in: cookie
+          required: true
+          schema:
+            type: string
+          example: user-session-abc
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                value:
+                  type: string
+                updatedAt:
+                  type: string
+                  format: date-time
+            example:
+              name: "Updated Resource"
+              value: "New value"
+              updatedAt: "2024-01-15T10:30:00Z"
+      responses:
+        '200':
+          description: Resource updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  updated:
+                    type: object
+              example:
+                status: "success"
+                updated:
+                  name: "Updated Resource"
+                  value: "New value"
+                  updatedAt: "2024-01-15T10:30:00Z"
+
+  # ========== DELETE with PATH + COOKIE ==========
+  /delete/{resourceId}:
+    parameters:
+      - name: resourceId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: res-789
+
+    delete:
+      summary: DELETE with path and cookie params
+      description: Demonstrates path and cookie parameters
+      parameters:
+        - name: X-Confirm
+          in: header
+          required: true
+          schema:
+            type: string
+            enum: [yes, no]
+          example: yes
+        - name: userSession
+          in: cookie
+          required: true
+          schema:
+            type: string
+          example: admin-session-xyz
+      responses:
+        '204':
+          description: Resource deleted successfully
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Resource not found"
+
+  # ========== PATCH with HEADER + BODY ==========
+  /patch:
+    patch:
+      summary: PATCH with header and body
+      description: Demonstrates header parameters with partial update body
+      parameters:
+        - name: X-Request-ID
+          in: header
+          required: true
+          schema:
+            type: string
+          example: req-789-ghi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                partialUpdate:
+                  type: object
+                  properties:
+                    field:
+                      type: string
+                    value:
+                      type: string
+            example:
+              partialUpdate:
+                field: "status"
+                value: "active"
+      responses:
+        '200':
+          description: Partial update applied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  updated:
+                    type: object
+              example:
+                status: "success"
+                updated:
+                  status: "active"
