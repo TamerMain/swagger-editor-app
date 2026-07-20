@@ -1,7 +1,6 @@
 'use client';
 
 import { signIn, type AuthActionError } from '@/app/actions/auth';
-import { validateEmail, validatePassword } from '@/lib/validation/auth';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -16,20 +15,13 @@ export function SignInForm() {
 
   const handleSignIn = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const invalid = [...validateEmail(email), ...validatePassword(password)];
-    if (invalid.length > 0) {
-      setErrors(invalid);
-      return;
-    }
-
     setLoading(true);
     setErrors([]);
 
     try {
       const code = await signIn(email, password);
       if (code) {
-        setErrors([code]);
+        setErrors(code.errors);
         setLoading(false);
         return;
       }

@@ -19,11 +19,14 @@ export async function parseFormat(content: string): Promise<ParseResult> {
 
     const originalLog = console.log;
     const originalError = console.error;
-    console.log = () => {};
-    console.error = () => {};
-    await SwaggerParser.validate(data);
-    console.log = originalLog;
-    console.error = originalError;
+    try {
+      console.log = () => {};
+      console.error = () => {};
+      await SwaggerParser.validate(data);
+    } finally {
+      console.log = originalLog;
+      console.error = originalError;
+    }
 
     // Unwrap $ref syntax
     const resolved = (await $RefParser.dereference(data)) as Spec;

@@ -104,7 +104,7 @@ describe('SignUpForm', () => {
   });
 
   it('displays a localized error message when signUp fails', async () => {
-    vi.mocked(signUp).mockResolvedValue('emailTaken');
+    vi.mocked(signUp).mockResolvedValue({ errors: ['emailTaken'] });
 
     const user = userEvent.setup({ delay: null });
     render(<SignUpForm />);

@@ -6,7 +6,6 @@ import HistoryFallback from '@/components/History/HistoryFallback';
 
 const History = dynamic(() => import('@/components/History/History'), {
   loading: () => <HistoryFallback />,
-  ssr: true,
 });
 
 export default async function HistoryPage() {

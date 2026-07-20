@@ -37,9 +37,15 @@ function mapSupabaseError(code: string | undefined): AuthActionError {
 export async function signUp(
   email: string,
   password: string,
-): Promise<AuthActionError | null> {
-  const invalid = [...validateEmail(email), ...validatePassword(password)];
-  if (invalid.length > 0) return invalid[0];
+): Promise<{ errors: AuthActionError[] } | null> {
+  const errors: AuthActionError[] = [
+    ...validateEmail(email),
+    ...validatePassword(password),
+  ];
+
+  if (errors.length > 0) {
+    return { errors };
+  }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
@@ -50,7 +56,9 @@ export async function signUp(
     },
   });
 
-  if (error) return mapSupabaseError(error.code);
+  if (error) {
+    return { errors: [mapSupabaseError(error.code)] };
+  }
 
   revalidatePath('/');
   return null;
@@ -59,14 +67,22 @@ export async function signUp(
 export async function signIn(
   email: string,
   password: string,
-): Promise<AuthActionError | null> {
-  if (validateEmail(email).length > 0) return 'emailInvalid';
-  if (password.length === 0) return 'credentialsInvalid';
+): Promise<{ errors: AuthActionError[] } | null> {
+  const errors: AuthActionError[] = [];
+  const emailErrors = validateEmail(email);
+  if (emailErrors.length > 0) errors.push(...emailErrors);
+  if (password.length === 0) errors.push('credentialsInvalid');
+
+  if (errors.length > 0) {
+    return { errors };
+  }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (error) return mapSupabaseError(error.code);
+  if (error) {
+    return { errors: [mapSupabaseError(error.code)] };
+  }
 
   revalidatePath('/');
   return null;

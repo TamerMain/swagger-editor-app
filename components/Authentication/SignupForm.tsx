@@ -38,7 +38,7 @@ export function SignUpForm() {
     try {
       const code = await signUp(email, password);
       if (code) {
-        setErrors([code]);
+        setErrors(code.errors);
       } else {
         setSuccess(true);
       }
